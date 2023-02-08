@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     InputAction jump;
     InputAction inspect;
     Rigidbody rb;
+    private bool isMoving = false;
 
     [SerializeField]float moveSpeed = 5.0f;
      [SerializeField]float jumpForce = 5.0f;
@@ -61,21 +62,31 @@ public class Movement : MonoBehaviour
         if(moveDirection.x > 0)
         {
             rb.AddForce(moveSpeed * transform.right * 10.0f, ForceMode.Acceleration);
+            isMoving = true;
         }
         else if(moveDirection.x < 0)
         {
             rb.AddForce(moveSpeed * -transform.right * 10.0f, ForceMode.Acceleration);
+            isMoving = true;
         }
         if(moveDirection.y > 0)
         {
             rb.AddForce(moveSpeed * transform.forward * 10.0f, ForceMode.Acceleration);
+            isMoving = true;
         }
         else if(moveDirection.y < 0)
         {
-            rb.AddForce(moveSpeed * -transform.right * 10.0f, ForceMode.Acceleration);
+            rb.AddForce(moveSpeed * -transform.forward * 10.0f, ForceMode.Acceleration);
+            isMoving = true;
         }
     }
+    private void Deceleration()
+    {
+        if(!isMoving)
+        {
 
+        }
+    }
     private void DoRotation()
     {
 
