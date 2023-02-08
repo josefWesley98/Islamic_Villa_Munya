@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     InputAction inspect;
     Rigidbody rb;
     private bool isMoving = false;
+    private bool isInspecting = false;
 
     [SerializeField]float moveSpeed = 5.0f;
      [SerializeField]float jumpForce = 5.0f;
@@ -47,7 +48,7 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
+        isInspecting = false;
     }
     private void FixedUpdate()
     {
@@ -84,7 +85,7 @@ public class Movement : MonoBehaviour
     {
         if(!isMoving)
         {
-
+            
         }
     }
     private void DoRotation()
@@ -99,5 +100,10 @@ public class Movement : MonoBehaviour
     private void Inspecting(InputAction.CallbackContext context)
     {
         Debug.Log("inspecting");
+        isInspecting = true;
+    }
+    public bool GetIsInspecting()
+    {
+        return isInspecting;
     }
 }
