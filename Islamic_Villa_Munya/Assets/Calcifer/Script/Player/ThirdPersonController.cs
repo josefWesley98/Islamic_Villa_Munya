@@ -7,9 +7,9 @@ public class ThirdPersonController : MonoBehaviour
     public CharacterController player_controller;
     public Transform cam;
 
-    public float speed = 10f;
+    public float speed = 7f;
 
-    public float smooth_time = 0.3f;
+    public float smooth_time = 0.1f;
     float turn_smooth_vel;
 
     // Update is called once per frame
