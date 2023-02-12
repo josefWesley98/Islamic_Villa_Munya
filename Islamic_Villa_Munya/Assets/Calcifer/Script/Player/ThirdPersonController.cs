@@ -7,8 +7,8 @@ public class ThirdPersonController : MonoBehaviour
     public CharacterController player_controller;
     public Transform cam;
 
-    public float walk_speed = 3f;
-    public float run_speed  =7f;
+    public float walk_speed = 1f;
+    public float run_speed  =3f;
     public float smooth_time = 0.1f;
     float turn_smooth_vel;
 
