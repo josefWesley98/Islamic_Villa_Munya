@@ -5,9 +5,6 @@ using UnityEngine;
 public class AnimationStateController : MonoBehaviour
 {
     Animator animator;
-    //int is_walking_hash;
-    //int is_running_hash;
-    //int is_walking_back_hash;
     float velocityZ = 0f;
     float velocityX = 0f;
     public float acceleration = 7f;
@@ -17,22 +14,28 @@ public class AnimationStateController : MonoBehaviour
     int velZ_hash;
     int velX_hash;
     private int crouch_layer_index;
+    private int jump_layer_index;
+    private int base_layer_index;
     private float crouch_weight = 6f;
     private float weight = 0f;
+    public float jump_time = 0f;
+    private float j_timer = 0f;
+    bool is_jumping = false;
 
     // Start is called before the first frame update
     void Start()
     {
         //Search for the animator component attached to this object
         animator = GetComponent<Animator>();
-        //is_walking_hash = Animator.StringToHash("IsWalking?");
-        //is_running_hash = Animator.StringToHash("IsRunning?");
-        //is_walking_back_hash = Animator.StringToHash("IsWalkingBack?");
         velZ_hash = Animator.StringToHash("VelocityZ");
         velX_hash = Animator.StringToHash("VelocityX");
 
         //Referencing the layer for crouching
         crouch_layer_index = animator.GetLayerIndex("Crouching");
+        jump_layer_index = animator.GetLayerIndex("Jumping");
+        base_layer_index = animator.GetLayerIndex("Base Layer");
+
+        UpdateAnimTimes();
     }
 
     //Handles acceleration and deceleration
@@ -198,6 +201,24 @@ public class AnimationStateController : MonoBehaviour
         }
     }
 
+    //Function to get the anim times for certain animations to play through to completion without interruption
+    void UpdateAnimTimes()
+    {
+        //Create an array to store the player animations which we will loop through
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+        //Foreach loop to loop through the anims until we get to jumping
+        foreach(AnimationClip clip in clips)
+        {
+            //If we reach the jumping animation, get the length and store this in the jump_time variable
+            if(clip.name == "H_Jumping2")
+            {
+                jump_time = clip.length;
+            }
+        }
+
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -209,14 +230,10 @@ public class AnimationStateController : MonoBehaviour
         bool run_pressed = Input.GetKey(KeyCode.LeftShift);
         bool backward_pressed = Input.GetKey(KeyCode.S);
         bool crouch_pressed = Input.GetKey(KeyCode.LeftControl);
+        bool jump_pressed = Input.GetKey(KeyCode.Space);
 
         //Set current max_vel
         float current_max_vel = run_pressed ? max_run_vel : max_walk_vel;
-
-        //Variables - Player Animation States
-        //bool is_walking = animator.GetBool(is_walking_hash);
-        //bool is_running = animator.GetBool(is_running_hash);
-        //bool is_walking_back = animator.GetBool(is_walking_back_hash);
 
         //Handle changes in velocity
         ChangeVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
@@ -244,73 +261,28 @@ public class AnimationStateController : MonoBehaviour
             animator.SetLayerWeight(crouch_layer_index, weight);
         }
 
+        if(!crouch_pressed && jump_pressed)
+        {
+            animator.SetBool("IsJumping", true);
+
+            is_jumping = true;
+
+            j_timer = jump_time - 0.3f;
+        }
+
+        if(is_jumping)
+        {
+            j_timer -= Time.deltaTime;
+
+            if(j_timer <= 0)
+            {
+                animator.SetBool("IsJumping", false);
+                is_jumping = false;
+                j_timer = jump_time - 0.3f;
+            }
+        }
+
         animator.SetFloat(velZ_hash, velocityZ);
         animator.SetFloat(velX_hash, velocityX);
-
-        // //1D blend tree example starts
-        // //Increase the speed while the player holds forward
-        // if(forward_pressed && velocity < 1f)
-        // {
-        //     velocity += Time.deltaTime * acceleration;
-        // }
-
-        // //Decelerate if the player lets go of forward
-        // if(!forward_pressed && velocity > 0f)
-        // {
-        //     velocity -= Time.deltaTime * deceleration;
-        // }
-
-        // //In case the velocity drops below zero
-        // if(!forward_pressed && velocity < 0f)
-        // {
-        //     velocity = 0f;
-        // }
-            //animator.SetFloat(vel_hash, velocity);
-        // //1D example ends
-
-        //Original code example begins
-        //Capture the player input
-        //If the player is not walking and forward/left/right
-        // if(!is_walking && (forward_pressed || left_pressed || right_pressed || backward_pressed))
-        // {
-        //     //Set the iswalking bool to true
-        //     animator.SetBool(is_walking_hash, true);
-        // }
-
-        // //If the player is walking and not pressing forward/left/right
-        // if(is_walking && (!forward_pressed && !left_pressed && !right_pressed && !backward_pressed))
-        // {
-        //     //Set the iswalking bool to true
-        //     animator.SetBool(is_walking_hash, false);
-        // }
-
-        // //If the player is pressing forward and the run button
-        // if(!is_running && (forward_pressed && run_pressed))
-        // {
-        //     //Set the running state to true
-        //     animator.SetBool(is_running_hash, true);
-        // }
-
-        // //If the player is not pressing running or forward
-        // if(is_running && (!forward_pressed || !run_pressed))
-        // {
-        //     //Set the running state to false
-        //     animator.SetBool(is_running_hash, false);
-        // }
-
-        ////If the player is pressing backwards
-        // if(!is_walking_back && (backward_pressed))
-        // {
-        //     //Set the walking backwards state to being true
-        //     animator.SetBool(is_walking_back_hash, true);
-        // }
-
-        // //If the player is not pressing backwards
-        // if(is_walking_back && (!backward_pressed))
-        // {
-        //     //Set the walking backward state to false
-        //     animator.SetBool(is_walking_back_hash, false);
-        // }
-        //Original code example ends here
     }
 }

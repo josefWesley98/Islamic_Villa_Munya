@@ -9,7 +9,7 @@ public class ThirdPersonController : MonoBehaviour
 
     public float walk_speed = 1f;
     public float run_speed  =3f;
-    public float smooth_time = 0.15f;
+    public float smooth_time = 0.2f;
     float turn_smooth_vel;
 
     // Update is called once per frame
