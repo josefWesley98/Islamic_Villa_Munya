@@ -9,6 +9,9 @@ public class ClimbingScript : MonoBehaviour
     InputAction jump;
     Rigidbody rb;
 
+    [SerializeField] private UpwardClimbing upwardClimbing
+     [SerializeField] private DownwardClimbing downwardClimbing;
+
     private bool isClimbing = false;
     private bool isJumping = false;
     private Vector3 climbPoint = new Vector3(0,0,0);
