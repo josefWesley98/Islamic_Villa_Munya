@@ -215,6 +215,7 @@ public class AnimationStateController : MonoBehaviour
             {
                 jump_time = clip.length;
             }
+
         }
 
     }
@@ -261,25 +262,54 @@ public class AnimationStateController : MonoBehaviour
             animator.SetLayerWeight(crouch_layer_index, weight);
         }
 
-        if(!crouch_pressed && jump_pressed)
+        if(!crouch_pressed && jump_pressed && (velocityX <= 0 && velocityZ <= 0))
         {
-            animator.SetBool("IsJumping", true);
+            animator.SetBool("StandJump", true);
 
             is_jumping = true;
 
             j_timer = jump_time - 0.3f;
+            animator.SetLayerWeight(jump_layer_index, 1f);
+            animator.SetLayerWeight(base_layer_index, 0f);
+        }
+        else if (!crouch_pressed && jump_pressed && (velocityX > 0 && velocityZ > 0))
+        {
+            animator.SetBool("RunJump", true);
+
+            is_jumping = true;
+
+            j_timer = jump_time - 0.3f;
+            animator.SetLayerWeight(jump_layer_index, 1f);
+            animator.SetLayerWeight(base_layer_index, 0f);
         }
 
-        if(is_jumping)
+        if (is_jumping && (velocityX <= 0 && velocityZ <= 0))
         {
             j_timer -= Time.deltaTime;
 
             if(j_timer <= 0)
             {
-                animator.SetBool("IsJumping", false);
+                animator.SetBool("StandJump", false);
                 is_jumping = false;
                 j_timer = jump_time - 0.3f;
             }
+
+            animator.SetLayerWeight(jump_layer_index, 0f);
+            animator.SetLayerWeight(base_layer_index, 1f);
+        }
+        else if (is_jumping && (velocityX > 0 || velocityZ > 0))
+        {
+            j_timer -= Time.deltaTime;
+
+            if (j_timer <= 0)
+            {
+                animator.SetBool("RunJump", false);
+                is_jumping = false;
+                j_timer = jump_time - 0.3f;
+            }
+
+            animator.SetLayerWeight(jump_layer_index, 0f);
+            animator.SetLayerWeight(base_layer_index, 1f);
         }
 
         animator.SetFloat(velZ_hash, velocityZ);
