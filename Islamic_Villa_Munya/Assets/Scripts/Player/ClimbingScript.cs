@@ -9,8 +9,8 @@ public class ClimbingScript : MonoBehaviour
     InputAction jump;
     Rigidbody rb;
 
-    [SerializeField] private UpwardClimbing upwardClimbing
-     [SerializeField] private DownwardClimbing downwardClimbing;
+    [SerializeField] private UpwardClimbing upwardClimbing;
+    [SerializeField] private DownwardClimbing downwardClimbing;
 
     private bool isClimbing = false;
     private bool isJumping = false;
@@ -52,7 +52,7 @@ public class ClimbingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Climb(centre, radius);
+        //Climb(centre, radius);
         //isClimbing = false;
         isJumping = true;
         LerpFunction();
@@ -68,34 +68,33 @@ public class ClimbingScript : MonoBehaviour
         }
     }
 
-    void Climb(Vector3 center, float radius)
-    {
-        Debug.Log("starting climb function");
-        Collider[] climabeObjects = Physics.OverlapSphere(center, radius, lm);
+    // void Climb(Vector3 center, float radius)
+    // {
+    //     Debug.Log("starting climb function");
+    //     Collider[] climabeObjects = Physics.OverlapSphere(center, radius, lm);
         
-        float[] order;
+    //     float[] order;
 
-        if(climabeObjects != null)
-        {
-            isClimbing = true;
-            isJumping = false;
-            foreach(var climabeObject in climabeObjects)
-            {
-                // find the nearest spot that isnt currently in use.
+    //     if(climabeObjects != null)
+    //     {
+    //         isClimbing = true;
+    //         isJumping = false;
+    //         foreach(var climabeObject in climabeObjects)
+    //         {
+    //             // find the nearest spot that isnt currently in use.
 
-                // make climbpoint = the nearest point.
-                climbPoint = climabeObject.transform.position;
+    //             // make climbpoint = the nearest point.
+    //             climbPoint = climabeObject.transform.position;
                
-                Debug.Log("climbing detected");
-            }
-        }
-        else
-        {
-            isJumping = true;
-            Debug.Log("no climbing spots detected");
-        }
-        
-    }
+    //             Debug.Log("climbing detected");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         isJumping = true;
+    //         Debug.Log("no climbing spots detected");
+    //     }      
+    // }
     
     private void Jumping(InputAction.CallbackContext context)
     {
