@@ -8,8 +8,9 @@ public class ClimbingScript : MonoBehaviour
     PlayerControls playercontrols;
     InputAction jump;
     InputAction climb;
+    InputAction movement;
     Rigidbody rb;
-
+    private MovementController movementController;
     [SerializeField] private UpwardClimbing upwardClimbing;
     [SerializeField] private DownwardClimbing downwardClimbing;
     [SerializeField] private Transform centreMass;
@@ -35,6 +36,7 @@ public class ClimbingScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        movementController = GetComponent<MovementController>();
     }
     private void OnEnable()
     {
@@ -45,9 +47,12 @@ public class ClimbingScript : MonoBehaviour
         jump.started += Jumping;
         jump.performed += Holding;
 
+        movement = playercontrols.Player.Move;
+        movement.Enable();
+
         climb = playercontrols.Player.DoClimb;
         climb.Enable();
-        climb.started += Climb;
+        climb.performed += Climb;
     }
 
     private void OnDisable()
@@ -59,8 +64,6 @@ public class ClimbingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Climb(centre, radius);
-        //isClimbing = false;
         isJumping = true;
         LerpFunction();
         if(!upwardClimbing.GetCanClimb())
@@ -70,51 +73,14 @@ public class ClimbingScript : MonoBehaviour
         if(!startClimb)
         {
             rb.useGravity = true;
+            movementController.enabled = true;
         }
-        if(arrived && startClimb)
+        if(arrived && startClimb )
         {
             arrived = false;
             GetNextClimbSpot();
-        }
-        // if(!arrived && !holding)
-        // {
-        //     rb.useGravity = true;
-        // }
-        // if(jump.ReadValue<float>() == 0)
-        // {
-        //     arrived = false;
-        //     holding = false;
-        // }
-    }
-
-    // void Climb(Vector3 center, float radius)
-    // {
-    //     Debug.Log("starting climb function");
-    //     Collider[] climabeObjects = Physics.OverlapSphere(center, radius, lm);
-        
-    //     float[] order;
-
-    //     if(climabeObjects != null)
-    //     {
-    //         isClimbing = true;
-    //         isJumping = false;
-    //         foreach(var climabeObject in climabeObjects)
-    //         {
-    //             // find the nearest spot that isnt currently in use.
-
-    //             // make climbpoint = the nearest point.
-    //             climbPoint = climabeObject.transform.position;
-               
-    //             Debug.Log("climbing detected");
-    //         }
-    //     }
-    //     else
-    //     {
-    //         isJumping = true;
-    //         Debug.Log("no climbing spots detected");
-    //     }      
-    // }
-    
+        }  
+    }    
     private void Jumping(InputAction.CallbackContext context)
     {
         if(isJumping)
@@ -122,35 +88,26 @@ public class ClimbingScript : MonoBehaviour
             Debug.Log("jumping");
             rb.AddForce(jumpForce * transform.up * 10.0f, ForceMode.Impulse);
         }
-        // if(isClimbing && climbPoint != new Vector3(0,0,0))
-        // {
-        //     Debug.Log("climbing");
-        //     playerLerpStart.transform.position = transform.position;
-        //     endLerpPoint.position = climbPoint;
-        //     endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y - 0.85f, endLerpPoint.position.z-0.25f);
-        //     startClimb = true;
-        //     isClimbing = false;
-        //     climbPoint = new Vector3(0,0,0);
-        //     arrived = false;
-        //     holding = false;
-        // }
     }
     private void Climb(InputAction.CallbackContext context)
     {
         if(upwardClimbing.GetCanClimb())
         {
+            Debug.Log("starting the climb.");
             startClimb = true;
             arrived = false;
             GetNextClimbSpot();
             rb.useGravity = false;
+            movementController.enabled = false;
+            upwardClimbing.SetMoveRightArm(true);
         }
     }
     private void GetNextClimbSpot()
     {
+        Debug.Log("finding new climbing spot.");
         playerLerpStart.position = centreMass.position;
-        
-        endLerpPoint.position = upwardClimbing.GetMiddlePoint();
-        endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+        endLerpPoint.position = upwardClimbing.GetNewMiddleSpot();
+        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.2f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
     }
     private void LerpFunction()
     {
@@ -158,16 +115,24 @@ public class ClimbingScript : MonoBehaviour
         {
             if(upwardClimbing.GetMovementDirection().y != 0 || upwardClimbing.GetMovementDirection().x != 0)
             {
-                interpolateAmount = (interpolateAmount + Time.deltaTime*0.4f);
+                interpolateAmount = (interpolateAmount + Time.deltaTime * 0.35f);
             }
             
             playerPos.position = Vector3.Lerp(playerLerpStart.position, endLerpPoint.position, interpolateAmount);
+          
             if(interpolateAmount >= 1.0f)
             {
                 interpolateAmount = 0.0f;
                 arrived  = true;
             }
         }
+    }
+    public void SetNewMovement(Vector3 _newEndPoint)
+    {
+        playerLerpStart.position = centreMass.position;
+        endLerpPoint.position = _newEndPoint;
+        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.35f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+        interpolateAmount = 0.0f;
     }
     private void Holding(InputAction.CallbackContext context)
     {
@@ -177,7 +142,18 @@ public class ClimbingScript : MonoBehaviour
             holding = true;
         }
     }
+    public float GetMovementDirectionY()
+    {
+        Vector2 moveDirection = movement.ReadValue<Vector2>();
 
+        return moveDirection.y;
+    }
+     public float GetMovementDirectionX()
+    {
+        Vector2 moveDirection = movement.ReadValue<Vector2>();
+
+        return moveDirection.x;
+    }
     private void CanceledHold(InputAction.CallbackContext context)
     {
         holding = false;

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Animations.Rigging;
 public class UpwardClimbing : MonoBehaviour
 {
     [SerializeField] private LayerMask climableLayer;
@@ -13,14 +13,34 @@ public class UpwardClimbing : MonoBehaviour
     private Vector3 middlePoint = Vector3.zero;
     private bool canClimb = false;
     bool m_Started;
+    [SerializeField] private ClimbingScript climbingScript;
+    // rigging start
+    [SerializeField] private Transform rightArmStartPosition;
+    [SerializeField] private Transform rightRigAimPosition;
+    [SerializeField] private float rigTargetWeightRightArm;
+    [SerializeField] private Rig rightArmRig;
+    [SerializeField] private Transform rightArmPos;
+    private float interpolateAmountRightArm = 0.0f;
+    private bool moveRightArm = true;
+
+
+    [SerializeField] private Transform leftArmStartPosition;
+    [SerializeField] private Transform leftRigAimPosition;
+    [SerializeField] private float rigTargetWeightLeftArm;
+    [SerializeField] private Rig leftArmRig;
+    [SerializeField] private Transform leftArmPos;
+    private float interpolateAmountLeftArm = 0.0f;
+
+    //rigging end.
+
     [SerializeField] private Transform[] grabbablePositionsRightHand;
     [SerializeField] private Transform[] grabbablePositionsLeftHand;
    [SerializeField] private Material newMaterialRefR;
    [SerializeField] private Material newMaterialRefL;
     private Transform targetSpotLeftHand;
     private Transform targetSpotRightHand;
-    private Vector3 currentHandSpotLeft = Vector3.zero;
-    private Vector3 currentHandSpotRight = Vector3.zero;
+    private GameObject currentHandSpotLeft;
+    private GameObject currentHandSpotRight;
     private Vector2 movementDirection;
     private int arrayPosLeftHand = 0;
     private int arrayPosRightHand = 0;
@@ -31,41 +51,177 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private float movingY = 0.0f;
     [SerializeField] private bool movingLeftHand = false;
     [SerializeField] private bool movingRightHand = false;
+    [SerializeField]  private bool needNewLeftHandSpot = false;
+     [SerializeField] private bool needNewRightHandSpot = false;
 
     void Start()
     {
         m_Started = true;
-        for(int i = 0; i < 50; i++)
+        for(int i = 0; i < 150; i++)
         {
             grabbablePositionsLeftHand[i] = gameObject.transform;
             grabbablePositionsRightHand[i] = gameObject.transform;
         }
+        
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
-        if (m_Started)
-            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-            Gizmos.DrawWireCube(transform.position, transform.localScale);
-    }
+    // void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
+    //     if (m_Started)
+    //         //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+    //         Gizmos.DrawWireCube(transform.position, transform.localScale);
+    // }
     // Update is called once per frame
     void Update()
     {
-        FindClimbingPositions();
+        FindRightHandClimbingPositions();
+        FindLeftHandClimbingPositions();
+        
         LerpRightHandToTarget();
         LerpLeftHandToTarget();
-        movementDirection.x = movingX;
-        movementDirection.y = movingY;
+        
+        RiggingWeightLerp();
+       
+        movementDirection.x = climbingScript.GetMovementDirectionX();
+        movementDirection.y = climbingScript.GetMovementDirectionY();
     }
-    private void FindClimbingPositions()
+    private void RiggingWeightLerp()
+    {
+        rightArmRig.weight = Mathf.Lerp(rightArmRig.weight, rigTargetWeightRightArm, Time.deltaTime*10);
+        leftArmRig.weight = Mathf.Lerp(leftArmRig.weight, rigTargetWeightLeftArm, Time.deltaTime*10);
+        
+        if(canClimb)
+        {
+            rigTargetWeightRightArm = 0.9f;
+            rigTargetWeightLeftArm = 0.9f;
+        }
+        else
+        {
+            rigTargetWeightRightArm = 0.0f;
+            rigTargetWeightLeftArm = 0.0f;
+        }
+    }
+    private void FindRightHandClimbingPositions()
     {
         Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
             grabbablePositionsRightHand[i] = climableSpots[i].gameObject.transform;
+        }
+
+        if(climableSpots.Length == 0)
+        {
+            canClimb = false;
+        }
+        else
+        {
+            canClimb = true;
+            arrayPosRightHand = 0;
+        }
+
+            if(movementDirection.y > 0)//Up
+            {
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 5;
+                    Debug.Log("moving up and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 4;
+                    Debug.Log("moving Up and to the Right");
+                }
+                if(movementDirection.x == 0) // Up
+                {
+                    chosenReference = 0;
+                    Debug.Log("just moving up");
+                }
+            }   
+            if(movementDirection.y < 0)//Down
+            {
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 7;
+                    Debug.Log("moving down and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 6;
+                    Debug.Log("moving down and to the right");
+                }
+                if(movementDirection.x == 0)// down
+                {
+                chosenReference = Random.Range(6,7);
+                Debug.Log("just moving down");
+                }
+            }     
+
+            if(movementDirection.x > 0 && movementDirection.y == 0)
+            {
+                chosenReference = 2;
+                Debug.Log("Just Moving Left");
+            }
+            if(movementDirection.x < 0 && movementDirection.y == 0)
+            {
+                chosenReference = 3;
+                Debug.Log("just moving right");
+            }
+                
+                System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
+                {
+                    
+                    float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
+                    float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
+                    return distanceX.CompareTo(distanceY);
+                });
+                
+                targetSpotRightHand = grabbablePositionsRightHand[arrayPosRightHand];
+
+                
+        if(needNewRightHandSpot)
+        {
+
+            currentHandSpotRight = targetSpotRightHand.gameObject;
+            needNewRightHandSpot = false;
+
+            if(movementDirection.x < 0 && movementDirection.y == 0)
+            {
+                 middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
+            }
+            else if(movementDirection.x > 0 && movementDirection.y == 0)
+            {
+                 middlePoint = GetMiddlePoint(targetSpotRightHand.position, downwardClimbing.GetCurrentSpotRightFoot());
+            }
+            else
+            {  
+                middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);   
+            }
+              
+            climbingScript.SetNewMovement(middlePoint);
+            if(currentHandSpotRight != null)
+            {
+                currentHandSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
+            }
+
+        }
+        
+    }
+    public Vector3 GetNewMiddleSpot()
+    {
+        needNewLeftHandSpot = true;
+        movingLeftHand = true;
+        middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);
+        return middlePoint;
+    }
+    private void FindLeftHandClimbingPositions()
+    {
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        
+        for(int i = 0; i < climableSpots.Length; i++)
+        {
             grabbablePositionsLeftHand[i] = climableSpots[i].gameObject.transform;
         }
 
@@ -77,57 +233,56 @@ public class UpwardClimbing : MonoBehaviour
         {
             canClimb = true;
             arrayPosLeftHand = 0;
-            arrayPosRightHand = 0;
-
-
-        if(movementDirection.y > 0)//Up
-        {
-            if(movementDirection.x > 0)//Up Right
-            {
-                chosenReference = 5;
-                Debug.Log("moving up and to the left");
-            }
-            if(movementDirection.x < 0)//Up Left
-            {
-                chosenReference = 4;
-                Debug.Log("moving Up and to the Right");
-            }
-            if(movementDirection.x == 0) // Up
-            {
-                chosenReference = 0;
-                Debug.Log("just moving up");
-            }
-        }   
-        if(movementDirection.y < 0)//Down
-        {
-            if(movementDirection.x > 0)//Down Right
-            {
-                chosenReference = 7;
-                Debug.Log("moving down and to the left");
-            }
-            if(movementDirection.x < 0)//Down Left
-            {
-                 chosenReference = 6;
-                 Debug.Log("moving down and to the right");
-            }
-            if(movementDirection.x == 0)// down
-            {
-               chosenReference = 1;
-               Debug.Log("just moving down");
-            }
-        }     
-
-        if(movementDirection.x > 0 && movementDirection.y == 0)
-        {
-            chosenReference = 2;
-            Debug.Log("Just Moving Left");
         }
-        if(movementDirection.x < 0 && movementDirection.y == 0)
-        {
-            chosenReference = 3;
-            Debug.Log("just moving right");
-        }
-       
+            if(movementDirection.y > 0)//Up
+            {
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 5;
+                    Debug.Log("moving up and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 4;
+                    Debug.Log("moving Up and to the Right");
+                }
+                if(movementDirection.x == 0) // Up
+                {
+                    chosenReference = 0;
+                    Debug.Log("just moving up");
+                }
+            }   
+            if(movementDirection.y < 0)//Down
+            {
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 7;
+                    Debug.Log("moving down and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 6;
+                    Debug.Log("moving down and to the right");
+                }
+                if(movementDirection.x == 0)// down
+                {
+                chosenReference = 1;
+                Debug.Log("just moving down");
+                }
+            }     
+
+            if(movementDirection.x < 0 && movementDirection.y == 0)
+            {
+                chosenReference = 2;
+                Debug.Log("just moving right");
+               
+            }
+            if(movementDirection.x > 0 && movementDirection.y == 0)
+            {
+                chosenReference = 3;
+                Debug.Log("Just Moving Left");
+            }
+        
 
             System.Array.Sort(grabbablePositionsLeftHand, (x, y) =>
             {
@@ -136,40 +291,110 @@ public class UpwardClimbing : MonoBehaviour
                 return distanceX.CompareTo(distanceY);
             });
             
-            System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
-            {
-                float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
-                float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
-                return distanceX.CompareTo(distanceY);
-            });
-            
-            if(grabbablePositionsLeftHand[0].position == currentHandSpotLeft && grabbablePositionsLeftHand.Length > 1)
-            {
-                arrayPosLeftHand++;
-            }
-            
-            if(grabbablePositionsRightHand[0].position == currentHandSpotRight && grabbablePositionsRightHand.Length > 1)
-            {
-                arrayPosRightHand++;
-            }
-         
+            // if(grabbablePositionsLeftHand[0].position == currentHandSpotLeft.transform.position && grabbablePositionsLeftHand.Length > 1)
+            // {
+            //     arrayPosLeftHand++;
+            // }
+        
             targetSpotLeftHand = grabbablePositionsLeftHand[arrayPosLeftHand];
-            targetSpotRightHand = grabbablePositionsRightHand[arrayPosRightHand];
 
-           
-            targetSpotLeftHand.gameObject.GetComponent<Renderer>().material = newMaterialRefL;
-            targetSpotRightHand.gameObject.GetComponent<Renderer>().material = newMaterialRefR;
+        
+
+        if(needNewLeftHandSpot)
+        {
+            currentHandSpotLeft = targetSpotLeftHand.gameObject;
+            needNewLeftHandSpot = false;
             
-            middlePoint = GetMiddlePoint(targetSpotLeftHand.position, targetSpotRightHand.position);
+            if(movementDirection.x < 0 && movementDirection.y == 0)
+            {
+                 middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
+            }
+            else if(movementDirection.x > 0 && movementDirection.y == 0)
+            {
+                 middlePoint = GetMiddlePoint(targetSpotRightHand.position, downwardClimbing.GetCurrentSpotRightFoot());
+            }
+            else
+            {  
+                middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);   
+            }
+              
+            climbingScript.SetNewMovement(middlePoint);
+            if(currentHandSpotLeft != null)
+            {
+                currentHandSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
+            }
         }
+        
     }
     private void LerpRightHandToTarget()
     {
+        if(rightArmStartPosition == null)
+        {
+            rightArmStartPosition.position = rightArmPos.position;
+        }
+        if(movingRightHand && currentHandSpotRight != null)
+        {
+           
+            interpolateAmountRightArm  += Time.deltaTime * 1.25f;
+
+            float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentHandSpotRight.transform.position.x, interpolateAmountRightArm);
+            float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentHandSpotRight.transform.position.y, interpolateAmountRightArm);
+            float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentHandSpotRight.transform.position.z, interpolateAmountRightArm);
+            
+            rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+
+            if(interpolateAmountRightArm >= 1.0f)
+            {
+                movingLeftHand = true;
+                movingRightHand = false;
+
+                needNewLeftHandSpot = true;
+                Debug.Log("right hand has reached is destination");
+                rightArmStartPosition.position = currentHandSpotRight.transform.position;
+                interpolateAmountRightArm = 0.0f;
+            }
+        }
+        else if(!movingRightHand && currentHandSpotRight != null)
+        {
+            rightRigAimPosition.position = currentHandSpotRight.transform.position;
+        }
 
     }
     private void LerpLeftHandToTarget()
     {
+        if(leftArmStartPosition == null)
+        {
+            leftArmStartPosition.position = leftArmPos.position;
+        }
+        if(movingLeftHand && currentHandSpotLeft != null)
+        {
+           
+            interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
+            
+            float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
+            float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentHandSpotLeft.transform.position.y, interpolateAmountLeftArm);
+            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentHandSpotLeft.transform.position.z, interpolateAmountLeftArm);
+            
+            leftRigAimPosition.position = new Vector3(newX, newY, newZ);
 
+            if(interpolateAmountLeftArm >= 1.0f)
+            {
+                interpolateAmountLeftArm = 0.0f;
+
+                movingLeftHand = false;
+                movingRightHand = true;
+
+                needNewRightHandSpot = true; 
+                leftArmStartPosition.position = currentHandSpotLeft.transform.position;
+                
+                Debug.Log("left hand has reached is destination");
+               
+            }
+        }
+        else if(!movingLeftHand && currentHandSpotLeft != null)
+        {
+            leftRigAimPosition.position = currentHandSpotLeft.transform.position;
+        }
     }
     private Vector3 GetMiddlePoint(Vector3 leftHandPos, Vector3 rightHandPos)
     {
@@ -190,19 +415,19 @@ public class UpwardClimbing : MonoBehaviour
     }
     public Vector3 GetCurrentSpotLeftHand()
     {
-        return currentHandSpotLeft;
+        return currentHandSpotLeft.transform.position;
     }
     public void SetCurrentSpotLeftHand(Vector3 _newCurrentSpotLeft)
     {
-        currentHandSpotLeft = _newCurrentSpotLeft;
+        currentHandSpotLeft.transform.position = _newCurrentSpotLeft;
     }
     public void SetCurrentSpotRightHand(Vector3 _newCurrentSpotRight)
     {
-        currentHandSpotRight = _newCurrentSpotRight;
+        currentHandSpotRight.transform.position = _newCurrentSpotRight;
     }
     public Vector3 GetCurrentSpotRightHand()
     {
-        return currentHandSpotRight;
+        return currentHandSpotRight.transform.position;
     }
     public void SetMovementDirection(Vector2 _moveDirection)
     {
@@ -210,9 +435,6 @@ public class UpwardClimbing : MonoBehaviour
     }
     public Vector3 GetMiddlePoint()
     {
-        currentHandSpotLeft = targetSpotLeftHand.position;
-        currentHandSpotRight = targetSpotRightHand.position; 
-        downwardClimbing.SetCurrentFootSpot();
         return middlePoint;
     }
     public bool GetCanClimb()
@@ -223,5 +445,16 @@ public class UpwardClimbing : MonoBehaviour
     {
         return movementDirection;
     }
-    
+    public void SetMoveRightArm(bool _moveRightArm)
+    {
+        rightArmStartPosition.position = rightArmPos.position;
+        leftArmStartPosition.position = leftArmPos.position;
+    }
+    public bool GetMoveRightArm()
+    {
+        return moveRightArm;
+    }
+    public void FindNewSpots()
+    {
+    }
 }
