@@ -5,22 +5,37 @@ using UnityEngine;
 public class AnimationStateController : MonoBehaviour
 {
     Animator animator;
+    public ThirdPersonController controller_ref;
     float velocityZ = 0f;
     float velocityX = 0f;
-    public float acceleration = 7f;
-    public float deceleration = 5f;
+    private float acceleration = 7f;
+    private float deceleration = 5f;
     public float max_walk_vel = 0.5f;
     public float max_run_vel = 2f;
     int velZ_hash;
     int velX_hash;
+    int rb_velX_hash;
+    int rb_velZ_hash;
     private int crouch_layer_index;
     private int jump_layer_index;
     private int base_layer_index;
     private float crouch_weight = 6f;
     private float weight = 0f;
-    public float jump_time = 0f;
+    private float stand_jump_time = 0f;
+    private float run_jump_time = 0f;
+    private float hard_land_time = 0f;
     private float j_timer = 0f;
-    bool is_jumping = false;
+    private float land_timer = 0f;
+    private bool is_jumping = false;
+    private bool run_jump = false;
+    private bool stand_jump = false;
+    private bool hard_land = false;
+    private Vector3 rb_vel;
+
+    private float time_since_fallen = 0f;
+    private float hard_landing_threshold = 0.1f;
+
+    private float falling_delay_time = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +44,8 @@ public class AnimationStateController : MonoBehaviour
         animator = GetComponent<Animator>();
         velZ_hash = Animator.StringToHash("VelocityZ");
         velX_hash = Animator.StringToHash("VelocityX");
+        rb_velX_hash = Animator.StringToHash("RB_velX");
+        rb_velZ_hash = Animator.StringToHash("RB_velZ");
 
         //Referencing the layer for crouching
         crouch_layer_index = animator.GetLayerIndex("Crouching");
@@ -210,10 +227,20 @@ public class AnimationStateController : MonoBehaviour
         //Foreach loop to loop through the anims until we get to jumping
         foreach(AnimationClip clip in clips)
         {
-            //If we reach the jumping animation, get the length and store this in the jump_time variable
+            //If we reach the jumping animation, get the length and store this in the relative time variable
             if(clip.name == "H_Jumping2")
             {
-                jump_time = clip.length;
+                stand_jump_time = clip.length;
+            }
+
+            if(clip.name == "H_Jump3")
+            {
+                run_jump_time = clip.length;
+            }
+
+            if(clip.name == "H_HardLanding")
+            {
+                hard_land_time = clip.length;
             }
 
         }
@@ -262,57 +289,106 @@ public class AnimationStateController : MonoBehaviour
             animator.SetLayerWeight(crouch_layer_index, weight);
         }
 
-        if(!crouch_pressed && jump_pressed && (velocityX <= 0 && velocityZ <= 0))
+        //Jumping parameters for choosing between animations
+        //Get the player rigid body velocity to pass into the animator
+        rb_vel = controller_ref.GetRBVelocity(rb_vel);
+        //Debug.Log(rb_vel);
+        if(!crouch_pressed && jump_pressed && ((rb_vel.x > 0.1 || rb_vel.x < -0.1) || 
+        (rb_vel.z > 0.1 || rb_vel.z < -0.1)))
         {
-            animator.SetBool("StandJump", true);
+            animator.SetBool("isJumping", true);
 
-            is_jumping = true;
+            run_jump = true;
 
-            j_timer = jump_time - 0.3f;
-            animator.SetLayerWeight(jump_layer_index, 1f);
-            animator.SetLayerWeight(base_layer_index, 0f);
+            j_timer = run_jump_time - 0.5f;
+
+            stand_jump = false;
         }
-        else if (!crouch_pressed && jump_pressed && (velocityX > 0 && velocityZ > 0))
+        else if(!crouch_pressed && jump_pressed && ((rb_vel.x <= 0.1 && rb_vel.x >= -0.1 ) || 
+        (rb_vel.z <= 0.1 && rb_vel.z >= -0.1)))
         {
-            animator.SetBool("RunJump", true);
+            animator.SetBool("isJumping", true);
 
-            is_jumping = true;
+            stand_jump = true;
 
-            j_timer = jump_time - 0.3f;
-            animator.SetLayerWeight(jump_layer_index, 1f);
-            animator.SetLayerWeight(base_layer_index, 0f);
+            j_timer = stand_jump_time - 0.3f;
+
+            run_jump = false;
         }
 
-        if (is_jumping && (velocityX <= 0 && velocityZ <= 0))
+        if (run_jump)
         {
             j_timer -= Time.deltaTime;
-
             if(j_timer <= 0)
             {
-                animator.SetBool("StandJump", false);
-                is_jumping = false;
-                j_timer = jump_time - 0.3f;
+                animator.SetBool("isJumping", false);
+                run_jump = false;
             }
-
-            animator.SetLayerWeight(jump_layer_index, 0f);
-            animator.SetLayerWeight(base_layer_index, 1f);
         }
-        else if (is_jumping && (velocityX > 0 || velocityZ > 0))
+        else if (stand_jump)
         {
             j_timer -= Time.deltaTime;
-
-            if (j_timer <= 0)
+            //Debug.Log(j_timer);
+            if(j_timer <= 0)
             {
-                animator.SetBool("RunJump", false);
-                is_jumping = false;
-                j_timer = jump_time - 0.3f;
+                animator.SetBool("isJumping", false);
+                stand_jump = false;
+            }
+        }
+
+        bool is_grounded = controller_ref.GetGrounded();
+
+        //Is the player falling? Play animation if they are
+        if(!stand_jump && !run_jump && !is_grounded)
+        {
+            StartCoroutine(DelayFallingAnim());
+            time_since_fallen += Time.deltaTime;
+        }
+        else
+        {
+            //Set the falling animation to stop playing
+            animator.SetBool("IsFalling", false);
+
+            if(time_since_fallen > hard_landing_threshold)
+            {
+                //land_timer = hard_land_time;
+                //animator.SetBool("HardLand", true);
+                //hard_land = true;
+                StartCoroutine(HardLandAnimation());
+                time_since_fallen = 0f;
             }
 
-            animator.SetLayerWeight(jump_layer_index, 0f);
-            animator.SetLayerWeight(base_layer_index, 1f);
+            // if(hard_land)
+            // {
+            //     land_timer -= Time.deltaTime;
+            //     Debug.Log(land_timer);
+            //     if(land_timer <= 0)
+            //     {
+            //         animator.SetBool("HardLand", false);
+            //         hard_land = false;
+            //         Debug.Log(hard_land);
+            //         time_since_fallen = 0f;
+            //     }
+            // }
         }
+
 
         animator.SetFloat(velZ_hash, velocityZ);
         animator.SetFloat(velX_hash, velocityX);
+        animator.SetFloat(rb_velX_hash, rb_vel.x);
+        animator.SetFloat(rb_velZ_hash, rb_vel.z);
+    }
+
+    IEnumerator DelayFallingAnim()
+    {
+        yield return new WaitForSeconds(falling_delay_time);
+        animator.SetBool("IsFalling", true);
+    }
+
+    IEnumerator HardLandAnimation()
+    {
+        animator.SetBool("HardLand", true);
+        yield return new WaitForSeconds(hard_land_time - 0.3f);
+        animator.SetBool("HardLand", false);
     }
 }
