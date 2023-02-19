@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DoClimb",
+                    "type": "Button",
+                    "id": "8fc7e193-a0e5-4a9a-8717-f826e2177db0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -287,10 +296,21 @@
                     "name": "",
                     "id": "7a7663cb-4d84-4987-8c3d-3d1f9f05d126",
                     "path": "<Keyboard>/space",
-                    "interactions": "",
+                    "interactions": "Hold(duration=1,pressPoint=0.25)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edc1e745-65b6-460c-9a9a-6ea6ab761b64",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DoClimb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

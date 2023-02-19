@@ -71,6 +71,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoClimb"",
+                    ""type"": ""Button"",
+                    ""id"": ""8fc7e193-a0e5-4a9a-8717-f826e2177db0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -309,10 +318,21 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""7a7663cb-4d84-4987-8c3d-3d1f9f05d126"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=1,pressPoint=0.25)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""edc1e745-65b6-460c-9a9a-6ea6ab761b64"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DoClimb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -905,6 +925,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Inspect = m_Player.FindAction("Inspect", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_DoClimb = m_Player.FindAction("DoClimb", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -981,6 +1002,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Inspect;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_DoClimb;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -990,6 +1012,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Inspect => m_Wrapper.m_Player_Inspect;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @DoClimb => m_Wrapper.m_Player_DoClimb;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1014,6 +1037,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @DoClimb.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDoClimb;
+                @DoClimb.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDoClimb;
+                @DoClimb.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDoClimb;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1033,6 +1059,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @DoClimb.started += instance.OnDoClimb;
+                @DoClimb.performed += instance.OnDoClimb;
+                @DoClimb.canceled += instance.OnDoClimb;
             }
         }
     }
@@ -1194,6 +1223,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnInspect(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnDoClimb(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
