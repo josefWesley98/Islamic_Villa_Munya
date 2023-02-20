@@ -24,8 +24,10 @@ public class AIController : MonoBehaviour
     int newPositionRandomiser = 0;
     
     //int chanceToWaitAtLocation = 50;
-    float waitTimeMax = 3.0f;
-    float waitTimeMin = 1.0f;
+    [SerializeField] float maxSpeed = 3.5f;
+    [SerializeField] float minSpeed = 2.0f;
+    [SerializeField] float waitTimeMax = 7.0f;
+    [SerializeField] float waitTimeMin = 1.0f;
     float waitingTime = 0.0f;
     float waitingTimer = 0.0f;
     bool isWaiting = false;
@@ -96,6 +98,7 @@ public class AIController : MonoBehaviour
             }
             else
             {
+                isWaiting = false;
                 arrivedAtTarget = true;
             }
         }
@@ -119,7 +122,8 @@ public class AIController : MonoBehaviour
        
         if(arrivedAtTarget)
         {
-            SetNewTargetPosition();    
+            SetNewTargetPosition();
+            agent.speed = Random.Range(minSpeed,maxSpeed);    
         }
     }
     void SetNewGoTo()
