@@ -65,14 +65,14 @@ public class UpwardClimbing : MonoBehaviour
         
     }
 
-    // void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
-    //     if (m_Started)
-    //         //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-    //         Gizmos.DrawWireCube(transform.position, transform.localScale);
-    // }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
+        if (m_Started)
+            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+            Gizmos.DrawWireCube(transform.position, transform.localScale);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -336,10 +336,10 @@ public class UpwardClimbing : MonoBehaviour
         {
            
             interpolateAmountRightArm  += Time.deltaTime * 1.25f;
-
+            float spotZ = currentHandSpotRight.transform.position.z + 0.15f;
             float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentHandSpotRight.transform.position.x, interpolateAmountRightArm);
             float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentHandSpotRight.transform.position.y, interpolateAmountRightArm);
-            float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentHandSpotRight.transform.position.z, interpolateAmountRightArm);
+            float newZ = Mathf.Lerp(rightRigAimPosition.position.z, spotZ, interpolateAmountRightArm);
             
             rightRigAimPosition.position = new Vector3(newX, newY, newZ);
 
@@ -370,10 +370,10 @@ public class UpwardClimbing : MonoBehaviour
         {
            
             interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
-            
+            float spotZ = currentHandSpotLeft.transform.position.z + 0.15f;
             float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
             float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentHandSpotLeft.transform.position.y, interpolateAmountLeftArm);
-            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentHandSpotLeft.transform.position.z, interpolateAmountLeftArm);
+            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, spotZ, interpolateAmountLeftArm);
             
             leftRigAimPosition.position = new Vector3(newX, newY, newZ);
 

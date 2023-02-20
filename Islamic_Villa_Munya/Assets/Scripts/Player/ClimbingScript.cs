@@ -107,7 +107,7 @@ public class ClimbingScript : MonoBehaviour
         Debug.Log("finding new climbing spot.");
         playerLerpStart.position = centreMass.position;
         endLerpPoint.position = upwardClimbing.GetNewMiddleSpot();
-        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.2f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.1f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
     }
     private void LerpFunction()
     {
