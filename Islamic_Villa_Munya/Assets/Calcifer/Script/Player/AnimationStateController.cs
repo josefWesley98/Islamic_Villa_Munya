@@ -19,7 +19,7 @@ public class AnimationStateController : MonoBehaviour
     private int crouch_layer_index;
     private int jump_layer_index;
     private int base_layer_index;
-    private float crouch_weight = 6f;
+    private float crouch_weight = 10f;
     private float weight = 0f;
     private float stand_jump_time = 0f;
     private float run_jump_time = 0f;
@@ -31,6 +31,7 @@ public class AnimationStateController : MonoBehaviour
     private bool stand_jump = false;
     private bool hard_land = false;
     private Vector3 rb_vel;
+    private bool input_disabled = false;
 
     private float time_since_fallen = 0f;
     private float hard_landing_threshold = 0.1f;
@@ -387,8 +388,16 @@ public class AnimationStateController : MonoBehaviour
 
     IEnumerator HardLandAnimation()
     {
+        StartCoroutine(DisableInput(hard_land_time));
         animator.SetBool("HardLand", true);
         yield return new WaitForSeconds(hard_land_time - 0.3f);
         animator.SetBool("HardLand", false);
+    }
+
+    private IEnumerator DisableInput(float duration)
+    {
+        input_disabled = true;
+        yield return new WaitForSeconds(duration);
+        input_disabled = false;
     }
 }
