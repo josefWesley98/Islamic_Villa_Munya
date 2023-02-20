@@ -107,13 +107,14 @@ public class PlayerInteract : MonoBehaviour
             firstPersonCamera.Priority = 15;
             closeButton.SetActive(true);
             infoObject.SetActive(true);
-            info.text =interactableObj.GetArtifactInfo();
+            info.text = interactableObj.GetArtifactInfo();
             if(!artifactGenerated)
             {
                 Ray ray = cam.ViewportPointToRay(new Vector3(0.5f,0.5f,0f));
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit)){
-                    destination = hit.point;
+                    //destination = hit.point;
+                    destination = ray.GetPoint(distFromCam);
                 }
                 else
                 {
