@@ -12,6 +12,9 @@ public class InteractalbeObject : MonoBehaviour
     [SerializeField] private string artifactInfoMedium = "Medium";
     [TextArea]
     [SerializeField] private string artifactInfoHard = "Hard";
+    [SerializeField] private Vector3 scale = new Vector3(0.35f,0.35f,0.35f);
+
+    [SerializeField] private GameObject LookAt;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,5 +43,13 @@ public class InteractalbeObject : MonoBehaviour
     public string GetArtifactInfoHard()
     {
         return artifactInfoHard;
+    }
+    public Vector3 GetScale()
+    {
+        return scale;
+    }
+    public Transform GetLookAt()
+    {
+        return LookAt.transform;
     }
 }

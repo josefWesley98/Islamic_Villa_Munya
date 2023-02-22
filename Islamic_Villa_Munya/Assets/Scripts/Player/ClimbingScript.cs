@@ -7,8 +7,13 @@ public class ClimbingScript : MonoBehaviour
 {
     PlayerControls playercontrols;
     InputAction jump;
+    InputAction climb;
     Rigidbody rb;
 
+    [SerializeField] private UpwardClimbing upwardClimbing;
+    [SerializeField] private DownwardClimbing downwardClimbing;
+    [SerializeField] private Transform centreMass;
+    [SerializeField] private Transform playerPos;
     private bool isClimbing = false;
     private bool isJumping = false;
     private Vector3 climbPoint = new Vector3(0,0,0);
@@ -39,60 +44,76 @@ public class ClimbingScript : MonoBehaviour
         jump.Enable();
         jump.started += Jumping;
         jump.performed += Holding;
+
+        climb = playercontrols.Player.DoClimb;
+        climb.Enable();
+        climb.started += Climb;
     }
 
     private void OnDisable()
     {
         playercontrols.Disable();
         jump.Disable();
+        climb.Disable();
     }
     // Update is called once per frame
     void Update()
     {
-        Climb(centre, radius);
+        //Climb(centre, radius);
         //isClimbing = false;
         isJumping = true;
         LerpFunction();
-
-        if(!arrived && !holding)
+        if(!upwardClimbing.GetCanClimb())
+        {
+            startClimb = false;
+        }
+        if(!startClimb)
         {
             rb.useGravity = true;
         }
-        if(jump.ReadValue<float>() == 0)
+        if(arrived && startClimb)
         {
             arrived = false;
-            holding = false;
+            GetNextClimbSpot();
         }
+        // if(!arrived && !holding)
+        // {
+        //     rb.useGravity = true;
+        // }
+        // if(jump.ReadValue<float>() == 0)
+        // {
+        //     arrived = false;
+        //     holding = false;
+        // }
     }
 
-    void Climb(Vector3 center, float radius)
-    {
-        Debug.Log("starting climb function");
-        Collider[] climabeObjects = Physics.OverlapSphere(center, radius, lm);
+    // void Climb(Vector3 center, float radius)
+    // {
+    //     Debug.Log("starting climb function");
+    //     Collider[] climabeObjects = Physics.OverlapSphere(center, radius, lm);
         
-        float[] order;
+    //     float[] order;
 
-        if(climabeObjects != null)
-        {
-            isClimbing = true;
-            isJumping = false;
-            foreach(var climabeObject in climabeObjects)
-            {
-                // find the nearest spot that isnt currently in use.
+    //     if(climabeObjects != null)
+    //     {
+    //         isClimbing = true;
+    //         isJumping = false;
+    //         foreach(var climabeObject in climabeObjects)
+    //         {
+    //             // find the nearest spot that isnt currently in use.
 
-                // make climbpoint = the nearest point.
-                climbPoint = climabeObject.transform.position;
+    //             // make climbpoint = the nearest point.
+    //             climbPoint = climabeObject.transform.position;
                
-                Debug.Log("climbing detected");
-            }
-        }
-        else
-        {
-            isJumping = true;
-            Debug.Log("no climbing spots detected");
-        }
-        
-    }
+    //             Debug.Log("climbing detected");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         isJumping = true;
+    //         Debug.Log("no climbing spots detected");
+    //     }      
+    // }
     
     private void Jumping(InputAction.CallbackContext context)
     {
@@ -101,31 +122,49 @@ public class ClimbingScript : MonoBehaviour
             Debug.Log("jumping");
             rb.AddForce(jumpForce * transform.up * 10.0f, ForceMode.Impulse);
         }
-        if(isClimbing && climbPoint != new Vector3(0,0,0))
+        // if(isClimbing && climbPoint != new Vector3(0,0,0))
+        // {
+        //     Debug.Log("climbing");
+        //     playerLerpStart.transform.position = transform.position;
+        //     endLerpPoint.position = climbPoint;
+        //     endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y - 0.85f, endLerpPoint.position.z-0.25f);
+        //     startClimb = true;
+        //     isClimbing = false;
+        //     climbPoint = new Vector3(0,0,0);
+        //     arrived = false;
+        //     holding = false;
+        // }
+    }
+    private void Climb(InputAction.CallbackContext context)
+    {
+        if(upwardClimbing.GetCanClimb())
         {
-            Debug.Log("climbing");
-            playerLerpStart.transform.position = transform.position;
-            endLerpPoint.position = climbPoint;
-            endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y - 0.85f, endLerpPoint.position.z-0.25f);
             startClimb = true;
-            isClimbing = false;
-            climbPoint = new Vector3(0,0,0);
             arrived = false;
-            holding = false;
+            GetNextClimbSpot();
+            rb.useGravity = false;
         }
     }
-
+    private void GetNextClimbSpot()
+    {
+        playerLerpStart.position = centreMass.position;
+        
+        endLerpPoint.position = upwardClimbing.GetMiddlePoint();
+        endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+    }
     private void LerpFunction()
     {
-        if(startClimb)
+        if(startClimb && !arrived)
         {
-            interpolateAmount = (interpolateAmount + Time.deltaTime*1.5f);
-            transform.position = Vector3.Lerp(playerLerpStart.position, endLerpPoint.position, interpolateAmount);
-            if(interpolateAmount >= 1)
+            if(upwardClimbing.GetMovementDirection().y != 0 || upwardClimbing.GetMovementDirection().x != 0)
             {
-                startClimb = false;
+                interpolateAmount = (interpolateAmount + Time.deltaTime*0.4f);
+            }
+            
+            playerPos.position = Vector3.Lerp(playerLerpStart.position, endLerpPoint.position, interpolateAmount);
+            if(interpolateAmount >= 1.0f)
+            {
                 interpolateAmount = 0.0f;
-               
                 arrived  = true;
             }
         }
