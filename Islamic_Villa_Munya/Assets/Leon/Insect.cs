@@ -54,7 +54,6 @@ public class Insect : MonoBehaviour
         insect.transform.rotation = Quaternion.Slerp(insect.transform.rotation, _lookRotation, Time.deltaTime * rotationSpeed);
     }
 
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
