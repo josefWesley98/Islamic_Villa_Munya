@@ -1,140 +1,348 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Animations.Rigging;
 public class DownwardClimbing : MonoBehaviour
 {
+    //scripts
     [SerializeField] private LayerMask climableLayer;
     [SerializeField] private UpwardClimbing upwardClimbing; 
+    // transforms 
     [SerializeField] private Transform[] grabbablePositionsRightFoot;
     [SerializeField] private Transform[] grabbablePositionsLeftFoot;
     [SerializeField] private Transform[] rightGrabPointReference;
     [SerializeField] private Transform[] leftGrabPointReference;
+    [SerializeField] private bool movingLeftFoot = false;
+    [SerializeField] private bool movingRightFoot= false;
+    [SerializeField] private bool needNewLeftFootSpot = false;
+    [SerializeField] private bool needNewRightFootSpot = false;
+    //Mats
     [SerializeField] private Material newMaterialRefL;
     [SerializeField] private Material newMaterialRefR;
+
+    // Left Foot Rig
+    [SerializeField] private Transform leftFootStartPosition;
+    [SerializeField] private Transform leftRigAimPosition;
+    [SerializeField] private float rigTargetWeightLeftFoot;
+    [SerializeField] private Rig leftFootRig;
+    [SerializeField] private Transform leftFootPos;
+    private float interpolateAmountLeftFoot = 0.0f;
+     private bool moveLeftFoot = true;
+
+    // Right Foot Rig
+    [SerializeField] private Transform rightFootStartPosition;
+    [SerializeField] private Transform rightRigAimPosition;
+    [SerializeField] private float rigTargetWeightRightFoot;
+    [SerializeField] private Rig rightFootRig;
+    [SerializeField] private Transform rightFootPos;
+    private float interpolateAmountRightFoot = 0.0f;
+    private bool moveRightFoot = true;
+
+    // general variables
     private bool m_Started;
     private Transform targetSpotLeftFoot;
     private Transform targetSpotRightFoot;
-    private Vector3 currentFootSpotLeft = Vector3.zero;
-    private Vector3 currentFootSpotRight = Vector3.zero;
+    private GameObject currentFootSpotLeft;
+    private GameObject currentFootSpotRight;
     private int arrayPosLeftFoot = 0;
     private int arrayPosRightFoot = 0;
     private int chosenReference = 0;
     private Vector2 movementDirection;
     private bool gotFootHolds = false;
+    
     // Start is called before the first frame update
     void Start()
     {
+        movingLeftFoot = true;
+        needNewLeftFootSpot = true; 
         m_Started = true; 
-        for(int i = 0; i < 50; i++)
+        for(int i = 0; i < 150; i++)
         {
             grabbablePositionsLeftFoot[i] = gameObject.transform;
             grabbablePositionsRightFoot[i] = gameObject.transform;
         }
     }
-    void Update()
+     void Update()
     {
-       DoClimbing();
-       movementDirection = upwardClimbing.GetMovementDirection();
+        FindRightFootClimbingPositions();
+        FindLeftFootClimbingPositions();
+        
+        LerpRightFootToTarget();
+        LerpLeftFootToTarget();
+        
+        RiggingWeightLerp();
+       
     }
-
-    private void DoClimbing()
+    private void RiggingWeightLerp()
+    {
+        rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
+        leftFootRig.weight = Mathf.Lerp(leftFootRig.weight, rigTargetWeightLeftFoot, Time.deltaTime*10);
+        
+        if(gotFootHolds)
+        {
+            rigTargetWeightRightFoot = 1.0f;
+            rigTargetWeightLeftFoot = 1.0f;
+        }
+        else
+        {
+            rigTargetWeightRightFoot = 0.0f;
+            rigTargetWeightLeftFoot = 0.0f;
+        }
+    }
+    private void FindRightFootClimbingPositions()
     {
         Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
             grabbablePositionsRightFoot[i] = climableSpots[i].gameObject.transform;
-            grabbablePositionsLeftFoot[i] = climableSpots[i].gameObject.transform;
         }
 
         if(climableSpots.Length == 0)
         {
             gotFootHolds = false;
-            Debug.Log("no Foot holds");
         }
-        else 
+        else
         {
             gotFootHolds = true;
-        }
-
-        if(upwardClimbing.GetCanClimb() && gotFootHolds)
-        {
-             Debug.Log("Foot holds Found");
-            arrayPosLeftFoot = 0;
             arrayPosRightFoot = 0;
+        }
 
             if(movementDirection.y > 0)//Up
             {
-                if(movementDirection.x > 0)//Up Right
+                if(movementDirection.x > 0)
                 {
                     chosenReference = 5;
+                    Debug.Log("moving up and to the left");
                 }
-                if(movementDirection.x < 0)//Up Left
+                if(movementDirection.x < 0)
                 {
-                chosenReference = 4;
+                    chosenReference = 4;
+                    Debug.Log("moving Up and to the Right");
                 }
                 if(movementDirection.x == 0) // Up
                 {
                     chosenReference = 0;
+                    Debug.Log("just moving up");
                 }
             }   
             if(movementDirection.y < 0)//Down
             {
-                if(movementDirection.x > 0)//Down Right
+                if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
+                    Debug.Log("moving down and to the left");
                 }
-                if(movementDirection.x < 0)//Down Left
+                if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
+                    Debug.Log("moving down and to the right");
                 }
                 if(movementDirection.x == 0)// down
                 {
-                chosenReference = 1;
+                chosenReference = Random.Range(6,7);
+                Debug.Log("just moving down");
                 }
             }     
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
-                Debug.Log("just moving right");
+                Debug.Log("Just Moving Left");
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 3;
-                Debug.Log("Just Moving Left");
+                Debug.Log("just moving right");
             }
-            System.Array.Sort(grabbablePositionsLeftFoot, (x, y) =>
+                
+                System.Array.Sort(grabbablePositionsRightFoot, (x, y) =>
                 {
-                    float distanceX = Vector3.Distance(x.transform.position, leftGrabPointReference[chosenReference].position);
-                    float distanceY = Vector3.Distance(y.transform.position, leftGrabPointReference[chosenReference].position);
-                    return distanceX.CompareTo(distanceY);
-                });
-            
-            System.Array.Sort(grabbablePositionsRightFoot, (x, y) =>
-                {
+                    
                     float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
                     float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
                     return distanceX.CompareTo(distanceY);
                 });
                 
-            if(grabbablePositionsLeftFoot[0].position == currentFootSpotLeft && grabbablePositionsLeftFoot.Length > 1)
+                targetSpotRightFoot = grabbablePositionsRightFoot[arrayPosRightFoot];
+
+                
+        if(needNewRightFootSpot)
+        {
+                currentFootSpotRight = targetSpotRightFoot.gameObject;
+                needNewRightFootSpot = false;
+
+                if(currentFootSpotRight != null)
+                {
+                    currentFootSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
+                }
+        }
+        
+    }
+    private void FindLeftFootClimbingPositions()
+    {
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        
+        for(int i = 0; i < climableSpots.Length; i++)
+        {
+            grabbablePositionsLeftFoot[i] = climableSpots[i].gameObject.transform;
+        }
+
+        if(climableSpots.Length == 0)
+        {
+            gotFootHolds = false;
+        }
+        else
+        {
+            gotFootHolds = true;
+            arrayPosLeftFoot = 0;
+        }
+            if(movementDirection.y > 0)//Up
             {
-                arrayPosLeftFoot++;
-            }
-            
-            if(grabbablePositionsRightFoot[0].position == currentFootSpotRight && grabbablePositionsRightFoot.Length > 1)
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 5;
+                    Debug.Log("moving up and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 4;
+                    Debug.Log("moving Up and to the Right");
+                }
+                if(movementDirection.x == 0) // Up
+                {
+                    chosenReference = 0;
+                    Debug.Log("just moving up");
+                }
+            }   
+            if(movementDirection.y < 0)//Down
             {
-                arrayPosRightFoot++;
+                if(movementDirection.x > 0)
+                {
+                    chosenReference = 7;
+                    Debug.Log("moving down and to the left");
+                }
+                if(movementDirection.x < 0)
+                {
+                    chosenReference = 6;
+                    Debug.Log("moving down and to the right");
+                }
+                if(movementDirection.x == 0)// down
+                {
+                chosenReference = 1;
+                Debug.Log("just moving down");
+                }
+            }     
+
+            if(movementDirection.x > 0 && movementDirection.y == 0)
+            {
+                chosenReference = 2;
+                Debug.Log("Just Moving Left");
             }
+            if(movementDirection.x < 0 && movementDirection.y == 0)
+            {
+                chosenReference = 3;
+                Debug.Log("just moving right");
+            }
+        
+
+            System.Array.Sort(grabbablePositionsLeftFoot, (x, y) =>
+            {
+                float distanceX = Vector3.Distance(x.transform.position, leftGrabPointReference[chosenReference].position);
+                float distanceY = Vector3.Distance(y.transform.position, leftGrabPointReference[chosenReference].position);
+                return distanceX.CompareTo(distanceY);
+            });
             
+            // if(grabbablePositionsLeftFoot[0].position == currentFootSpotLeft.transform.position && grabbablePositionsLeftFoot.Length > 1)
+            // {
+            //     arrayPosLeftFoot++;
+            // }
+        
             targetSpotLeftFoot = grabbablePositionsLeftFoot[arrayPosLeftFoot];
-            targetSpotRightFoot = grabbablePositionsRightFoot[arrayPosRightFoot];
 
-            targetSpotLeftFoot.gameObject.GetComponent<Renderer>().material = newMaterialRefL;
-            targetSpotRightFoot.gameObject.GetComponent<Renderer>().material = newMaterialRefR;
+        
 
+        if(needNewLeftFootSpot)
+        {
+            currentFootSpotLeft = targetSpotLeftFoot.gameObject;
+            needNewLeftFootSpot = false;
+            if(currentFootSpotLeft != null)
+            {
+                currentFootSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
+            }
+        }
+        
+    }
+    private void LerpRightFootToTarget()
+    {
+        if(rightFootStartPosition == null)
+        {
+            rightFootStartPosition.position = rightFootPos.position;
+        }
+        if(movingRightFoot && currentFootSpotRight != null)
+        {
+           //  rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
+            interpolateAmountRightFoot += Time.deltaTime *1.25f;
+            //rightRigAimPosition.position = Vector3.Lerp(rightFootStartPosition.position, currentFootSpotRight.transform.position , interpolateAmountRightFoot);
+             float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentFootSpotRight.transform.position.x, interpolateAmountRightFoot);
+             float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentFootSpotRight.transform.position.y, interpolateAmountRightFoot);
+             float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentFootSpotRight.transform.position.z, interpolateAmountRightFoot);
+            
+            rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+
+            if(interpolateAmountRightFoot >= 1.0f)
+            {
+                movingLeftFoot = true;
+                movingRightFoot = false;
+
+                rightFootStartPosition.position = currentFootSpotRight.transform.position;
+                
+                needNewLeftFootSpot = true;
+                interpolateAmountRightFoot = 0.0f;
+                
+                Debug.Log("right Foot has reached is destination");
+            }
+        }
+        else if(!movingRightFoot && currentFootSpotRight != null)
+        {
+            rightRigAimPosition.position = currentFootSpotRight.transform.position;
+        }
+
+    }
+    private void LerpLeftFootToTarget()
+    {
+        if(leftFootStartPosition == null)
+        {
+            leftFootStartPosition.position = leftFootPos.position;
+        }
+        if(movingLeftFoot && currentFootSpotLeft != null)
+        {
+           
+            interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
+
+            float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentFootSpotLeft.transform.position.x, interpolateAmountLeftFoot);
+            float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentFootSpotLeft.transform.position.y, interpolateAmountLeftFoot);
+            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentFootSpotLeft.transform.position.z, interpolateAmountLeftFoot);
+
+            leftRigAimPosition.position = new Vector3(newX, newY, newZ);
+
+            if(interpolateAmountLeftFoot >= 1.0f)
+            {
+                interpolateAmountLeftFoot = 0.0f;
+
+                movingLeftFoot = false;
+                movingRightFoot = true;
+
+                needNewRightFootSpot = true; 
+                leftFootStartPosition.position = currentFootSpotLeft.transform.position;
+                
+                Debug.Log("left Foot has reached is destination");
+               
+            }
+        }
+        else if(!movingLeftFoot && currentFootSpotLeft != null)
+        {
+            leftRigAimPosition.position = currentFootSpotLeft.transform.position;
         }
     }
 
@@ -156,19 +364,14 @@ public class DownwardClimbing : MonoBehaviour
     }
     public Vector3 GetCurrentSpotLeftFoot()
     {
-        return currentFootSpotLeft;
+        return currentFootSpotLeft.transform.position;
     }
     public Vector3 GetCurrentSpotRightFoot()
     {
-        return currentFootSpotRight;
+        return currentFootSpotRight.transform.position;
     }
     public void SetMovementDirection(Vector2 _moveDirection)
     {
         movementDirection = _moveDirection;
-    }
-    public void SetCurrentFootSpot()
-    {
-        //currentFootSpotLeft = targetSpotLeftFoot.position;
-        //currentFootSpotRight = targetSpotRightFoot.position;
     }
 }
