@@ -7,18 +7,22 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class Door : MonoBehaviour
 {
+    public float originAngle = 90.0f;
     [Range(0.1f, 20)]
     public float hingeOffset = 1f;
     [Range(-179, 179)]
     public float angleOpen = 90.0f;
-    public float offsetRot = 0f;
+
+    public Vector3 orientation = Vector3.right;
+    
+    float offsetRot = 0f;
     public float openSpeed = 1f;
     public float closeSpeed = 1f;
     public bool open = false;
     //public bool destinationReached = false;
     //door holder is an empty object that serves as the hinge which this gameobject gets parented to
     GameObject doorHolder;
-    Vector3 hingeLocationWorld;
+    Vector3 hingePos;
     Vector3 openPos;
     Vector3 closedPos;
 
@@ -30,8 +34,15 @@ public class Door : MonoBehaviour
         if(Application.isPlaying)
             CreateDoorParent();
         //store the open and close positions
-        openPos = hingeLocationWorld + Quaternion.Euler(0, angleOpen + offsetRot, 0) * transform.right * -Vector3.Distance(hingeLocationWorld, transform.position);
-        closedPos = hingeLocationWorld + Quaternion.Euler(0, 0, 0) * transform.right * -Vector3.Distance(hingeLocationWorld, transform.position);
+        UpdatePositions();
+    }
+
+    void UpdatePositions()
+    {
+        //update the position of the hinge and open position in real time in edit mode
+        hingePos = transform.position + orientation * hingeOffset;
+        closedPos = hingePos + Quaternion.Euler(0, 0, 0) * orientation * -Vector3.Distance(hingePos, transform.position);
+        openPos = hingePos + Quaternion.Euler(0, angleOpen + offsetRot, 0) * orientation * -Vector3.Distance(hingePos, transform.position);
     }
 
     void Update()
@@ -39,10 +50,7 @@ public class Door : MonoBehaviour
         //run only in edit mode
         if (!Application.isPlaying)
         {
-            //update the position of the hinge and open position in real time in edit mode
-            hingeLocationWorld = transform.position + transform.right * hingeOffset;
-            openPos = hingeLocationWorld + Quaternion.Euler(0, angleOpen + offsetRot, 0) * transform.right * -Vector3.Distance(hingeLocationWorld, transform.position);
-
+            UpdatePositions();
             //stuff breaks if door not kept vertical so z and x are locked for now
             Vector3 rot = transform.eulerAngles;
             rot.x = rot.z = 0;
@@ -83,9 +91,9 @@ public class Door : MonoBehaviour
     {
         doorHolder = new GameObject("Door Holder");
         doorHolder.transform.parent = null;
-        hingeLocationWorld = transform.position + transform.right * hingeOffset;
+        hingePos = transform.position + orientation * hingeOffset;
         doorHolder.transform.rotation = transform.rotation * Quaternion.Euler(0, -90, 0);
-        doorHolder.transform.position = hingeLocationWorld;
+        doorHolder.transform.position = hingePos;
         transform.parent = doorHolder.transform;
     }
 
@@ -93,15 +101,21 @@ public class Door : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(hingeLocationWorld, 0.2f);
-        Handles.Label(hingeLocationWorld + Vector3.up * 0.3f, "Hinge");
+        Gizmos.DrawSphere(hingePos, 0.2f);
+        Handles.Label(hingePos + Vector3.up * 0.3f, "Hinge");
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(hingeLocationWorld, openPos);
+        Gizmos.DrawLine(hingePos, openPos);
         Gizmos.DrawSphere(openPos, 0.05f);
         Handles.Label(openPos + Vector3.up * 0.2f, "Open");
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, hingeLocationWorld);
+        Gizmos.DrawLine(transform.position, hingePos);
         Gizmos.DrawSphere(transform.position, 0.05f);
         Handles.Label(transform.position + Vector3.up * 0.2f, "Closed");
+    }
+
+    public bool ToggleOpen()
+    {
+        open = !open;
+        return open;
     }
 }
