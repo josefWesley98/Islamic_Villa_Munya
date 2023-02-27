@@ -92,7 +92,7 @@ public class Door : MonoBehaviour
         doorHolder = new GameObject("Door Holder");
         doorHolder.transform.parent = null;
         hingePos = transform.position + orientation * hingeOffset;
-        doorHolder.transform.rotation = transform.rotation * Quaternion.Euler(0, -90, 0);
+        //doorHolder.transform.rotation = transform.rotation * Quaternion.Euler(0, -90, 0);
         doorHolder.transform.position = hingePos;
         transform.parent = doorHolder.transform;
     }
