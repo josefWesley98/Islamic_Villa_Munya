@@ -12,6 +12,7 @@ public class Door : MonoBehaviour
     public float angleOffset = 90.0f;
     [Range(-180, 180)]
     public float angleOpen = 90.0f;
+    public bool flipAngleValues = false;
 
     public float openSpeed = 1f;
     public float closeSpeed = 1f;
@@ -24,6 +25,7 @@ public class Door : MonoBehaviour
     Vector3 hingePos;
     Vector3 openPos;
     Vector3 closedPos;
+
 
     Mesh mesh;
     [Header("Door Extras")]
@@ -50,9 +52,9 @@ public class Door : MonoBehaviour
             UpdatePositions();
             mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
             //stuff breaks if door not kept vertical so z and x are locked for now
-            Vector3 rot = transform.eulerAngles;
-            rot.x = rot.z = 0;
-            transform.rotation = Quaternion.Euler(rot.x, rot.y, rot.z);
+            //Vector3 rot = transform.eulerAngles;
+            //rot.x = rot.z = 0;
+            //transform.rotation = Quaternion.Euler(rot.x, rot.y, rot.z);
         }
         else if (hinge != null)
         {
@@ -164,7 +166,15 @@ public class Door : MonoBehaviour
         Gizmos.color = c;
         Gizmos.DrawMesh(mesh, openPos, Quaternion.LookRotation(hingePos - openPos) * Quaternion.Euler(0, -angleOffset, 0), transform.localScale);
     }
-
+    private void OnValidate()
+    {
+        if (flipAngleValues)
+        {
+            angleOffset *= -1;
+            angleOpen *= -1;
+            flipAngleValues = false;
+        }
+    }
     public bool ToggleOpen()
     {
         open = !open;
