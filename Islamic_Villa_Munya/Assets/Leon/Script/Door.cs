@@ -6,6 +6,14 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class Door : MonoBehaviour
 {
+    public enum DoorState
+    {
+        Opening,
+        Open,
+        Closing,
+        Closed
+    }
+    public DoorState doorState;
     [Header("Door Parameters")]
     [Range(0.1f, 10)]
     public float hingeDistanceOffset = 1f;
@@ -19,6 +27,7 @@ public class Door : MonoBehaviour
     public float closeSpeed = 1f;
     public float openDelay = 0f;
     public float closeDelay = 0f;
+    float timer = 0.0f;
 
     //public bool open = false;
     public bool locked = false;
@@ -28,22 +37,12 @@ public class Door : MonoBehaviour
     Vector3 hingePos;
     Vector3 openPos;
     Vector3 closedPos;
-    float timer;
-    bool destinationReached = true;
+    bool destinationReached = false;
 
     Mesh mesh;
     [Header("Door Extras")]
     public Door puppetDoor;
     public UnityEvent doorReachOpen, doorReachClose;
-
-    public enum DoorState
-    {
-        Opening,
-        Open,
-        Closing,
-        Closed
-    }
-    public DoorState doorState;
 
     void Start()
     {
@@ -78,26 +77,42 @@ public class Door : MonoBehaviour
             switch (doorState)
             {
                 case DoorState.Open:
-                    // code block
+                    timer = 0;
+                    destinationReached = false;
                     break;
                 case DoorState.Closed:
-                    // code block
+                    timer = 0;
+                    destinationReached = false;
                     break;
                 case DoorState.Closing:
-                    MoveDoor(false);
+
+                    timer += Time.deltaTime;
+
+                    if(timer > closeDelay)
+                        MoveDoor(false);
 
                     if (destinationReached)
+                    {
+                        doorReachClose.Invoke();                
+                        //print("door closed");
                         doorState = DoorState.Closed;
+                    }
                     break;
                 case DoorState.Opening:
-                    MoveDoor(true);
+
+                    timer += Time.deltaTime;
+
+                    if (timer > openDelay)
+                        MoveDoor(true);
 
                     if (destinationReached)
+                    {
+                        doorReachOpen.Invoke();
+                        //print("door open");
                         doorState = DoorState.Open;
+                    }
                     break;
             }
-
-            print(destinationReached);
 
             //print(Vector3.Angle(hinge.transform.forward, hingeOpenTarget.transform.forward));
 
@@ -122,15 +137,15 @@ public class Door : MonoBehaviour
     }
 
     //move the door to its open or not open position
-    void MoveDoor(bool open = true)
+    void MoveDoor(bool openDoor = true)
     {
         //stop moving the door if at destination angle
         if (destinationReached)// && open != lastDestWasOpen)
             return;
         //set appropriate values based on if door is to be open or closed
-        Vector3 targetDirection = open ? hingeOpenTarget.transform.forward : hingeClosedTarget.transform.forward;
+        Vector3 targetDirection = openDoor ? hingeOpenTarget.transform.forward : hingeClosedTarget.transform.forward;
 
-        float speed = open ? openSpeed : closeSpeed;
+        float speed = openDoor ? openSpeed : closeSpeed;
         // step size is equal to speed times frame time.
         float singleStep = speed * Time.deltaTime;
         // rotate forward vector towards the target direction by one step
@@ -139,6 +154,7 @@ public class Door : MonoBehaviour
         hinge.transform.rotation = Quaternion.LookRotation(newDirection);
 
         destinationReached = CheckAngleReached(hinge.transform.forward, targetDirection);
+
         //hinge.transform.rotation = Quaternion.LookRotation(hingePos - openPos) * Quaternion.Euler(0, -angleOffset, 0);
         //if(open)
         //  hinge.transform.rotation = null
@@ -147,6 +163,7 @@ public class Door : MonoBehaviour
     //return true when angle between vectors in near zero
     bool CheckAngleReached(Vector3 from, Vector3 to)
     {
+        print(Vector3.Angle(from, to));
         return Vector3.Angle(from, to) < 1f;
     }
 
