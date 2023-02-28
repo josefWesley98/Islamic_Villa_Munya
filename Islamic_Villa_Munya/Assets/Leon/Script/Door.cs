@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,8 +17,10 @@ public class Door : MonoBehaviour
 
     public float openSpeed = 1f;
     public float closeSpeed = 1f;
+    public float openDelay = 0f;
+    public float closeDelay = 0f;
 
-    public bool open = false;
+    //public bool open = false;
     public bool locked = false;
 
     Vector3 doorToHingeVector = Vector3.forward;
@@ -25,16 +28,26 @@ public class Door : MonoBehaviour
     Vector3 hingePos;
     Vector3 openPos;
     Vector3 closedPos;
-
+    float timer;
+    bool destinationReached = true;
 
     Mesh mesh;
     [Header("Door Extras")]
     public Door puppetDoor;
     public UnityEvent doorReachOpen, doorReachClose;
 
+    public enum DoorState
+    {
+        Opening,
+        Open,
+        Closing,
+        Closed
+    }
+    public DoorState doorState;
 
     void Start()
     {
+        doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
         //on game start, make a hinge for this door object
@@ -51,10 +64,6 @@ public class Door : MonoBehaviour
         {
             UpdatePositions();
             mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
-            //stuff breaks if door not kept vertical so z and x are locked for now
-            //Vector3 rot = transform.eulerAngles;
-            //rot.x = rot.z = 0;
-            //transform.rotation = Quaternion.Euler(rot.x, rot.y, rot.z);
         }
         else if (hinge != null)
         {
@@ -63,15 +72,39 @@ public class Door : MonoBehaviour
                 ToggleOpen();
             }
 
-            if (locked)
-                open = false;
+            //if (locked)
+            //    open = false;
 
-            MoveDoor(open);
+            switch (doorState)
+            {
+                case DoorState.Open:
+                    // code block
+                    break;
+                case DoorState.Closed:
+                    // code block
+                    break;
+                case DoorState.Closing:
+                    MoveDoor(false);
+
+                    if (destinationReached)
+                        doorState = DoorState.Closed;
+                    break;
+                case DoorState.Opening:
+                    MoveDoor(true);
+
+                    if (destinationReached)
+                        doorState = DoorState.Open;
+                    break;
+            }
+
+            print(destinationReached);
+
+            //print(Vector3.Angle(hinge.transform.forward, hingeOpenTarget.transform.forward));
 
             if (puppetDoor != null)
             {
-                puppetDoor.open = open;
-                puppetDoor.locked = locked;
+                //puppetDoor.open = open;
+                //puppetDoor.locked = locked;
             }
         }// && !destinationReached)
     }
@@ -91,6 +124,9 @@ public class Door : MonoBehaviour
     //move the door to its open or not open position
     void MoveDoor(bool open = true)
     {
+        //stop moving the door if at destination angle
+        if (destinationReached)// && open != lastDestWasOpen)
+            return;
         //set appropriate values based on if door is to be open or closed
         Vector3 targetDirection = open ? hingeOpenTarget.transform.forward : hingeClosedTarget.transform.forward;
 
@@ -102,10 +138,7 @@ public class Door : MonoBehaviour
         // Calculate a rotation a step closer to the target and applies rotation to this object
         hinge.transform.rotation = Quaternion.LookRotation(newDirection);
 
-        //stop moving the door if at destination angle
-        //if(CheckAngleReached(doorHolder.transform.forward, targetDirection))        
-        //destinationReached = true;
-
+        destinationReached = CheckAngleReached(hinge.transform.forward, targetDirection);
         //hinge.transform.rotation = Quaternion.LookRotation(hingePos - openPos) * Quaternion.Euler(0, -angleOffset, 0);
         //if(open)
         //  hinge.transform.rotation = null
@@ -175,10 +208,14 @@ public class Door : MonoBehaviour
             flipAngleValues = false;
         }
     }
-    public bool ToggleOpen()
+    public void ToggleOpen()
     {
-        open = !open;
-        return open;
+        if(doorState == DoorState.Closed)
+            doorState = DoorState.Opening;
+        if (doorState == DoorState.Open)
+            doorState = DoorState.Closing;
+        //open = !open;
+        //return open;
     }
     public bool ToggleLocked()
     {

@@ -176,7 +176,7 @@ public class ThirdPersonController : MonoBehaviour
         // Debug.DrawRay(orientation.position, orientation.forward * 2, Color.blue);
         // Debug.DrawRay(orientation.position, orientation.right * 2, Color.red);
         // Debug.DrawRay(rb.position, move_dir, Color.green);
-        Debug.Log(rb.velocity);
+        //Debug.Log(rb.velocity);
         //Debug.Log(move_input);
         if (grounded)
         {
