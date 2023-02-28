@@ -39,43 +39,43 @@ public class ThirdPersonController : MonoBehaviour
     private Vector3 move_dir;
     public Transform orientation;
     public Transform ground_pos;
-    float horizontal_input;
-    float vertical_input;
+    Vector2 move_input;
     private float stand_jump_delay = 0f;
     InputAction movement;
     InputAction jumping;
+    public PlayerControls_Cal controls;
 
 
-    // void Awake() 
-    // {
-    //     controls = new PlayerControls_Cal();
-    // }
+    void Awake() 
+    {
+        controls = new PlayerControls_Cal();
+    }
     private void Start()
     {
         is_jump_ready = true;
     }
 
-    // private void OnEnable() 
-    // {
-    //     //Initialise the controls and assign to input actions
-    //     controls.Enable();
+    private void OnEnable() 
+    {
+        //Initialise the controls and assign to input actions
+        controls.Enable();
 
-    //     //Assign input actions here
-    //     jumping = controls.Player.Jump;
-    //     jumping.Enable();
+        //Assign input actions here
+        jumping = controls.Player.Jump;
+        jumping.Enable();
         
-    //     movement = controls.Player.Move;
-    //     movement.Enable();
+        movement = controls.Player.Move;
+        movement.Enable();
         
-    //     //jumping.started += _ => Jump(true);
-    // }
+        //jumping.started += _ => Jump(true);
+    }
 
-    // private void OnDisable() 
-    // {
-    //     controls.Disable();
-    //     movement.Disable();
-    //     jumping.Disable();
-    // }
+    private void OnDisable() 
+    {
+        controls.Disable();
+        movement.Disable();
+        jumping.Disable();
+    }
 
     // Update is called once per frame
     void Update()
@@ -132,11 +132,10 @@ public class ThirdPersonController : MonoBehaviour
     {
         if(grounded && !input_disabled)
         {
-            horizontal_input = Input.GetAxisRaw("Horizontal");
-            vertical_input = Input.GetAxisRaw("Vertical");
+            //horizontal_input = Input.GetAxisRaw("Horizontal");
+            //vertical_input = Input.GetAxisRaw("Vertical");
 
-            //horizontal_input = movement.ReadValue<Vector2>().y;
-            //vertical_input = movement.ReadValue<Vector2>().x;
+            move_input = movement.ReadValue<Vector2>();
 
             bool jump_pressed = Input.GetKey(KeyCode.Space);
             bool  crouch_pressed = Input.GetKey(KeyCode.LeftControl);
@@ -172,8 +171,13 @@ public class ThirdPersonController : MonoBehaviour
         bool run_pressed = Input.GetKey(KeyCode.LeftShift);
 
         // calculate movement direction
-        move_dir = orientation.forward * vertical_input + orientation.right * horizontal_input;
-
+        move_dir = orientation.forward * move_input.y + orientation.right * move_input.x;
+        // Debug.Log(orientation.forward);
+        // Debug.DrawRay(orientation.position, orientation.forward * 2, Color.blue);
+        // Debug.DrawRay(orientation.position, orientation.right * 2, Color.red);
+        // Debug.DrawRay(rb.position, move_dir, Color.green);
+        Debug.Log(rb.velocity);
+        //Debug.Log(move_input);
         if (grounded)
         {
             //If the player is walking
@@ -278,5 +282,10 @@ public class ThirdPersonController : MonoBehaviour
     public bool GetIsStandingJump()
     {
         return is_standing_jump;
+    }
+
+    public Vector2 GetPlayerInput()
+    {
+        return move_input;
     }
 }

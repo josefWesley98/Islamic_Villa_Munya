@@ -8,10 +8,9 @@ public class ThirdPersonCam : MonoBehaviour
     public Transform player;
     public Transform player_obj;
     public Rigidbody rb;
-    public ThirdPersonController player_controller;
+    public ThirdPersonController p;
 
     public float ground_rot_speed;
-    public float air_rot_speed;
 
     // Start is called before the first frame update
     void Start()
@@ -27,21 +26,10 @@ public class ThirdPersonCam : MonoBehaviour
         orientation.forward = view_dir.normalized;
 
         //Rotate the player
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        Vector3 input_dir = orientation.forward * vertical + orientation.right * horizontal;
+        Vector2 look_at = p.GetPlayerInput();
+        Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
 
-        if (input_dir != Vector3.zero && player_controller.GetIsStandingJump() == false)
-        {
-            if (player_controller.GetGrounded() == false)
-            {
-                player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * air_rot_speed);
-            }
-            else if (player_controller.GetGrounded() == true)
-            {
-                player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
-            }
-        }
+        player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
 
     }
 
