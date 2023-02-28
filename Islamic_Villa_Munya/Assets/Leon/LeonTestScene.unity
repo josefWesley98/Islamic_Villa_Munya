@@ -1458,7 +1458,6 @@ GameObject:
   - component: {fileID: 107037259}
   - component: {fileID: 107037258}
   - component: {fileID: 107037257}
-  - component: {fileID: 107037262}
   - component: {fileID: 107037263}
   m_Layer: 0
   m_Name: TestDoor
@@ -1545,26 +1544,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!95 &107037262
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107037256}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9794d24d5cd3b164d836e0d8f0dedce1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &107037263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,6 +1556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f37909c3d846ed499f4ec3f0cd2201a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorState: 3
   hingeDistanceOffset: 0.9
   angleOffset: 90
   angleOpen: 110
@@ -1585,7 +1565,6 @@ MonoBehaviour:
   closeSpeed: 1
   openDelay: 0
   closeDelay: 0
-  open: 0
   locked: 0
   puppetDoor: {fileID: 0}
   doorReachOpen:
@@ -31001,12 +30980,12 @@ PrefabInstance:
     - target: {fileID: 2790462081370704085, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000034269927
+      value: -0.000000034269927
       objectReference: {fileID: 0}
     - target: {fileID: 2790462081370704085, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000031321756
+      value: 0.0000000031321756
       objectReference: {fileID: 0}
     - target: {fileID: 4926470090747739387, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
@@ -31081,12 +31060,12 @@ PrefabInstance:
     - target: {fileID: 4926470091358618792, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000017134958
+      value: -0.000000017134969
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091358618792, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000015660873
+      value: 0.0000000015660881
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
@@ -31106,17 +31085,17 @@ PrefabInstance:
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.011299954
+      value: 0.011299957
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000018705342
+      value: 0.0000000011511047
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.11383e-11
+      value: -1.3008263e-11
       objectReference: {fileID: 0}
     - target: {fileID: 4926470092135892556, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
