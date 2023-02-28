@@ -43,21 +43,31 @@ public class Movement : MonoBehaviour
     {
         DoMovement();
         DoRotation();
+
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    rb.AddTorque(Vector3.up * 2);
+        //}
     }
 
     private void DoMovement()
     {
         Vector2 moveDirection = movement.ReadValue<Vector2>();
 
+        rb.angularVelocity *= 0.9f;
+        if(rb.velocity.magnitude > 4)
+        {
+            rb.velocity *= 0.9f;
+
+        }
+
         if(moveDirection.x > 0)
         {
-            rb.AddForce(moveSpeed * transform.right * 10.0f, ForceMode.Acceleration);
-            isMoving = true;
+            rb.AddTorque(Vector3.up * 0.5f);
         }
         else if(moveDirection.x < 0)
         {
-            rb.AddForce(moveSpeed * -transform.right * 10.0f, ForceMode.Acceleration);
-            isMoving = true;
+            rb.AddTorque(Vector3.up * -0.5f);
         }
         if(moveDirection.y > 0)
         {
