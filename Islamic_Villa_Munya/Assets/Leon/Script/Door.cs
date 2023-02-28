@@ -88,7 +88,7 @@ public class Door : MonoBehaviour
 
                     timer += Time.deltaTime;
 
-                    if(timer > closeDelay)
+                    if(timer > closeDelay || locked)
                         MoveDoor(false);
 
                     if (destinationReached)
@@ -114,14 +114,16 @@ public class Door : MonoBehaviour
                     break;
             }
 
+            if (locked)
+                doorState = DoorState.Closing;
             //print(Vector3.Angle(hinge.transform.forward, hingeOpenTarget.transform.forward));
 
             if (puppetDoor != null)
             {
-                //puppetDoor.open = open;
-                //puppetDoor.locked = locked;
+                puppetDoor.doorState = doorState;
+                puppetDoor.locked = locked;
             }
-        }// && !destinationReached)
+        }
     }
     void UpdatePositions()
     {
