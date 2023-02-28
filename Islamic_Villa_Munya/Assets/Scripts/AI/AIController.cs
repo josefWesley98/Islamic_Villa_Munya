@@ -43,6 +43,8 @@ public class AIController : MonoBehaviour
     bool goToSecondIsland = false;
     bool goToThirdIsland = false;
     bool goToFourthIsland = false;
+
+  
     void Start()
     {
         //Random.InitState(seed);
