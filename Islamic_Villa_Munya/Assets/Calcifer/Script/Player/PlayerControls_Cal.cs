@@ -71,6 +71,15 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleRun"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d0a6110-8f86-4eec-90e4-047517c8d8be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -313,6 +322,17 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36f3458c-e98b-4419-b854-e9eaf9014117"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleRun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -905,6 +925,7 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Inspect = m_Player.FindAction("Inspect", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_ToggleRun = m_Player.FindAction("ToggleRun", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -981,6 +1002,7 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Inspect;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_ToggleRun;
     public struct PlayerActions
     {
         private @PlayerControls_Cal m_Wrapper;
@@ -990,6 +1012,7 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Inspect => m_Wrapper.m_Player_Inspect;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @ToggleRun => m_Wrapper.m_Player_ToggleRun;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1014,6 +1037,9 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @ToggleRun.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
+                @ToggleRun.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
+                @ToggleRun.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1033,6 +1059,9 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @ToggleRun.started += instance.OnToggleRun;
+                @ToggleRun.performed += instance.OnToggleRun;
+                @ToggleRun.canceled += instance.OnToggleRun;
             }
         }
     }
@@ -1194,6 +1223,7 @@ public partial class @PlayerControls_Cal : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnInspect(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnToggleRun(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

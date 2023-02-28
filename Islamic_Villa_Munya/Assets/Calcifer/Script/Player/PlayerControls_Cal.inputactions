@@ -1,5 +1,5 @@
 {
-    "name": "PlayerControls",
+    "name": "PlayerControls_Cal",
     "maps": [
         {
             "name": "Player",
@@ -45,6 +45,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "cbb44275-21b5-4119-aece-c6b82a339c8c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleRun",
+                    "type": "Button",
+                    "id": "9d0a6110-8f86-4eec-90e4-047517c8d8be",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -291,6 +300,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36f3458c-e98b-4419-b854-e9eaf9014117",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ToggleRun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
