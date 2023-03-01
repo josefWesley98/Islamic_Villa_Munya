@@ -361,25 +361,9 @@ public class AnimationStateController : MonoBehaviour
 
             if(time_since_fallen > hard_landing_threshold)
             {
-                //land_timer = hard_land_time;
-                //animator.SetBool("HardLand", true);
-                //hard_land = true;
                 StartCoroutine(HardLandAnimation());
                 time_since_fallen = 0f;
             }
-
-            // if(hard_land)
-            // {
-            //     land_timer -= Time.deltaTime;
-            //     Debug.Log(land_timer);
-            //     if(land_timer <= 0)
-            //     {
-            //         animator.SetBool("HardLand", false);
-            //         hard_land = false;
-            //         Debug.Log(hard_land);
-            //         time_since_fallen = 0f;
-            //     }
-            // }
         }
 
 
@@ -406,7 +390,23 @@ public class AnimationStateController : MonoBehaviour
     private IEnumerator DisableInput(float duration)
     {
         input_disabled = true;
+        hard_land = true;
         yield return new WaitForSeconds(duration);
         input_disabled = false;
+    }
+
+    public bool GetHardLanding()
+    {
+        return hard_land;
+    }
+
+    public void SetHardLanding(bool land)
+    {
+        hard_land = land;
+    }
+
+    public float GetHardLandAnimTime()
+    {
+        return hard_land_time;
     }
 }
