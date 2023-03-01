@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class NIThirdPersonController : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private CapsuleCollider capsule;
     [SerializeField] private PlayerControls_Cal controls;
     Keyboard kb;
     InputAction hide_cursor;
@@ -42,6 +43,10 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private float stand_jump_force;
     [SerializeField] private float moving_jump_force;
     [SerializeField] private float air_multiplier;
+    [Header("Capsule Properties")]
+    [SerializeField] private float capsule_radius;
+    [SerializeField] private float capsule_height;
+    [SerializeField] private float capsule_centre;
     private float stand_jump_delay = 0.5f;
     private float disabled_input_delay = 1.7f;
 
@@ -55,6 +60,11 @@ public class NIThirdPersonController : MonoBehaviour
     private void Start()
     {
         //Initialise necessary variables here for player startup
+
+        //Set the capsule collider to variables that will change when crouching
+        capsule.height = capsule_height;
+        capsule.radius = capsule_radius;
+        capsule.center = new Vector3(0f, capsule_centre, 0f);
     }
 
     private void OnEnable() 
@@ -115,8 +125,6 @@ public class NIThirdPersonController : MonoBehaviour
         if(floor)
         {
             grounded = true;
-            //is_jumping = false;
-
         }
         else
         {
@@ -173,9 +181,15 @@ public class NIThirdPersonController : MonoBehaviour
             }
 
             //If the player is running
-            if (is_running)
+            if (is_running && !is_crouching)
             {
                 rb.AddForce(move_dir.normalized * run_speed * 10, ForceMode.Force);
+            }
+
+            //If the player is trying to run while crouching
+            if(is_running && is_crouching)
+            {
+                rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
         }
         else if (!grounded)
@@ -290,10 +304,16 @@ public class NIThirdPersonController : MonoBehaviour
         if(crouch.started)
         {
             is_crouching = true;
+            capsule.height = capsule_height / 2;
+            capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+            capsule.radius = capsule_radius * 2;
         }
         if(crouch.canceled)
         {
             is_crouching = false;
+            capsule.height = capsule_height;
+            capsule.center = new Vector3(0f, capsule_centre, 0f);
+            capsule.radius = capsule_radius;
         }
     }
 
