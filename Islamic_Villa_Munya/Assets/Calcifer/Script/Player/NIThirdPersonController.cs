@@ -227,6 +227,7 @@ public class NIThirdPersonController : MonoBehaviour
                 //Apply the delay before allowing the player to jump
                 StartCoroutine(DisableInput(disabled_input_delay));
                 Invoke("DelayedJump", stand_jump_delay);
+                Debug.Log("delaaaaaaaayed");
             }
             else
             {
@@ -314,6 +315,11 @@ public class NIThirdPersonController : MonoBehaviour
         return is_standing_jump;
     }
 
+    public bool GetJumping()
+    {
+        return is_jumping;
+    }
+
     public Vector2 GetPlayerInput()
     {
         return move_input;
@@ -327,6 +333,13 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetRunning()
     {
         return is_running;
+    }
+
+    public bool GetPlayerDirection()
+    {
+        bool dir = false;
+        //Need to get the direction of the player
+        return dir;
     }
 }
 
