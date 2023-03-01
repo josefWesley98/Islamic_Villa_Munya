@@ -8,23 +8,16 @@ public class MainMenu : MonoBehaviour
     //[SerializeField] SpawnAudioPrefabs SpawnAudio;
     // Get AudioManager for audio spawning
 
-
-    void Start()
+    public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
     {
-        //SpawnAudio.spawnAudioPrefab(0);        //Spawn audio prefab (prefab is 2D in this case) and NO TRUE cause it is a 2D sound (ambient sound)
-
-    }
-    // Start is called before the first frame update
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("PlayerTesting");
+        SceneManager.LoadScene("PlayerTesting");  
     }
 
-    public void PlayGame2()
+    public void PlayGame2()                         // when playgame2 is called, it switches scene to "SampleScene" which is the ai testing
     {
         SceneManager.LoadScene("SampleScene");
     }
-    public void QuitGame()
+    public void QuitGame()                           // when quitgame is called, it quits the application
     {
         Debug.Log("Quit");
         Application.Quit();
