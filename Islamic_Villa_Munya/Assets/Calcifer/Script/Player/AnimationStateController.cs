@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AnimationStateController : MonoBehaviour
 {
     Animator animator;
-    public ThirdPersonController controller_ref;
+    public NIThirdPersonController controller_ref;
     float velocityZ = 0f;
     float velocityX = 0f;
     private float acceleration = 7f;
@@ -38,9 +39,14 @@ public class AnimationStateController : MonoBehaviour
 
     private float falling_delay_time = 0.1f;
 
+    Keyboard kb;
+
     // Start is called before the first frame update
     void Start()
     {
+        //User input from keyboard
+        kb = InputSystem.GetDevice<Keyboard>();
+
         //Search for the animator component attached to this object
         animator = GetComponent<Animator>();
 
@@ -64,64 +70,66 @@ public class AnimationStateController : MonoBehaviour
     {
         //2D Blend trees example begins here
         //If player presses forward, increase vel in z direction
-        if(forward_pressed && velocityZ < current_max_vel)
+        if (forward_pressed && velocityZ < current_max_vel)
         {
             velocityZ += Time.deltaTime * acceleration;
         }
 
         //If the player presses walk backwards, decrease the vel in the z direction
-        if(backward_pressed && velocityZ < current_max_vel)
+        if (backward_pressed && velocityZ < current_max_vel)
         {
             velocityZ -= Time.deltaTime * acceleration;
         }
 
         //If the player presses left, increase vel in left dir
-        if(left_pressed && velocityX > -current_max_vel)
+        if (left_pressed && velocityX > -current_max_vel)
         {
             velocityX -= Time.deltaTime * acceleration;
         }
 
         //If player moves right, increase vel in right dir
-        if(right_pressed && velocityX < current_max_vel)
+        if (right_pressed && velocityX < current_max_vel)
         {
             velocityX += Time.deltaTime * acceleration;
         }
 
         //Decrease velocityZ
-        if(!forward_pressed && velocityZ > 0f)
+        if (!forward_pressed && velocityZ > 0f)
         {
             velocityZ -= Time.deltaTime * deceleration;
         }
 
         //Increase the velocity when not moving backwards to 0
-        if(!backward_pressed && velocityZ < 0f)
+        if (!backward_pressed && velocityZ < 0f)
         {
             velocityX += Time.deltaTime * deceleration;
         }
 
         //Increase velocityX if left is not pressed and velocityX < 0
-        if(!left_pressed && velocityX < 0f)
+        if (!left_pressed && velocityX < 0f)
         {
             velocityX += Time.deltaTime * deceleration;
         }
 
         //Decrease velocityX if right is not pressed and velocityX > 0
-        if(!right_pressed && velocityX > 0f)
+        if (!right_pressed && velocityX > 0f)
         {
             velocityX -= Time.deltaTime * deceleration;
         }
 
         //Reset the crouch weight to 0
-        if(crouch_pressed && weight > 1f)
+        if (crouch_pressed && weight > 1f)
         {
             weight = 1f;
         }
 
-        if(!crouch_pressed && weight < 0f)
+        if (!crouch_pressed && weight < 0f)
         {
             weight = 0f;
         }
     }
+
+
 
     void LockOrResetVel(bool forward_pressed, bool backward_pressed, bool left_pressed, bool right_pressed, bool run_pressed, bool crouch_pressed, float current_max_vel)
     {
@@ -255,15 +263,16 @@ public class AnimationStateController : MonoBehaviour
     void Update()
     {
         //Variables - Player Control
-        //Get key input
-        //GET THE INPUT FROM THE PLAYER CONTROLLER CLASS INSTEAD OF USING BUTTON PRESSES
-        bool forward_pressed = Input.GetKey(KeyCode.W);
-        bool left_pressed = Input.GetKey(KeyCode.A);
-        bool right_pressed = Input.GetKey(KeyCode.D);
-        bool run_pressed = Input.GetKey(KeyCode.LeftShift);
-        bool backward_pressed = Input.GetKey(KeyCode.S);
-        bool crouch_pressed = Input.GetKey(KeyCode.LeftControl);
-        bool jump_pressed = Input.GetKey(KeyCode.Space);
+        //Get key input using newer input system
+        bool forward_pressed = kb.wKey.isPressed;
+        bool left_pressed = kb.aKey.isPressed;
+        bool right_pressed = kb.dKey.isPressed;
+        bool run_pressed = kb.leftShiftKey.isPressed;
+        bool backward_pressed = kb.sKey.isPressed;
+        bool crouch_pressed = kb.leftCtrlKey.isPressed;
+        bool jump_pressed = kb.spaceKey.isPressed;
+
+        rb_vel = controller_ref.GetRBVelocity(rb_vel);
 
         //Set current max_vel
         float current_max_vel = run_pressed ? max_run_vel : max_walk_vel;
@@ -294,13 +303,10 @@ public class AnimationStateController : MonoBehaviour
             animator.SetLayerWeight(crouch_layer_index, weight);
         }
 
-        //Jumping parameters for choosing between animations
-        //Get the player rigid body velocity to pass into the animator
-        rb_vel = controller_ref.GetRBVelocity(rb_vel);
-        //Debug.Log(rb_vel);
-        if(!crouch_pressed && jump_pressed && ((rb_vel.x > 0.1 || rb_vel.x < -0.1) || 
+        if (!crouch_pressed && jump_pressed && ((rb_vel.x > 0.1 || rb_vel.x < -0.1) || 
         (rb_vel.z > 0.1 || rb_vel.z < -0.1)))
         {
+            Debug.Log(rb_vel);
             animator.SetBool("isJumping", true);
 
             run_jump = true;
@@ -333,7 +339,6 @@ public class AnimationStateController : MonoBehaviour
         else if (stand_jump)
         {
             j_timer -= Time.deltaTime;
-            //Debug.Log(j_timer);
             if(j_timer <= 0)
             {
                 animator.SetBool("isJumping", false);
@@ -356,25 +361,9 @@ public class AnimationStateController : MonoBehaviour
 
             if(time_since_fallen > hard_landing_threshold)
             {
-                //land_timer = hard_land_time;
-                //animator.SetBool("HardLand", true);
-                //hard_land = true;
                 StartCoroutine(HardLandAnimation());
                 time_since_fallen = 0f;
             }
-
-            // if(hard_land)
-            // {
-            //     land_timer -= Time.deltaTime;
-            //     Debug.Log(land_timer);
-            //     if(land_timer <= 0)
-            //     {
-            //         animator.SetBool("HardLand", false);
-            //         hard_land = false;
-            //         Debug.Log(hard_land);
-            //         time_since_fallen = 0f;
-            //     }
-            // }
         }
 
 
@@ -401,7 +390,23 @@ public class AnimationStateController : MonoBehaviour
     private IEnumerator DisableInput(float duration)
     {
         input_disabled = true;
+        hard_land = true;
         yield return new WaitForSeconds(duration);
         input_disabled = false;
+    }
+
+    public bool GetHardLanding()
+    {
+        return hard_land;
+    }
+
+    public void SetHardLanding(bool land)
+    {
+        hard_land = land;
+    }
+
+    public float GetHardLandAnimTime()
+    {
+        return hard_land_time;
     }
 }

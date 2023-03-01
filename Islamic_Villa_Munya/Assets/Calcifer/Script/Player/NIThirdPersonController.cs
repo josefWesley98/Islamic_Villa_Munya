@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,9 @@ using UnityEngine.InputSystem;
 
 public class NIThirdPersonController : MonoBehaviour
 {
+    [SerializeField] private AnimationStateController animator_ref;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private CapsuleCollider capsule;
     [SerializeField] private PlayerControls_Cal controls;
     Keyboard kb;
     InputAction hide_cursor;
@@ -19,20 +22,24 @@ public class NIThirdPersonController : MonoBehaviour
 
     [SerializeField] private Transform cam;
     [SerializeField] private Transform orientation;
-    [SerializeField] private Transform ground_pos;
+    [SerializeField] private Transform feet_pos;
+    [SerializeField] private Transform head_pos;
 
     private Vector3 input;
     private Vector3 move_dir;
     private Vector2 move_input;
 
     [SerializeField] private LayerMask is_ground;
+    [SerializeField] private LayerMask is_ceiling;
 
     private bool grounded;
+    private bool is_roof;
     private bool is_running = false;
     private bool is_crouching = false;
     private bool is_jumping = false;
     private bool is_standing_jump = false;
     private bool input_disabled = false;
+    private bool hard_landing = false;
 
     [Header("Movement")]
     [SerializeField] private float ground_drag;
@@ -42,6 +49,10 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private float stand_jump_force;
     [SerializeField] private float moving_jump_force;
     [SerializeField] private float air_multiplier;
+    [Header("Capsule Properties")]
+    [SerializeField] private float capsule_radius;
+    [SerializeField] private float capsule_height;
+    [SerializeField] private float capsule_centre;
     private float stand_jump_delay = 0.5f;
     private float disabled_input_delay = 1.7f;
 
@@ -55,6 +66,11 @@ public class NIThirdPersonController : MonoBehaviour
     private void Start()
     {
         //Initialise necessary variables here for player startup
+
+        //Set the capsule collider to variables that will change when crouching
+        capsule.height = capsule_height;
+        capsule.radius = capsule_radius;
+        capsule.center = new Vector3(0f, capsule_centre, 0f);
     }
 
     private void OnEnable() 
@@ -108,23 +124,37 @@ public class NIThirdPersonController : MonoBehaviour
         //Function to hide cursor when playing
         HideCursor();
 
+        hard_landing = animator_ref.GetHardLanding();
+
         //Check to see if the player is on the ground
-        bool floor = Physics.CheckSphere(ground_pos.position, 0.2f, is_ground);
+        bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
+        bool roof = Physics.CheckSphere(head_pos.position, 0.2f, is_ceiling);
 
         //If the player is on the floor then set grounded to true and allow for movement and jumping
         if(floor)
         {
             grounded = true;
-            //is_jumping = false;
-
         }
         else
         {
             grounded = false;
         }
 
+        //Player will still be on ground but crouched, so allow for movement, but prevent the player from standing again.
+        if(roof)
+        {
+            //grounded = true;
+            is_roof = true;
+            Debug.Log("Don't stand up");
+        }
+        else
+        {
+            //grounded = false;
+            is_roof = false;
+        }
+
         //Handle drag
-        if (grounded)
+        if (grounded && !hard_landing)
         {
             //If the player speed is above the maximum velocity then call this function
             ControlPlayerVel();
@@ -136,6 +166,14 @@ public class NIThirdPersonController : MonoBehaviour
         else
         {
             rb.drag = 0f;
+        }
+
+        //If the player falls and has a hard landing, disable the input
+        if(hard_landing)
+        {
+            Debug.Log(hard_landing);
+            float disable_input = animator_ref.GetHardLandAnimTime() - 0.3f;
+            StartCoroutine(DisableInput(disable_input));
         }
     }
 
@@ -173,14 +211,20 @@ public class NIThirdPersonController : MonoBehaviour
             }
 
             //If the player is running
-            if (is_running)
+            if (is_running && !is_crouching)
             {
                 rb.AddForce(move_dir.normalized * run_speed * 10, ForceMode.Force);
+            }
+
+            //If the player is trying to run while crouching
+            if(is_running && is_crouching)
+            {
+                rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
         }
         else if (!grounded)
         {
-            rb.AddForce(move_dir.normalized * walk_speed * 10f * air_multiplier, ForceMode.Force);
+            //rb.AddForce(move_dir.normalized * walk_speed * 10f * air_multiplier, ForceMode.Force);
         }
     }
 
@@ -227,6 +271,7 @@ public class NIThirdPersonController : MonoBehaviour
                 //Apply the delay before allowing the player to jump
                 StartCoroutine(DisableInput(disabled_input_delay));
                 Invoke("DelayedJump", stand_jump_delay);
+                Debug.Log("delaaaaaaaayed");
             }
             else
             {
@@ -249,8 +294,14 @@ public class NIThirdPersonController : MonoBehaviour
     private IEnumerator DisableInput(float duration)
     {
         input_disabled = true;
+        rb.velocity = new Vector3(0f, 0f, 0f);
         yield return new WaitForSeconds(duration);
         input_disabled = false;
+
+        if (hard_landing)
+        {
+            animator_ref.SetHardLanding(false);
+        }
     }
 
     //Hide cursor function
@@ -289,10 +340,16 @@ public class NIThirdPersonController : MonoBehaviour
         if(crouch.started)
         {
             is_crouching = true;
+            capsule.height = capsule_height / 2;
+            capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+            capsule.radius = capsule_radius * 2;
         }
-        if(crouch.canceled)
+        if(crouch.canceled && !is_roof)
         {
             is_crouching = false;
+            capsule.height = capsule_height;
+            capsule.center = new Vector3(0f, capsule_centre, 0f);
+            capsule.radius = capsule_radius;
         }
     }
 
@@ -314,6 +371,11 @@ public class NIThirdPersonController : MonoBehaviour
         return is_standing_jump;
     }
 
+    public bool GetJumping()
+    {
+        return is_jumping;
+    }
+
     public Vector2 GetPlayerInput()
     {
         return move_input;
@@ -327,6 +389,13 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetRunning()
     {
         return is_running;
+    }
+
+    public bool GetPlayerDirection()
+    {
+        bool dir = false;
+        //Need to get the direction of the player
+        return dir;
     }
 }
 
