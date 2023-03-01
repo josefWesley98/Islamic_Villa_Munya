@@ -3,61 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*Cal's script starts here */
+
 public class NIThirdPersonController : MonoBehaviour
 {
-    public float ground_drag;
-    public float player_height;
-    public LayerMask is_ground;
-    public bool grounded;
-    bool is_walking = false;
-    bool is_running = false;
-    public bool is_standing_jump = false;
-
-    public float stand_jump_force;
-    public float moving_jump_force;
-    public float jump_cooldown;
-    public float air_multiplier;
-    bool is_jump_ready;
-    private bool input_disabled = false;
-    private float disabled_input_delay = 1f;
-
-    public float walk_speed;
-    public float run_speed;
-    public float smooth_time;
-    float turn_smooth_vel;
-
-
-    private float stand_jump_delay = 0f;
-
-
-
-    //New variables and variables to keep
-    public Rigidbody rb;
-    public PlayerControls_Cal controls;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private PlayerControls_Cal controls;
+    Keyboard kb;
+    InputAction hide_cursor;
+    InputAction show_cursor;
     InputAction movement;
     InputAction jumping;
     InputAction running;
+    InputAction crouching;
 
-    public Transform cam;
-    public Transform orientation;
-    public Transform ground_pos;
+    [SerializeField] private Transform cam;
+    [SerializeField] private Transform orientation;
+    [SerializeField] private Transform ground_pos;
 
     private Vector3 input;
     private Vector3 move_dir;
     private Vector2 move_input;
 
-    bool toggle_run = false;
+    [SerializeField] private LayerMask is_ground;
+
+    private bool grounded;
+    private bool is_running = false;
+    private bool is_crouching = false;
+    private bool is_jumping = false;
+    private bool is_standing_jump = false;
+    private bool input_disabled = false;
+
+    [Header("Movement")]
+    [SerializeField] private float ground_drag;
+    [SerializeField] private float walk_speed;
+    [SerializeField] private float run_speed;
+    [Header("Jumping")]
+    [SerializeField] private float stand_jump_force;
+    [SerializeField] private float moving_jump_force;
+    [SerializeField] private float air_multiplier;
+    private float stand_jump_delay = 0.5f;
+    private float disabled_input_delay = 1.7f;
 
 
     void Awake() 
     {
         //Assign the new input controller
         controls = new PlayerControls_Cal();
+        kb = InputSystem.GetDevice<Keyboard>();
     }
     private void Start()
     {
         //Initialise necessary variables here for player startup
-        is_jump_ready = true;
     }
 
     private void OnEnable() 
@@ -66,6 +63,12 @@ public class NIThirdPersonController : MonoBehaviour
         controls.Enable();
 
         //Assign input actions here
+        hide_cursor = controls.Player.HideCursor;
+        hide_cursor.Enable();
+
+        show_cursor = controls.Player.ShowCursor;
+        show_cursor.Enable();
+
         jumping = controls.Player.Jump;
         jumping.Enable();
         
@@ -75,10 +78,20 @@ public class NIThirdPersonController : MonoBehaviour
         running = controls.Player.ToggleRun;
         running.Enable();
 
+        crouching = controls.Player.Crouch;
+        crouching.Enable();
+
         //Use input actions to call necessary functions for player functionality
-        jumping.started += _ => Jump(false);
-        running.started -= _ => ToggleRunning(true);
-        running.performed -= _ => ToggleRunning(false);
+        hide_cursor.started += _ => HideCursor();
+        show_cursor.started += _ => ShowCursor();
+
+        jumping.started += _ => Jump();
+
+        running.started += _ => ToggleRunning(_);
+        running.canceled += _ => ToggleRunning(_);
+
+        crouching.started += _ => ToggleCrouch(_);
+        crouching.canceled += _ => ToggleCrouch(_);
     }
 
     private void OnDisable() 
@@ -102,6 +115,7 @@ public class NIThirdPersonController : MonoBehaviour
         if(floor)
         {
             grounded = true;
+            //is_jumping = false;
 
         }
         else
@@ -113,7 +127,7 @@ public class NIThirdPersonController : MonoBehaviour
         if (grounded)
         {
             //If the player speed is above the maximum velocity then call this function
-            //ControlPlayerVel();
+            ControlPlayerVel();
 
             //Prevent moving in the air by preventing player input updates during a jump
             PlayerInput();
@@ -137,41 +151,12 @@ public class NIThirdPersonController : MonoBehaviour
         {
             //Newer input system reading input values from the player
             move_input = movement.ReadValue<Vector2>();
-
-            bool jump_pressed = Input.GetKey(KeyCode.Space);
-            bool  crouch_pressed = Input.GetKey(KeyCode.LeftControl);
-
-            //When to jump
-            if (jump_pressed && is_jump_ready && grounded && !is_standing_jump && !crouch_pressed)
-            {
-                is_jump_ready = false;
-                
-                //Check if the player is standing still
-                if(rb.velocity.magnitude < 0.1f)
-                {
-                    is_standing_jump = true;
-                    //Apply a delay before jumping
-                    stand_jump_delay = 0.5f;
-                    Invoke("JumpWithDelay", stand_jump_delay);
-                }
-                else
-                {
-                    //Jump without delay
-                    Jump(false);
-                }
-
-                Invoke(nameof(ResetJump), jump_cooldown);
-            }
         }
     }
 
     private void PlayerMovement()
     {
-        //Capture the user key input
-        //Determine speed depending on whether run key is pressed
-        //bool run_pressed = Input.GetKey(KeyCode.LeftShift);
-
-        // calculate movement direction
+        //Calculate movement direction
         move_dir = orientation.forward * move_input.y + orientation.right * move_input.x;
         
         //Debug rays for making sure the player moves in the correct direction
@@ -182,20 +167,14 @@ public class NIThirdPersonController : MonoBehaviour
         if (grounded)
         {
             //If the player is walking
-            if (!toggle_run)
+            if (!is_running)
             {
-                is_running = false;
-                is_walking = true;
-                Debug.Log("walking");
                 rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
 
-            //If the player is running, increase the speed
-            if (toggle_run)
+            //If the player is running
+            if (is_running)
             {
-                is_walking = false;
-                is_running = true;
-                Debug.Log("Running");
                 rb.AddForce(move_dir.normalized * run_speed * 10, ForceMode.Force);
             }
         }
@@ -209,24 +188,18 @@ public class NIThirdPersonController : MonoBehaviour
     {
         Vector3 current_vel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+
         //Limit the velocity if above the threshold 
-        if(is_walking && !is_running && current_vel.magnitude > walk_speed)
+        if(current_vel.magnitude > walk_speed)
         {
             Vector3 limit_vel = current_vel.normalized * walk_speed;
             rb.velocity = new Vector3(limit_vel.x, rb.velocity.y, limit_vel.z);
         }
-        if (is_running && !is_walking && current_vel.magnitude > run_speed)
+        if (current_vel.magnitude > run_speed)
         {
             Vector3 limit_vel = current_vel.normalized * run_speed;
             rb.velocity = new Vector3(limit_vel.x, rb.velocity.y, limit_vel.z);
         }
-    }
-
-
-    //Delay jump
-    private void JumpWithDelay()
-    {
-        Jump(true);
     }
 
     //Stop the player rotating when standing jumping
@@ -236,25 +209,41 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     //Function for jumping
-    private void Jump(bool apply_delay)
+    private void Jump()
     {
-
-        if(apply_delay)
+        if(grounded)
         {
-            //Apply the delay before allowing the player to jump
-            StartCoroutine(DisableInput(disabled_input_delay));
-            rb.AddForce(transform.up * stand_jump_force, ForceMode.Impulse);
-        }
-        else
-        {
-            //Reset the player y-velocity to 0 so they player jumps to the same height every time
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            
-            //Apply the force once using impulse
-            rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
-        }
+            is_jumping = true;
+            bool apply_delay = false;
 
-        Invoke("NoRotationDelay", 1f);
+            //If the player magnitude is < 0.1, then apply delay for standing jump
+            if(rb.velocity.magnitude < 0.1f)
+            {
+                apply_delay = true;
+            }
+
+            if(apply_delay)
+            {
+                //Apply the delay before allowing the player to jump
+                StartCoroutine(DisableInput(disabled_input_delay));
+                Invoke("DelayedJump", stand_jump_delay);
+            }
+            else
+            {
+                //Reset the player y-velocity to 0 so they player jumps to the same height every time
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                
+                //Apply the force once using impulse
+                rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
+            }
+
+            Invoke("NoRotationDelay", 1f);
+        }
+    }
+
+    private void DelayedJump()
+    {
+        rb.AddForce(transform.up * stand_jump_force, ForceMode.Impulse);
     }
 
     private IEnumerator DisableInput(float duration)
@@ -267,32 +256,47 @@ public class NIThirdPersonController : MonoBehaviour
     //Hide cursor function
     private void HideCursor()
     {
-        //Make cursor disappear while playing game
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        //Hides cursor while playing
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    //Reset the ability for the player to jump here
-    private void ResetJump()
+    //Show the cursor
+    private void ShowCursor()
     {
-        is_jump_ready = true;
+        //Shows cursor while playing
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     //Function for determining whether the player wants to jump or not
-    private void ToggleRunning(bool currently_running)
+    private void ToggleRunning(InputAction.CallbackContext run)
     {
-        toggle_run = currently_running;
-        Debug.Log(toggle_run);
+        //If the player has pressed the run button in addition to moving
+        if(run.started)
+        {
+            is_running = true;
+        }
+        if(run.canceled)
+        {
+            is_running = false;
+        }
     }
 
+    //Function for determining whether the player wants to crouch or not
+    private void ToggleCrouch(InputAction.CallbackContext crouch)
+    {
+        if(crouch.started)
+        {
+            is_crouching = true;
+        }
+        if(crouch.canceled)
+        {
+            is_crouching = false;
+        }
+    }
+
+    //Getters relevant for passing variables into the animator controller
     public Vector3 GetRBVelocity(Vector3 vel)
     {
         vel = rb.velocity;
@@ -314,4 +318,16 @@ public class NIThirdPersonController : MonoBehaviour
     {
         return move_input;
     }
+
+    public bool GetCrouching()
+    {
+        return is_crouching;
+    }
+
+    public bool GetRunning()
+    {
+        return is_running;
+    }
 }
+
+/*Cal's script ends here*/

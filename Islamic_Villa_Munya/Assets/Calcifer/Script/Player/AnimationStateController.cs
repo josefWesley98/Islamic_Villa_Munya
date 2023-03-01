@@ -43,6 +43,8 @@ public class AnimationStateController : MonoBehaviour
     {
         //Search for the animator component attached to this object
         animator = GetComponent<Animator>();
+
+        //Use hash so it is less expensive for changing these float variables in the animator controller
         velZ_hash = Animator.StringToHash("VelocityZ");
         velX_hash = Animator.StringToHash("VelocityX");
         rb_velX_hash = Animator.StringToHash("RB_velX");
@@ -53,6 +55,7 @@ public class AnimationStateController : MonoBehaviour
         jump_layer_index = animator.GetLayerIndex("Jumping");
         base_layer_index = animator.GetLayerIndex("Base Layer");
 
+        //Get the animation times for specific animations
         UpdateAnimTimes();
     }
 
@@ -253,6 +256,7 @@ public class AnimationStateController : MonoBehaviour
     {
         //Variables - Player Control
         //Get key input
+        //GET THE INPUT FROM THE PLAYER CONTROLLER CLASS INSTEAD OF USING BUTTON PRESSES
         bool forward_pressed = Input.GetKey(KeyCode.W);
         bool left_pressed = Input.GetKey(KeyCode.A);
         bool right_pressed = Input.GetKey(KeyCode.D);
