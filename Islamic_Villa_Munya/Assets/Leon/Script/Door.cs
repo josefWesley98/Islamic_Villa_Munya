@@ -31,6 +31,7 @@ public class Door : MonoBehaviour
 
     //public bool open = false;
     public bool locked = false;
+    public bool unlockNextPress = false;
 
     Vector3 doorToHingeVector = Vector3.forward;
     GameObject hinge, hingeOpenTarget, hingeClosedTarget;
@@ -43,6 +44,9 @@ public class Door : MonoBehaviour
     [Header("Door Extras")]
     public Door puppetDoor;
     public UnityEvent doorReachOpen, doorReachClose;
+
+    public Transform temporaryPlayerReferenceDeleteLaterOk;
+    public float interactMinDistance = 1f;
 
     void Start()
     {
@@ -66,14 +70,21 @@ public class Door : MonoBehaviour
         }
         else if (hinge != null)
         {
-            if (Input.GetKeyDown(KeyCode.F))//TEMPORARY
+            if (Input.GetKeyDown(KeyCode.F) && Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos) < interactMinDistance)//TEMPORARY
             {
+                if (unlockNextPress && locked)
+                {
+                    locked = false;
+                    //play unlock sound
+                    return;
+                }
                 ToggleOpen();
             }
 
             //if (locked)
             //    open = false;
 
+            //Door State Machine
             switch (doorState)
             {
                 case DoorState.Open:
@@ -165,7 +176,7 @@ public class Door : MonoBehaviour
     //return true when angle between vectors in near zero
     bool CheckAngleReached(Vector3 from, Vector3 to)
     {
-        print(Vector3.Angle(from, to));
+        //print(Vector3.Angle(from, to));
         return Vector3.Angle(from, to) < 1f;
     }
 
