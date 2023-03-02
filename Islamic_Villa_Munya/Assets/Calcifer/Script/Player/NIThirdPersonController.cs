@@ -128,7 +128,7 @@ public class NIThirdPersonController : MonoBehaviour
 
         //Check to see if the player is on the ground
         bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
-        bool roof = Physics.CheckSphere(head_pos.position, 0.2f, is_ceiling);
+        bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
 
         //If the player is on the floor then set grounded to true and allow for movement and jumping
         if(floor)
@@ -145,14 +145,23 @@ public class NIThirdPersonController : MonoBehaviour
         {
             //grounded = true;
             is_roof = true;
-            Debug.Log("Don't stand up");
         }
-        else
+        else if(!roof)
         {
             //grounded = false;
             is_roof = false;
-        }
 
+            //Reset the capsule to it's usual parameters when player is standing
+            if(is_crouching)
+            {
+                bool force_stop_crouch = kb.leftCtrlKey.isPressed;
+                if(!force_stop_crouch)
+                {
+                    ResetCapsuleCollider();
+                }
+            }
+        }
+        
         //Handle drag
         if (grounded && !hard_landing)
         {
@@ -171,7 +180,6 @@ public class NIThirdPersonController : MonoBehaviour
         //If the player falls and has a hard landing, disable the input
         if(hard_landing)
         {
-            Debug.Log(hard_landing);
             float disable_input = animator_ref.GetHardLandAnimTime() - 0.3f;
             StartCoroutine(DisableInput(disable_input));
         }
@@ -221,10 +229,6 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
-        }
-        else if (!grounded)
-        {
-            //rb.AddForce(move_dir.normalized * walk_speed * 10f * air_multiplier, ForceMode.Force);
         }
     }
 
@@ -353,11 +357,18 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
+    private void ResetCapsuleCollider()
+    {
+            is_crouching = false;
+            capsule.height = capsule_height;
+            capsule.center = new Vector3(0f, capsule_centre, 0f);
+            capsule.radius = capsule_radius;
+    }
+
     //Getters relevant for passing variables into the animator controller
     public Vector3 GetRBVelocity(Vector3 vel)
     {
         vel = rb.velocity;
-        //Debug.Log(vel);
         return vel;
     }
 
@@ -389,13 +400,6 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetRunning()
     {
         return is_running;
-    }
-
-    public bool GetPlayerDirection()
-    {
-        bool dir = false;
-        //Need to get the direction of the player
-        return dir;
     }
 }
 

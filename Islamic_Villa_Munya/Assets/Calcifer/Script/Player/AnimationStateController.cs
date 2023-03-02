@@ -35,7 +35,7 @@ public class AnimationStateController : MonoBehaviour
     private bool input_disabled = false;
 
     private float time_since_fallen = 0f;
-    private float hard_landing_threshold = 0.1f;
+    private float hard_landing_threshold = 0.7f;
 
     private float falling_delay_time = 0.1f;
 
@@ -269,7 +269,7 @@ public class AnimationStateController : MonoBehaviour
         bool right_pressed = kb.dKey.isPressed;
         bool run_pressed = kb.leftShiftKey.isPressed;
         bool backward_pressed = kb.sKey.isPressed;
-        bool crouch_pressed = kb.leftCtrlKey.isPressed;
+        bool crouch_pressed = controller_ref.GetCrouching();
         bool jump_pressed = kb.spaceKey.isPressed;
 
         rb_vel = controller_ref.GetRBVelocity(rb_vel);
@@ -306,7 +306,6 @@ public class AnimationStateController : MonoBehaviour
         if (!crouch_pressed && jump_pressed && ((rb_vel.x > 0.1 || rb_vel.x < -0.1) || 
         (rb_vel.z > 0.1 || rb_vel.z < -0.1)))
         {
-            Debug.Log(rb_vel);
             animator.SetBool("isJumping", true);
 
             run_jump = true;
@@ -397,6 +396,7 @@ public class AnimationStateController : MonoBehaviour
 
     public bool GetHardLanding()
     {
+        Debug.Log(hard_land);
         return hard_land;
     }
 
