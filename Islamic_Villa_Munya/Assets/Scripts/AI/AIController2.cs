@@ -6,7 +6,7 @@ public class AIController2 : MonoBehaviour
 {
     [SerializeField] private NPCManager manager;
     [SerializeField] private int id = 0;
-
+    [SerializeField] private SpawnAudioPrefabs spawnAudioPrefabs;
     // job checks
     private bool isInspecting = false;
     private bool isWalking = false;
@@ -76,6 +76,7 @@ public class AIController2 : MonoBehaviour
     private bool rotatingLeft = false;
     private bool rotatingRight = false;
     private bool viewingArtifact = false;
+    private bool doSocialAudio = false;
     private Vector3 socialDestination = Vector3.zero;
     private float slerpSpeed = 2.0f;
     private Vector3 direction = Vector3.zero;
@@ -452,6 +453,12 @@ public class AIController2 : MonoBehaviour
                 isSocialising = true;
                 actionTimer += Time.deltaTime;
                 doSocialAnim = true;
+                // do audio.
+                if(doSocialAudio)
+                {
+                    spawnAudioPrefabs.spawnAudioPrefab(id, true);
+                    doSocialAudio = false;
+                }
 
                 if(actionTimer >= doSocialisingFor)
                 {
@@ -686,7 +693,6 @@ public class AIController2 : MonoBehaviour
     }
     private void NewJobSetup()
     {
-       
         if(newJob == "Walking" && allowWalkingAbout && manager.CheckForWalkingSpotsAvailable(currentLocation))
         {
             correctRotation = false;
@@ -763,7 +769,7 @@ public class AIController2 : MonoBehaviour
             actionTimer = 0.0f;
             doSocialisingFor = ActionRandomTimer();
             socialisingCd = ActionCdRandomTimer();
-            
+            doSocialAudio = true;
             if(socialDestination != Vector3.zero)
             {
                 hasSocialPartner = true;
@@ -885,17 +891,14 @@ public class AIController2 : MonoBehaviour
     {
         if(idleLeanType == "IdleLeanLeft")
         {
-            Debug.Log("to lean left"); 
             idleLeanLeft = true;
         }
         if(idleLeanType == "IdleLeanRight")
         {
-            Debug.Log("to lean right");
             idleLeanRight = true;
         }
         if(idleLeanType == "IdleLeanBack")
-        {
-            Debug.Log("to lean back");
+        {     
             idleLeanBack = true;
         }
         doIdleLean = true;

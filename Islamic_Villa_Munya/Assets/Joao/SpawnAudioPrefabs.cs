@@ -10,12 +10,12 @@ public class SpawnAudioPrefabs : MonoBehaviour
 
     public void spawnAudioPrefab(int Num, bool attachTo = false)
     {
-        WhatToSpawn[Num] = Instantiate(WhatToSpawn[Num], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        WhatToSpawn[0] = Instantiate(WhatToSpawn[0], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
         // spawns prefabs number
 
         if (attachTo)
         {
-            WhatToSpawn[Num].transform.parent = spawnLocations[Num].transform;
+            WhatToSpawn[0].transform.parent = spawnLocations[Num].transform;
             // If TRUE, spawns object as child of spawn location
         }
     }
