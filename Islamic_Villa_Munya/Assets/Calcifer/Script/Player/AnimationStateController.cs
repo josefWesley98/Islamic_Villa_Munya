@@ -322,11 +322,11 @@ public class AnimationStateController : MonoBehaviour
             }
 
         }
-        // else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
-        // {
-        //     animator.SetBool("IsJumping", false);
-        //     run_jump = false;
-        // }
+        else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+        {
+            animator.SetBool("IsJumping", false);
+            run_jump = false;
+        }
         
         //Rigidody velocity will not be above the threshold
         if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)))
