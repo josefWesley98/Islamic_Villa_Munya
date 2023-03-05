@@ -131,7 +131,7 @@ public class ClimbingScript : MonoBehaviour
     {
         playerLerpStart.position = centreMass.position;
         endLerpPoint.position = _newEndPoint;
-        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.35f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
         interpolateAmount = 0.0f;
     }
     private void Holding(InputAction.CallbackContext context)
@@ -145,13 +145,13 @@ public class ClimbingScript : MonoBehaviour
     public float GetMovementDirectionY()
     {
         Vector2 moveDirection = movement.ReadValue<Vector2>();
-
+     //   Debug.Log("move direction y = " + moveDirection.y);
         return moveDirection.y;
     }
      public float GetMovementDirectionX()
     {
         Vector2 moveDirection = movement.ReadValue<Vector2>();
-
+//        Debug.Log("move direction x = " + moveDirection.x);
         return moveDirection.x;
     }
     private void CanceledHold(InputAction.CallbackContext context)

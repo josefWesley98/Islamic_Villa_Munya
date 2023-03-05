@@ -7,6 +7,7 @@ public class DownwardClimbing : MonoBehaviour
     //scripts
     [SerializeField] private LayerMask climableLayer;
     [SerializeField] private UpwardClimbing upwardClimbing; 
+    [SerializeField] private Transform centrePoint;
     // transforms 
     [SerializeField] private Transform[] grabbablePositionsRightFoot;
     [SerializeField] private Transform[] grabbablePositionsLeftFoot;
@@ -37,7 +38,7 @@ public class DownwardClimbing : MonoBehaviour
     [SerializeField] private Transform rightFootPos;
     private float interpolateAmountRightFoot = 0.0f;
     private bool moveRightFoot = true;
-
+    private Vector3 middlePoint = Vector3.zero;
     // general variables
     private bool m_Started;
     private Transform targetSpotLeftFoot;
@@ -49,10 +50,41 @@ public class DownwardClimbing : MonoBehaviour
     private int chosenReference = 0;
     private Vector2 movementDirection;
     private bool gotFootHolds = false;
+    private Vector3 leftFootPositionUp;
+    private Vector3 leftFootPositionUpLeft;
+    private Vector3 leftFootPositionUpRight;
+
+    private Vector3 rightFootPositionUp;
+    private Vector3 rightFootPositionUpLeft;
+    private Vector3 rightFootPositionUpRight;
+
+     private Vector3 leftFootPositionDown;
+    private Vector3 leftFootPositionDownLeft;
+    private Vector3 leftFootPositionDownRight;
+
+    private Vector3 rightFootPositionDown;
+    private Vector3 rightFootPositionDownLeft;
+    private Vector3 rightFootPositionDownRight;
     
     // Start is called before the first frame update
     void Start()
     {
+        // leftFootPositionUp;
+        // leftFootPositionUpLeft;
+        // leftFootPositionUpRight;
+
+        // rightFootPositionUp;
+        // rightFootPositionUpLeft;
+        // rightFootPositionUpRight;
+
+        // leftFootPositionDown;
+        // leftFootPositionDownLeft;
+        // leftFootPositionDownRight;
+
+        // rightFootPositionDown;
+        // rightFootPositionDownLeft;
+        // rightFootPositionDownRight;
+
         movingLeftFoot = true;
         needNewLeftFootSpot = true; 
         m_Started = true; 
@@ -113,17 +145,17 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 5;
-                    Debug.Log("moving up and to the left");
+                 
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 4;
-                    Debug.Log("moving Up and to the Right");
+                  
                 }
-                if(movementDirection.x == 0) // Up
+                else
                 {
                     chosenReference = 0;
-                    Debug.Log("just moving up");
+                 
                 }
             }   
             if(movementDirection.y < 0)//Down
@@ -138,46 +170,50 @@ public class DownwardClimbing : MonoBehaviour
                     chosenReference = 6;
                     Debug.Log("moving down and to the right");
                 }
-                if(movementDirection.x == 0)// down
+                else // down
                 {
-                chosenReference = Random.Range(6,7);
-                Debug.Log("just moving down");
+                    chosenReference = 1;
+                    Debug.Log("just moving down");
                 }
             }     
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
-                chosenReference = 2;
+                chosenReference = 3;
                 Debug.Log("Just Moving Left");
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
-                chosenReference = 3;
+                chosenReference = 2;
                 Debug.Log("just moving right");
             }
                 
-                System.Array.Sort(grabbablePositionsRightFoot, (x, y) =>
-                {
-                    
-                    float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
-                    float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
-                    return distanceX.CompareTo(distanceY);
-                });
+            System.Array.Sort(grabbablePositionsRightFoot, (x,y) =>
+            {
                 
-                targetSpotRightFoot = grabbablePositionsRightFoot[arrayPosRightFoot];
+                float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
+                float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
+                return distanceX.CompareTo(distanceY);
+            });
+            
+            targetSpotRightFoot = grabbablePositionsRightFoot[arrayPosRightFoot];
 
                 
         if(needNewRightFootSpot)
         {
-                currentFootSpotRight = targetSpotRightFoot.gameObject;
-                needNewRightFootSpot = false;
-
-                if(currentFootSpotRight != null)
-                {
-                    currentFootSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
-                }
+            currentFootSpotRight = targetSpotRightFoot.gameObject;
+            needNewRightFootSpot = false;
+            GetNewMiddleSpot();
+            if(currentFootSpotRight != null)
+            {
+                currentFootSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
+            }
         }
         
+    }
+    public Vector3 GetMiddlePoint()
+    {
+        return middlePoint;
     }
     private void FindLeftFootClimbingPositions()
     {
@@ -202,17 +238,17 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 5;
-                    Debug.Log("moving up and to the left");
+                    
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 4;
-                    Debug.Log("moving Up and to the Right");
+                    
                 }
-                if(movementDirection.x == 0) // Up
+                else // Up
                 {
                     chosenReference = 0;
-                    Debug.Log("just moving up");
+                   
                 }
             }   
             if(movementDirection.y < 0)//Down
@@ -227,22 +263,22 @@ public class DownwardClimbing : MonoBehaviour
                     chosenReference = 6;
                     Debug.Log("moving down and to the right");
                 }
-                if(movementDirection.x == 0)// down
+                else // down
                 {
-                chosenReference = 1;
-                Debug.Log("just moving down");
+                    chosenReference = 1;
+                    Debug.Log("just moving down");
                 }
             }     
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
-                chosenReference = 2;
-                Debug.Log("Just Moving Left");
+                chosenReference = 3;
+                
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
-                chosenReference = 3;
-                Debug.Log("just moving right");
+                chosenReference = 2;
+               
             }
         
 
@@ -264,14 +300,28 @@ public class DownwardClimbing : MonoBehaviour
 
         if(needNewLeftFootSpot)
         {
+            GetNewMiddleSpot();
             currentFootSpotLeft = targetSpotLeftFoot.gameObject;
             needNewLeftFootSpot = false;
             if(currentFootSpotLeft != null)
             {
                 currentFootSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
             }
-        }
-        
+        }   
+    }
+    public Vector3 GetNewMiddleSpot()
+    {
+        middlePoint = GetMiddlePoint(targetSpotRightFoot.position, targetSpotLeftFoot.position);
+        return middlePoint;
+    }
+    private Vector3 GetMiddlePoint(Vector3 leftHandPos, Vector3 rightHandPos)
+    {
+        float x = (leftHandPos.x + rightHandPos.x) / 2;
+        float y = (leftHandPos.y + rightHandPos.y) / 2;
+        float z = (leftHandPos.z + rightHandPos.z) / 2;
+        Vector3 newPos = new Vector3(x,y,z);
+
+        return newPos;
     }
     private void LerpRightFootToTarget()
     {
@@ -283,12 +333,13 @@ public class DownwardClimbing : MonoBehaviour
         {
            //  rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
             interpolateAmountRightFoot += Time.deltaTime *1.25f;
-            //rightRigAimPosition.position = Vector3.Lerp(rightFootStartPosition.position, currentFootSpotRight.transform.position , interpolateAmountRightFoot);
-             float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentFootSpotRight.transform.position.x, interpolateAmountRightFoot);
-             float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentFootSpotRight.transform.position.y, interpolateAmountRightFoot);
-             float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentFootSpotRight.transform.position.z, interpolateAmountRightFoot);
+            rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position,  currentFootSpotRight.transform.position, interpolateAmountRightFoot);
+            //  rightRigAimPosition.position = Vector3.Lerp(rightFootStartPosition.position, currentFootSpotRight.transform.position , interpolateAmountRightFoot);
+            //  float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentFootSpotRight.transform.position.x, interpolateAmountRightFoot);
+            //  float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentFootSpotRight.transform.position.y, interpolateAmountRightFoot);
+            //  float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentFootSpotRight.transform.position.z, interpolateAmountRightFoot);
             
-            rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+            // rightRigAimPosition.position = new Vector3(newX, newY, newZ);
 
             if(interpolateAmountRightFoot >= 1.0f)
             {
@@ -300,7 +351,7 @@ public class DownwardClimbing : MonoBehaviour
                 needNewLeftFootSpot = true;
                 interpolateAmountRightFoot = 0.0f;
                 
-                Debug.Log("right Foot has reached is destination");
+                
             }
         }
         else if(!movingRightFoot && currentFootSpotRight != null)
@@ -319,12 +370,12 @@ public class DownwardClimbing : MonoBehaviour
         {
            
             interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
+            leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, currentFootSpotLeft.transform.position, interpolateAmountLeftFoot);
+            // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentFootSpotLeft.transform.position.x, interpolateAmountLeftFoot);
+            // float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentFootSpotLeft.transform.position.y, interpolateAmountLeftFoot);
+            // float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentFootSpotLeft.transform.position.z, interpolateAmountLeftFoot);
 
-            float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentFootSpotLeft.transform.position.x, interpolateAmountLeftFoot);
-            float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentFootSpotLeft.transform.position.y, interpolateAmountLeftFoot);
-            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentFootSpotLeft.transform.position.z, interpolateAmountLeftFoot);
-
-            leftRigAimPosition.position = new Vector3(newX, newY, newZ);
+            // leftRigAimPosition.position = new Vector3(newX, newY, newZ);
 
             if(interpolateAmountLeftFoot >= 1.0f)
             {
@@ -335,8 +386,6 @@ public class DownwardClimbing : MonoBehaviour
 
                 needNewRightFootSpot = true; 
                 leftFootStartPosition.position = currentFootSpotLeft.transform.position;
-                
-                Debug.Log("left Foot has reached is destination");
                
             }
         }

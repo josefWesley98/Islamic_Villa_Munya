@@ -83,7 +83,8 @@ public class UpwardClimbing : MonoBehaviour
         LerpLeftHandToTarget();
         
         RiggingWeightLerp();
-       
+        downwardClimbing.SetMovementDirection(movementDirection);
+
         movementDirection.x = climbingScript.GetMovementDirectionX();
         movementDirection.y = climbingScript.GetMovementDirectionY();
     }
@@ -94,8 +95,8 @@ public class UpwardClimbing : MonoBehaviour
         
         if(canClimb)
         {
-            rigTargetWeightRightArm = 0.9f;
-            rigTargetWeightLeftArm = 0.9f;
+            rigTargetWeightRightArm = 1.0f;
+            rigTargetWeightLeftArm = 1.0f;
         }
         else
         {
@@ -127,17 +128,17 @@ public class UpwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 5;
-                    Debug.Log("moving up and to the left");
+              
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 4;
-                    Debug.Log("moving Up and to the Right");
+        
                 }
                 if(movementDirection.x == 0) // Up
                 {
                     chosenReference = 0;
-                    Debug.Log("just moving up");
+       
                 }
             }   
             if(movementDirection.y < 0)//Down
@@ -145,29 +146,29 @@ public class UpwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
-                    Debug.Log("moving down and to the left");
+                  
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
-                    Debug.Log("moving down and to the right");
+                    
                 }
-                if(movementDirection.x == 0)// down
+                else// down
                 {
-                chosenReference = Random.Range(6,7);
-                Debug.Log("just moving down");
+                    chosenReference = 1;
+              
                 }
             }     
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
-                chosenReference = 2;
-                Debug.Log("Just Moving Left");
+                chosenReference = 3;
+      
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
-                chosenReference = 3;
-                Debug.Log("just moving right");
+                chosenReference = 2;
+            
             }
                 
                 System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
@@ -187,13 +188,18 @@ public class UpwardClimbing : MonoBehaviour
             currentHandSpotRight = targetSpotRightHand.gameObject;
             needNewRightHandSpot = false;
 
-            if(movementDirection.x < 0 && movementDirection.y == 0)
+            if(chosenReference == 2)
             {
                  middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
+                 
             }
-            else if(movementDirection.x > 0 && movementDirection.y == 0)
+            else if(chosenReference == 3)
             {
                  middlePoint = GetMiddlePoint(targetSpotRightHand.position, downwardClimbing.GetCurrentSpotRightFoot());
+            }
+            else if(chosenReference == 6 || chosenReference == 7 || chosenReference == 1)
+            {
+                middlePoint = downwardClimbing.GetMiddlePoint();
             }
             else
             {  
@@ -239,17 +245,17 @@ public class UpwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 5;
-                    Debug.Log("moving up and to the left");
+                   
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 4;
-                    Debug.Log("moving Up and to the Right");
+             
                 }
                 if(movementDirection.x == 0) // Up
                 {
                     chosenReference = 0;
-                    Debug.Log("just moving up");
+           
                 }
             }   
             if(movementDirection.y < 0)//Down
@@ -257,30 +263,31 @@ public class UpwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
-                    Debug.Log("moving down and to the left");
+          
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
-                    Debug.Log("moving down and to the right");
+               
                 }
-                if(movementDirection.x == 0)// down
+               
+                else
                 {
-                chosenReference = 1;
-                Debug.Log("just moving down");
+                    chosenReference = 1;
+           
                 }
             }     
 
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
-                Debug.Log("just moving right");
+     
                
             }
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
                 chosenReference = 3;
-                Debug.Log("Just Moving Left");
+
             }
         
 
@@ -305,20 +312,29 @@ public class UpwardClimbing : MonoBehaviour
             currentHandSpotLeft = targetSpotLeftHand.gameObject;
             needNewLeftHandSpot = false;
             
-            if(movementDirection.x < 0 && movementDirection.y == 0)
+            if(chosenReference == 2)
             {
-                 middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
+                //Debug.Log("getting a middle point to the left");
+                middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
             }
-            else if(movementDirection.x > 0 && movementDirection.y == 0)
+            else if(chosenReference == 3)
             {
+                //Debug.Log("getting a middle point to the right");
                  middlePoint = GetMiddlePoint(targetSpotRightHand.position, downwardClimbing.GetCurrentSpotRightFoot());
+            }
+            else if(chosenReference == 6 || chosenReference == 7 || chosenReference == 1)
+            {
+                //Debug.Log("getting a middle point down");
+                middlePoint = downwardClimbing.GetMiddlePoint();
             }
             else
             {  
+                //Debug.Log("getting a middle point above");
                 middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);   
             }
               
             climbingScript.SetNewMovement(middlePoint);
+
             if(currentHandSpotLeft != null)
             {
                 currentHandSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
@@ -334,14 +350,18 @@ public class UpwardClimbing : MonoBehaviour
         }
         if(movingRightHand && currentHandSpotRight != null)
         {
-           
-            interpolateAmountRightArm  += Time.deltaTime * 1.25f;
-            float spotZ = currentHandSpotRight.transform.position.z + 0.15f;
-            float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentHandSpotRight.transform.position.x, interpolateAmountRightArm);
-            float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentHandSpotRight.transform.position.y, interpolateAmountRightArm);
-            float newZ = Mathf.Lerp(rightRigAimPosition.position.z, spotZ, interpolateAmountRightArm);
+            //Debug.Log("moving right hand.");
+            //float spotZ = currentHandSpotRight.transform.position.z + 0.15f;
+            // float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentHandSpotRight.transform.position.x, interpolateAmountRightArm);
+            // float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentHandSpotRight.transform.position.y, interpolateAmountRightArm);
+            // float newZ = Mathf.Lerp(rightRigAimPosition.position.z, spotZ, interpolateAmountRightArm);
             
-            rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+            //rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+
+            Vector3 LHandPos =  new Vector3(currentHandSpotRight.transform.position.x, currentHandSpotRight.transform.position.y, currentHandSpotRight.transform.position.z);
+            interpolateAmountRightArm += Time.deltaTime * 1.25f;
+
+            rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position, LHandPos, interpolateAmountRightArm);
 
             if(interpolateAmountRightArm >= 1.0f)
             {
@@ -349,7 +369,7 @@ public class UpwardClimbing : MonoBehaviour
                 movingRightHand = false;
 
                 needNewLeftHandSpot = true;
-                Debug.Log("right hand has reached is destination");
+        
                 rightArmStartPosition.position = currentHandSpotRight.transform.position;
                 interpolateAmountRightArm = 0.0f;
             }
@@ -368,14 +388,17 @@ public class UpwardClimbing : MonoBehaviour
         }
         if(movingLeftHand && currentHandSpotLeft != null)
         {
-           
+  
             interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
-            float spotZ = currentHandSpotLeft.transform.position.z + 0.15f;
-            float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
-            float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentHandSpotLeft.transform.position.y, interpolateAmountLeftArm);
-            float newZ = Mathf.Lerp(leftRigAimPosition.position.z, spotZ, interpolateAmountLeftArm);
+            Vector3 RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z);
             
-            leftRigAimPosition.position = new Vector3(newX, newY, newZ);
+            leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, RHandPos, interpolateAmountLeftArm);
+
+            // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
+            // float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentHandSpotLeft.transform.position.y, interpolateAmountLeftArm);
+            // float newZ = Mathf.Lerp(leftRigAimPosition.position.z, spotZ, interpolateAmountLeftArm);
+            
+            // leftRigAimPosition.position = new Vector3(newX, newY, newZ);
 
             if(interpolateAmountLeftArm >= 1.0f)
             {
@@ -387,7 +410,7 @@ public class UpwardClimbing : MonoBehaviour
                 needNewRightHandSpot = true; 
                 leftArmStartPosition.position = currentHandSpotLeft.transform.position;
                 
-                Debug.Log("left hand has reached is destination");
+
                
             }
         }
@@ -419,11 +442,11 @@ public class UpwardClimbing : MonoBehaviour
     }
     public void SetCurrentSpotLeftHand(Vector3 _newCurrentSpotLeft)
     {
-        currentHandSpotLeft.transform.position = _newCurrentSpotLeft;
+        //currentHandSpotLeft.transform.position = _newCurrentSpotLeft;
     }
     public void SetCurrentSpotRightHand(Vector3 _newCurrentSpotRight)
     {
-        currentHandSpotRight.transform.position = _newCurrentSpotRight;
+        //currentHandSpotRight.transform.position = _newCurrentSpotRight;
     }
     public Vector3 GetCurrentSpotRightHand()
     {
