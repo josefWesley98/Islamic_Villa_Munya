@@ -24,6 +24,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform feet_pos;
     [SerializeField] private Transform head_pos;
+    [SerializeField] private Transform wall_pos;
 
     private Vector3 input;
     private Vector3 move_dir;
@@ -31,15 +32,20 @@ public class NIThirdPersonController : MonoBehaviour
 
     [SerializeField] private LayerMask is_ground;
     [SerializeField] private LayerMask is_ceiling;
+    [SerializeField] private LayerMask is_a_wall;
 
     private bool grounded;
     private bool is_roof;
+    private bool is_wall;
     private bool is_running = false;
     private bool is_crouching = false;
     private bool is_jumping = false;
+    private bool is_run_jump_ready = true;
     private bool is_standing_jump = false;
+    private bool is_stand_jump_ready = true;
     private bool input_disabled = false;
     private bool hard_landing = false;
+    private bool allow_jump = true;
 
     [Header("Movement")]
     [SerializeField] private float ground_drag;
@@ -53,8 +59,10 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private float capsule_radius;
     [SerializeField] private float capsule_height;
     [SerializeField] private float capsule_centre;
-    private float stand_jump_delay = 0.5f;
-    private float disabled_input_delay = 1.7f;
+
+    private float stand_jump_delay = 0.5f;  //Change depending on the animation used
+    private float run_jump_delay;
+    private float disabled_input_delay;
 
 
     void Awake() 
@@ -119,7 +127,7 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //Function to hide cursor when playing
         HideCursor();
@@ -129,6 +137,8 @@ public class NIThirdPersonController : MonoBehaviour
         //Check to see if the player is on the ground
         bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
         bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
+        bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
+
 
         //If the player is on the floor then set grounded to true and allow for movement and jumping
         if(floor)
@@ -162,6 +172,17 @@ public class NIThirdPersonController : MonoBehaviour
             }
         }
         
+        if(wall)
+        {
+            //StopPlayer();
+            is_wall = true;
+            
+        }
+        else if(!wall)
+        {
+            is_wall = false;
+        }
+        
         //Handle drag
         if (grounded && !hard_landing)
         {
@@ -171,24 +192,31 @@ public class NIThirdPersonController : MonoBehaviour
             //Prevent moving in the air by preventing player input updates during a jump
             PlayerInput();
             rb.drag = ground_drag;
+            //is_stand_jump_ready = true;
         }
         else
         {
             rb.drag = 0f;
+            //is_stand_jump_ready = false;
         }
 
         //If the player falls and has a hard landing, disable the input
         if(hard_landing)
         {
-            float disable_input = animator_ref.GetHardLandAnimTime() - 0.3f;
+            float disable_input = animator_ref.GetHardLandAnimTime();
             StartCoroutine(DisableInput(disable_input));
+
+            HardLandCapsuleCollider();
         }
     }
 
     private void FixedUpdate()
     {
         //Call player movement
-        PlayerMovement();
+        if(!input_disabled)
+        {
+            PlayerMovement();
+        }
     }
 
     private void PlayerInput()
@@ -259,7 +287,7 @@ public class NIThirdPersonController : MonoBehaviour
     //Function for jumping
     private void Jump()
     {
-        if(grounded)
+        if(grounded && !is_crouching && allow_jump)
         {
             is_jumping = true;
             bool apply_delay = false;
@@ -267,46 +295,117 @@ public class NIThirdPersonController : MonoBehaviour
             //If the player magnitude is < 0.1, then apply delay for standing jump
             if(rb.velocity.magnitude < 0.1f)
             {
+                //Get delay duration for disabling input to be that of the stand animation duration
+                disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.1f;
+
                 apply_delay = true;
+                StartCoroutine(DisableInput(disabled_input_delay));
             }
 
-            if(apply_delay)
+            if((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
             {
                 //Apply the delay before allowing the player to jump
-                StartCoroutine(DisableInput(disabled_input_delay));
+                is_stand_jump_ready = false;
+
                 Invoke("DelayedJump", stand_jump_delay);
-                Debug.Log("delaaaaaaaayed");
             }
-            else
+            
+            //Run jump
+            else if(rb.velocity.magnitude > 0.1f && !is_wall)
             {
+                //Get delay from the animator
+                run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
+
                 //Reset the player y-velocity to 0 so they player jumps to the same height every time
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
                 
                 //Apply the force once using impulse
                 rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
+
+                allow_jump = false;
+                StartCoroutine(DelayRunJump(run_jump_delay));
             }
 
             Invoke("NoRotationDelay", 1f);
         }
     }
 
+    private IEnumerator DelayRunJump(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        allow_jump = true;
+    }
+
     private void DelayedJump()
     {
-        rb.AddForce(transform.up * stand_jump_force, ForceMode.Impulse);
+        if(grounded)
+        {
+            rb.AddForce(transform.up * stand_jump_force, ForceMode.Impulse);
+            is_stand_jump_ready = true;
+        }
     }
 
     private IEnumerator DisableInput(float duration)
     {
         input_disabled = true;
-        rb.velocity = new Vector3(0f, 0f, 0f);
-        yield return new WaitForSeconds(duration);
-        input_disabled = false;
+        allow_jump = false;
 
         if (hard_landing)
         {
             animator_ref.SetHardLanding(false);
         }
+
+        rb.velocity = Vector3.zero;;
+
+        float prev_mag = rb.velocity.magnitude;
+
+        yield return new WaitForSeconds(duration);
+
+        while(rb.velocity.magnitude > 0.1f)
+        {
+            yield return null;
+            if(rb.velocity.magnitude > prev_mag)
+            {
+                //Player is still moving so reset the timer
+                prev_mag = rb.velocity.magnitude;
+                yield return new WaitForSeconds(0.1f);
+            }
+            else
+            {
+                //Player is slowing down or is stationary
+                prev_mag = rb.velocity.magnitude;
+                yield return null;
+            }
+
+        }
+        
+        //Reset capsule properties after landing has finished
+        ResetCapsuleCollider();
+        input_disabled = false;
+        allow_jump = true;
     }
+
+
+    private void StopPlayer()
+    {
+        //float time = 0.1f;
+        //Disable the animator so animations freeze while being repelled
+        //animator_ref.FreezeAnimation();
+        //animator_ref.enabled = false;
+        //Wait for the repel force to end
+        //StartCoroutine(WaitForRepel(time));
+
+        //First of all, stop the player from moving closer to the object if there is a wall there
+        //rb.velocity = Vector3.zero;
+
+    }
+
+    // private IEnumerator WaitForRepel(float time)
+    // {
+    //     yield return new WaitForSeconds(time);
+    //     animator_ref.enabled = true;
+    //     //animator_ref.UnfreezeAnimation();
+    // }
 
     //Hide cursor function
     private void HideCursor()
@@ -341,19 +440,22 @@ public class NIThirdPersonController : MonoBehaviour
     //Function for determining whether the player wants to crouch or not
     private void ToggleCrouch(InputAction.CallbackContext crouch)
     {
-        if(crouch.started)
+        if(grounded && !input_disabled)
         {
-            is_crouching = true;
-            capsule.height = capsule_height / 2;
-            capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
-            capsule.radius = capsule_radius * 2;
-        }
-        if(crouch.canceled && !is_roof)
-        {
-            is_crouching = false;
-            capsule.height = capsule_height;
-            capsule.center = new Vector3(0f, capsule_centre, 0f);
-            capsule.radius = capsule_radius;
+            if(crouch.started)
+            {
+                is_crouching = true;
+                capsule.height = capsule_height / 2;
+                capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+                capsule.radius = capsule_radius * 2;
+            }
+            if(crouch.canceled && !is_roof)
+            {
+                is_crouching = false;
+                capsule.height = capsule_height;
+                capsule.center = new Vector3(0f, capsule_centre, 0f);
+                capsule.radius = capsule_radius;
+            }
         }
     }
 
@@ -363,6 +465,13 @@ public class NIThirdPersonController : MonoBehaviour
             capsule.height = capsule_height;
             capsule.center = new Vector3(0f, capsule_centre, 0f);
             capsule.radius = capsule_radius;
+    }
+
+    private void HardLandCapsuleCollider()
+    {
+        capsule.height = capsule_height / 2;
+        capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+        capsule.radius = capsule_radius * 2;
     }
 
     //Getters relevant for passing variables into the animator controller
@@ -380,6 +489,16 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetIsStandingJump()
     {
         return is_standing_jump;
+    }
+
+    public bool GetRunningJumping()
+    {
+        if(!grounded)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public bool GetJumping()
@@ -400,6 +519,11 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetRunning()
     {
         return is_running;
+    }
+
+    public bool GetAllowJump()
+    {
+        return allow_jump;
     }
 }
 

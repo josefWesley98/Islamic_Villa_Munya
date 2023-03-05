@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*Cal's code starts here*/
 public class ThirdPersonCam : MonoBehaviour
 {
     public Transform orientation;
@@ -34,3 +35,5 @@ public class ThirdPersonCam : MonoBehaviour
     }
 
 }
+
+/*Cal's code ends here*/

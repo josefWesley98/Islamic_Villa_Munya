@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*Cal's code starts here*/
 public class AnimationStateController : MonoBehaviour
 {
     Animator animator;
@@ -25,7 +26,8 @@ public class AnimationStateController : MonoBehaviour
     private float stand_jump_time = 0f;
     private float run_jump_time = 0f;
     private float hard_land_time = 0f;
-    private float j_timer = 0f;
+    private float j_timer_run = 0f;
+    private float j_timer_stand = 0f;
     private float land_timer = 0f;
     private bool is_jumping = false;
     private bool run_jump = false;
@@ -35,9 +37,12 @@ public class AnimationStateController : MonoBehaviour
     private bool input_disabled = false;
 
     private float time_since_fallen = 0f;
-    private float hard_landing_threshold = 0.7f;
+    private float hard_landing_threshold = 0.4f;
 
-    private float falling_delay_time = 0.1f;
+    private float falling_delay_time = 0.3f;
+    private bool currently_jumping = false;
+
+    AnimatorClipInfo[] info;
 
     Keyboard kb;
 
@@ -47,7 +52,6 @@ public class AnimationStateController : MonoBehaviour
         //User input from keyboard
         kb = InputSystem.GetDevice<Keyboard>();
 
-        //Search for the animator component attached to this object
         animator = GetComponent<Animator>();
 
         //Use hash so it is less expensive for changing these float variables in the animator controller
@@ -260,7 +264,7 @@ public class AnimationStateController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //Variables - Player Control
         //Get key input using newer input system
@@ -272,6 +276,7 @@ public class AnimationStateController : MonoBehaviour
         bool crouch_pressed = controller_ref.GetCrouching();
         bool jump_pressed = kb.spaceKey.isPressed;
 
+        bool is_grounded = controller_ref.GetGrounded();
         rb_vel = controller_ref.GetRBVelocity(rb_vel);
 
         //Set current max_vel
@@ -302,50 +307,68 @@ public class AnimationStateController : MonoBehaviour
             }
             animator.SetLayerWeight(crouch_layer_index, weight);
         }
-
-        if (!crouch_pressed && jump_pressed && ((rb_vel.x > 0.1 || rb_vel.x < -0.1) || 
-        (rb_vel.z > 0.1 || rb_vel.z < -0.1)))
+        
+        if(rb_vel.y > 0f)
         {
-            animator.SetBool("isJumping", true);
+            //If the player is able to jump then play the animations relevant to the velocity of the player
+            if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+            {
+                animator.SetBool("IsJumping", true);
+                run_jump = true;
+                stand_jump = false;
 
-            run_jump = true;
+                j_timer_run = run_jump_time - 0.5f;
 
-            j_timer = run_jump_time - 0.5f;
+            }
 
-            stand_jump = false;
         }
-        else if(!crouch_pressed && jump_pressed && ((rb_vel.x <= 0.1 && rb_vel.x >= -0.1 ) || 
-        (rb_vel.z <= 0.1 && rb_vel.z >= -0.1)))
+        else if(is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
         {
-            animator.SetBool("isJumping", true);
+            animator.SetBool("IsJumping", false);
+        }
+        
+        //Rigidody velocity will not be above the threshold
+        if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)))
+        {
+            if(!currently_jumping)
+            {
+                currently_jumping = true;
+                animator.SetBool("IsJumping", true);
 
-            stand_jump = true;
+                stand_jump = true;
+                run_jump = false;
 
-            j_timer = stand_jump_time - 0.3f;
+                j_timer_stand = stand_jump_time - 0.3f;
+            }
 
-            run_jump = false;
         }
 
         if (run_jump)
         {
-            j_timer -= Time.deltaTime;
-            if(j_timer <= 0)
+            stand_jump = false;
+
+            j_timer_run -= Time.deltaTime;
+            if(j_timer_run <= 0)
             {
-                animator.SetBool("isJumping", false);
+                animator.SetBool("IsJumping", false);
                 run_jump = false;
             }
         }
-        else if (stand_jump)
+        
+        if (stand_jump)
         {
-            j_timer -= Time.deltaTime;
-            if(j_timer <= 0)
+            run_jump = false;
+
+            j_timer_stand -= Time.deltaTime;
+            if(j_timer_stand <= 0)
             {
-                animator.SetBool("isJumping", false);
+                animator.SetBool("IsJumping", false);
                 stand_jump = false;
+                currently_jumping = false;
             }
+
         }
 
-        bool is_grounded = controller_ref.GetGrounded();
 
         //Is the player falling? Play animation if they are
         if(!stand_jump && !run_jump && !is_grounded)
@@ -375,7 +398,11 @@ public class AnimationStateController : MonoBehaviour
     IEnumerator DelayFallingAnim()
     {
         yield return new WaitForSeconds(falling_delay_time);
-        animator.SetBool("IsFalling", true);
+
+        if(!controller_ref.GetGrounded())
+        {
+            animator.SetBool("IsFalling", true);
+        }
     }
 
     IEnumerator HardLandAnimation()
@@ -390,13 +417,25 @@ public class AnimationStateController : MonoBehaviour
     {
         input_disabled = true;
         hard_land = true;
+
         yield return new WaitForSeconds(duration);
         input_disabled = false;
     }
 
+    public void FreezeAnimation()
+    {
+        info = animator.GetCurrentAnimatorClipInfo(0);
+
+        animator.speed = 0f;
+    }
+
+    public void UnfreezeAnimation()
+    {
+        animator.speed = 1f;
+    }
+
     public bool GetHardLanding()
     {
-        Debug.Log(hard_land);
         return hard_land;
     }
 
@@ -409,4 +448,16 @@ public class AnimationStateController : MonoBehaviour
     {
         return hard_land_time;
     }
+
+    public float GetRunJumpAnimTime()
+    {
+        return run_jump_time;
+    }
+
+    public float GetStandJumpAnimTime()
+    {
+        return stand_jump_time;
+    }
 }
+
+/*Cal's code ends here*/
