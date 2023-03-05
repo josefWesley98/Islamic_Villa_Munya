@@ -296,7 +296,7 @@ public class NIThirdPersonController : MonoBehaviour
             if(rb.velocity.magnitude < 0.1f)
             {
                 //Get delay duration for disabling input to be that of the stand animation duration
-                disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.1f;
+                disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
 
                 apply_delay = true;
                 StartCoroutine(DisableInput(disabled_input_delay));

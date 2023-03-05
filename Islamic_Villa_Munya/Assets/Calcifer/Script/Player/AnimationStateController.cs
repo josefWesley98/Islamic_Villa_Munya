@@ -322,10 +322,11 @@ public class AnimationStateController : MonoBehaviour
             }
 
         }
-        else if(is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
-        {
-            animator.SetBool("IsJumping", false);
-        }
+        // else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+        // {
+        //     animator.SetBool("IsJumping", false);
+        //     run_jump = false;
+        // }
         
         //Rigidody velocity will not be above the threshold
         if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)))
@@ -339,6 +340,7 @@ public class AnimationStateController : MonoBehaviour
                 run_jump = false;
 
                 j_timer_stand = stand_jump_time - 0.3f;
+                StartCoroutine(StandJumpTimer());
             }
 
         }
@@ -355,19 +357,20 @@ public class AnimationStateController : MonoBehaviour
             }
         }
         
-        if (stand_jump)
-        {
-            run_jump = false;
+        // if (stand_jump)
+        // {
+        //     run_jump = false;
 
-            j_timer_stand -= Time.deltaTime;
-            if(j_timer_stand <= 0)
-            {
-                animator.SetBool("IsJumping", false);
-                stand_jump = false;
-                currently_jumping = false;
-            }
+        //     Debug.Log("Stnading jump");
+        //     j_timer_stand -= Time.deltaTime;
+        //     if(j_timer_stand <= 0)
+        //     {
+        //         animator.SetBool("IsJumping", false);
+        //         stand_jump = false;
+        //         currently_jumping = false;
+        //     }
 
-        }
+        // }
 
 
         //Is the player falling? Play animation if they are
@@ -393,6 +396,19 @@ public class AnimationStateController : MonoBehaviour
         animator.SetFloat(velX_hash, velocityX);
         animator.SetFloat(rb_velX_hash, rb_vel.x);
         animator.SetFloat(rb_velZ_hash, rb_vel.z);
+    }
+
+    IEnumerator StandJumpTimer()
+    {
+        while(j_timer_stand > 0)
+        {
+            j_timer_stand -= Time.deltaTime;
+            yield return null;
+        }
+
+        animator.SetBool("IsJumping", false);
+        stand_jump = false;
+        currently_jumping = false;
     }
 
     IEnumerator DelayFallingAnim()
