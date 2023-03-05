@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 /*Cal's code starts here*/
 public class AnimationStateController : MonoBehaviour
 {
-    Animator animator;
+    [SerializeField] private Animator animator;
     public NIThirdPersonController controller_ref;
     float velocityZ = 0f;
     float velocityX = 0f;
@@ -41,7 +41,7 @@ public class AnimationStateController : MonoBehaviour
 
     private float falling_delay_time = 0.3f;
     private bool currently_jumping = false;
-
+    private int climbLayerIndex;
     AnimatorClipInfo[] info;
 
     Keyboard kb;
@@ -52,7 +52,7 @@ public class AnimationStateController : MonoBehaviour
         //User input from keyboard
         kb = InputSystem.GetDevice<Keyboard>();
 
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
 
         //Use hash so it is less expensive for changing these float variables in the animator controller
         velZ_hash = Animator.StringToHash("VelocityZ");
@@ -61,6 +61,7 @@ public class AnimationStateController : MonoBehaviour
         rb_velZ_hash = Animator.StringToHash("RB_velZ");
 
         //Referencing the layer for crouching
+        climbLayerIndex = animator.GetLayerIndex("Climbing");
         crouch_layer_index = animator.GetLayerIndex("Crouching");
         jump_layer_index = animator.GetLayerIndex("Jumping");
         base_layer_index = animator.GetLayerIndex("Base Layer");
@@ -268,6 +269,18 @@ public class AnimationStateController : MonoBehaviour
     {
         //Variables - Player Control
         //Get key input using newer input system
+
+
+        animator.SetBool("IsClimbing", controller_ref.GetIsClimbing());
+        if(controller_ref.GetIsClimbing())
+        {
+            animator.SetLayerWeight(climbLayerIndex, 1.0f);
+        }
+        else 
+        {
+             animator.SetLayerWeight(climbLayerIndex, 0.0f);
+        }
+
         bool forward_pressed = kb.wKey.isPressed;
         bool left_pressed = kb.aKey.isPressed;
         bool right_pressed = kb.dKey.isPressed;

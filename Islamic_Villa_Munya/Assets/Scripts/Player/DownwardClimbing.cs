@@ -163,29 +163,29 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
-                    Debug.Log("moving down and to the left");
+             
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
-                    Debug.Log("moving down and to the right");
+                   
                 }
                 else // down
                 {
                     chosenReference = 1;
-                    Debug.Log("just moving down");
+              
                 }
             }     
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
                 chosenReference = 3;
-                Debug.Log("Just Moving Left");
+    
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
-                Debug.Log("just moving right");
+     
             }
                 
             System.Array.Sort(grabbablePositionsRightFoot, (x,y) =>

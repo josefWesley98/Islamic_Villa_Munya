@@ -138,7 +138,6 @@ public class UpwardClimbing : MonoBehaviour
                 if(movementDirection.x == 0) // Up
                 {
                     chosenReference = 0;
-       
                 }
             }   
             if(movementDirection.y < 0)//Down

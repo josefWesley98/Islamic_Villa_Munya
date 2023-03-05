@@ -11,6 +11,7 @@ public class ClimbingScript : MonoBehaviour
     InputAction movement;
     Rigidbody rb;
     private MovementController movementController;
+    [SerializeField] private NIThirdPersonController moveController;
     [SerializeField] private UpwardClimbing upwardClimbing;
     [SerializeField] private DownwardClimbing downwardClimbing;
     [SerializeField] private Transform centreMass;
@@ -69,6 +70,11 @@ public class ClimbingScript : MonoBehaviour
         if(!upwardClimbing.GetCanClimb())
         {
             startClimb = false;
+            moveController.SetIsClimbing(false);
+        }
+        if(upwardClimbing.GetCanClimb() && startClimb)
+        {
+            moveController.SetIsClimbing(true);
         }
         if(!startClimb)
         {

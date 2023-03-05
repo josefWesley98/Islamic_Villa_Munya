@@ -59,6 +59,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private float capsule_radius;
     [SerializeField] private float capsule_height;
     [SerializeField] private float capsule_centre;
+    [SerializeField] private bool isClimbing = false;
 
     private float stand_jump_delay = 0.5f;  //Change depending on the animation used
     private float run_jump_delay;
@@ -92,30 +93,34 @@ public class NIThirdPersonController : MonoBehaviour
 
         show_cursor = controls.Player.ShowCursor;
         show_cursor.Enable();
-
-        jumping = controls.Player.Jump;
-        jumping.Enable();
         
-        movement = controls.Player.Move;
-        movement.Enable();
+        if(!isClimbing)
+        {
+            jumping = controls.Player.Jump;
+            jumping.Enable();
+            
+            movement = controls.Player.Move;
+            movement.Enable();
 
-        running = controls.Player.ToggleRun;
-        running.Enable();
+            running = controls.Player.ToggleRun;
+            running.Enable();
 
-        crouching = controls.Player.Crouch;
-        crouching.Enable();
+            crouching = controls.Player.Crouch;
+            crouching.Enable();
+
+            jumping.started += _ => Jump();
+
+            running.started += _ => ToggleRunning(_);
+            running.canceled += _ => ToggleRunning(_);
+
+            crouching.started += _ => ToggleCrouch(_);
+            crouching.canceled += _ => ToggleCrouch(_);
+        }
 
         //Use input actions to call necessary functions for player functionality
         hide_cursor.started += _ => HideCursor();
         show_cursor.started += _ => ShowCursor();
 
-        jumping.started += _ => Jump();
-
-        running.started += _ => ToggleRunning(_);
-        running.canceled += _ => ToggleRunning(_);
-
-        crouching.started += _ => ToggleCrouch(_);
-        crouching.canceled += _ => ToggleCrouch(_);
     }
 
     private void OnDisable() 
@@ -129,84 +134,88 @@ public class NIThirdPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //Function to hide cursor when playing
-        HideCursor();
-
-        hard_landing = animator_ref.GetHardLanding();
-
-        //Check to see if the player is on the ground
-        bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
-        bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
-        bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
-
-
-        //If the player is on the floor then set grounded to true and allow for movement and jumping
-        if(floor)
+        
+        if(!isClimbing)
         {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
+            //Function to hide cursor when playing
+            HideCursor();
 
-        //Player will still be on ground but crouched, so allow for movement, but prevent the player from standing again.
-        if(roof)
-        {
-            //grounded = true;
-            is_roof = true;
-        }
-        else if(!roof)
-        {
-            //grounded = false;
-            is_roof = false;
+            hard_landing = animator_ref.GetHardLanding();
 
-            //Reset the capsule to it's usual parameters when player is standing
-            if(is_crouching)
+            //Check to see if the player is on the ground
+            bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
+            bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
+            bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
+
+
+            //If the player is on the floor then set grounded to true and allow for movement and jumping
+            if(floor)
             {
-                bool force_stop_crouch = kb.leftCtrlKey.isPressed;
-                if(!force_stop_crouch)
+                grounded = true;
+            }
+            else
+            {
+                grounded = false;
+            }
+
+            //Player will still be on ground but crouched, so allow for movement, but prevent the player from standing again.
+            if(roof)
+            {
+                //grounded = true;
+                is_roof = true;
+            }
+            else if(!roof)
+            {
+                //grounded = false;
+                is_roof = false;
+
+                //Reset the capsule to it's usual parameters when player is standing
+                if(is_crouching)
                 {
-                    ResetCapsuleCollider();
+                    bool force_stop_crouch = kb.leftCtrlKey.isPressed;
+                    if(!force_stop_crouch)
+                    {
+                        ResetCapsuleCollider();
+                    }
                 }
             }
-        }
-        
-        if(wall)
-        {
-            //StopPlayer();
-            is_wall = true;
             
-        }
-        else if(!wall)
-        {
-            is_wall = false;
-        }
-        
-        //Handle drag
-        if (grounded && !hard_landing)
-        {
-            //If the player speed is above the maximum velocity then call this function
-            ControlPlayerVel();
+            if(wall)
+            {
+                //StopPlayer();
+                is_wall = true;
+                
+            }
+            else if(!wall)
+            {
+                is_wall = false;
+            }
+            
+            //Handle drag
+            if (grounded && !hard_landing)
+            {
+                //If the player speed is above the maximum velocity then call this function
+                ControlPlayerVel();
 
-            //Prevent moving in the air by preventing player input updates during a jump
-            PlayerInput();
-            rb.drag = ground_drag;
-            //is_stand_jump_ready = true;
-        }
-        else
-        {
-            rb.drag = 0f;
-            //is_stand_jump_ready = false;
-        }
+                //Prevent moving in the air by preventing player input updates during a jump
+                PlayerInput();
+                rb.drag = ground_drag;
+                //is_stand_jump_ready = true;
+            }
+            else
+            {
+                rb.drag = 0f;
+                //is_stand_jump_ready = false;
+            }
 
-        //If the player falls and has a hard landing, disable the input
-        if(hard_landing)
-        {
-            float disable_input = animator_ref.GetHardLandAnimTime();
-            StartCoroutine(DisableInput(disable_input));
+            //If the player falls and has a hard landing, disable the input
+            if(hard_landing)
+            {
+                float disable_input = animator_ref.GetHardLandAnimTime();
+                StartCoroutine(DisableInput(disable_input));
 
-            HardLandCapsuleCollider();
+                HardLandCapsuleCollider();
+            }
         }
     }
 
@@ -524,6 +533,14 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetAllowJump()
     {
         return allow_jump;
+    }
+    public void SetIsClimbing(bool change)
+    {
+        isClimbing = change;
+    }
+    public bool GetIsClimbing()
+    {
+        return isClimbing;
     }
 }
 
