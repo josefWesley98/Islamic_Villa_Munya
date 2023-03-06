@@ -1,0 +1,500 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eed5864476f84ce4b85454db09ca4eaa, type: 3}
+  m_Name: graph_0
+  m_EditorClassIdentifier: 
+  AssetPath: Assets/Prefabs/Iraklis's prefabs/Wood_M_Param.sbsar
+  OutputPath: Assets/Prefabs/Iraklis's prefabs/Wood_M_Param_graph_0
+  RawData: {fileID: -244192453324840774, guid: 514cb8ccb745ab84e89639f486c03326, type: 3}
+  Name: graph_0
+  IsRoot: 1
+  FlagedForDelete: 0
+  GUID: d63942d2-a933-4c90-8bd2-5bf93cf7a54a
+  Index: 0
+  Input:
+  - rid: 1000
+  - rid: 1001
+  - rid: 1002
+  - rid: 1003
+  - rid: 1004
+  - rid: 1005
+  - rid: 1006
+  - rid: 1007
+  - rid: 1008
+  - rid: 1009
+  - rid: 1010
+  - rid: 1011
+  - rid: 1012
+  - rid: 1013
+  - rid: 1014
+  - rid: 1015
+  Output:
+  - Index: 0
+    VirtualOutputIndex: 6
+    Description:
+      Identifier: basecolor
+      Label: basecolor
+      Index: 0
+      Type: 8
+      Channel: baseColor
+    OutputTexture: {fileID: 2800000, guid: 60573d61560a67c4d9e55c099374b2f9, type: 3}
+    sRGB: 1
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _BaseMap
+  - Index: 1
+    VirtualOutputIndex: 7
+    Description:
+      Identifier: normal
+      Label: normal
+      Index: 1
+      Type: 8
+      Channel: normal
+    OutputTexture: {fileID: 2800000, guid: ef906c116af011f47b465d10d1c5faeb, type: 3}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 0
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _BumpMap
+  - Index: 2
+    VirtualOutputIndex: 8
+    Description:
+      Identifier: roughness
+      Label: roughness
+      Index: 2
+      Type: 8
+      Channel: roughness
+    OutputTexture: {fileID: 0}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _RoughnessMap
+  - Index: 3
+    VirtualOutputIndex: 9
+    Description:
+      Identifier: metallic
+      Label: metallic
+      Index: 3
+      Type: 8
+      Channel: metallic
+    OutputTexture: {fileID: 2800000, guid: a37145a48b31d1c47ba10f56249771ea, type: 3}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: roughness
+    InvertAssignedAlpha: 1
+    Flags: 0
+    MaterialTextureTarget: _MetallicGlossMap
+  - Index: 4
+    VirtualOutputIndex: 10
+    Description:
+      Identifier: height
+      Label: height
+      Index: 4
+      Type: 8
+      Channel: height
+    OutputTexture: {fileID: 2800000, guid: 224d50216c80640479224ae59dd3c687, type: 3}
+    sRGB: 1
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _ParallaxMap
+  - Index: 5
+    VirtualOutputIndex: 11
+    Description:
+      Identifier: ambientocclusion
+      Label: ambientocclusion
+      Index: 5
+      Type: 8
+      Channel: ambientOcclusion
+    OutputTexture: {fileID: 2800000, guid: cecad278ecb9bb64cbe5379a15cb4a51, type: 3}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _OcclusionMap
+  HasPhysicalSize: 0
+  PhysicalSize: {x: 0, y: 0, z: 0}
+  EnablePhysicalSize: 0
+  Thumbnail: 
+  HasThumbnail: 0
+  CurrentStatePreset: " <sbspreset pkgurl=\"pkg://Wood_M\" label=\"\" >\n  <presetinput
+    identifier=\"$outputsize\" uid=\"2483462944\" type=\"8\" value=\"11,11\" />\n
+    </sbspreset>\n"
+  IsRuntimeOnly: 0
+  GenerateAllOutputs: 0
+  GenerateAllMipmaps: 1
+  OutputMaterial: {fileID: 2100000, guid: 61a8926b3647442488166120478f06a0, type: 2}
+  DefaultPreset: " <sbspreset pkgurl=\"pkg://Wood_M\" label=\"\" >\n  <presetinput
+    identifier=\"$outputsize\" uid=\"2483462944\" type=\"8\" value=\"10,10\" />\n</sbspreset>\n"
+  MaterialShader: Universal Render Pipeline/Lit
+  RenderTextures: 0
+  OutputRemaped: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 1000
+      type: {class: SubstanceInputInt2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 0
+        Description:
+          Identifier: $outputsize
+          Label: $outputsize
+          GuiGroup: 
+          GuiDescription: 
+          Type: 5
+          WidgetType: 0
+        Data: {x: 11, y: 11}
+        NumericalDescription:
+          DefaultValue: {x: 8, y: 8}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 1, y: 1}
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1001
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 1
+        Description:
+          Identifier: $randomseed
+          Label: $randomseed
+          GuiGroup: 
+          GuiDescription: 
+          Type: 4
+          WidgetType: 0
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0.01
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1002
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 2
+        Description:
+          Identifier: Normal_Intensity
+          Label: Intensity
+          GuiGroup: Normal
+          GuiDescription: 'The <b>Intensity</b> parameter modifies the intensity
+            of height map '
+          Type: 0
+          WidgetType: 1
+        Data: 1
+        NumericalDescription:
+          DefaultValue: 1
+          MinValue: 0
+          MaxValue: 3
+          SliderStep: 0.01
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1003
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 3
+        Description:
+          Identifier: x_amount
+          Label: X Amount
+          GuiGroup: Tiles
+          GuiDescription: 
+          Type: 4
+          WidgetType: 1
+        Data: 6
+        NumericalDescription:
+          DefaultValue: 6
+          MinValue: 1
+          MaxValue: 64
+          SliderStep: 1
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1004
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 4
+        Description:
+          Identifier: y_amount
+          Label: Y Amount
+          GuiGroup: Tiles
+          GuiDescription: 
+          Type: 4
+          WidgetType: 1
+        Data: 1
+        NumericalDescription:
+          DefaultValue: 1
+          MinValue: 1
+          MaxValue: 64
+          SliderStep: 1
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1005
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 5
+        Description:
+          Identifier: size_mode
+          Label: Size Mode
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 4
+          WidgetType: 5
+        Data: 1
+        NumericalDescription:
+          DefaultValue: 1
+          MinValue: 0
+          MaxValue: 0
+          SliderStep: 0
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 4
+          EnumValues:
+          - Value: 1
+            Label: Normal
+          - Value: 2
+            Label: Keep Ratio
+          - Value: 3
+            Label: Absolute
+          - Value: 4
+            Label: Pixel
+    - rid: 1006
+      type: {class: SubstanceInputFloat2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 6
+        Description:
+          Identifier: size
+          Label: Size
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 1
+          WidgetType: 1
+        Data: {x: 1, y: 1}
+        NumericalDescription:
+          DefaultValue: {x: 1, y: 1}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 1, y: 1}
+          SliderStep: 0.01
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1007
+      type: {class: SubstanceInputFloat2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 7
+        Description:
+          Identifier: size_absolute
+          Label: Size (absolute)
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 1
+          WidgetType: 1
+        Data: {x: 0.1, y: 0.1}
+        NumericalDescription:
+          DefaultValue: {x: 0.1, y: 0.1}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 1, y: 1}
+          SliderStep: 0.01
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1008
+      type: {class: SubstanceInputFloat2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 8
+        Description:
+          Identifier: size_pixel
+          Label: Size (pixel)
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 1
+          WidgetType: 1
+        Data: {x: 1, y: 1}
+        NumericalDescription:
+          DefaultValue: {x: 1, y: 1}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 4, y: 4}
+          SliderStep: 0.01
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1009
+      type: {class: SubstanceInputFloat2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 9
+        Description:
+          Identifier: size_random
+          Label: Size Random
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 1
+          WidgetType: 1
+        Data: {x: 0, y: 0}
+        NumericalDescription:
+          DefaultValue: {x: 0, y: 0}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 1, y: 1}
+          SliderStep: 0.01
+          SliderClamp: 1
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1010
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 10
+        Description:
+          Identifier: scale
+          Label: Scale
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 1
+        NumericalDescription:
+          DefaultValue: 1
+          MinValue: 0
+          MaxValue: 10
+          SliderStep: 0.01
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1011
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 11
+        Description:
+          Identifier: scale_random
+          Label: Scale Random
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0.01
+          SliderClamp: 1
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1012
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 12
+        Description:
+          Identifier: scale_map_multiplier
+          Label: Scale Map Multiplier
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0.01
+          SliderClamp: 1
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1013
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 13
+        Description:
+          Identifier: scale_vector_map_multiplier
+          Label: Scale Vector Map Multiplier
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0.01
+          SliderClamp: 1
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 1014
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 14
+        Description:
+          Identifier: scale_parametrization_affect
+          Label: Scale Map Parametrization Affect
+          GuiGroup: Tiles/Size
+          GuiDescription: 
+          Type: 4
+          WidgetType: 5
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 0
+          SliderStep: 0
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 3
+          EnumValues:
+          - Value: 0
+            Label: X and Y
+          - Value: 1
+            Label: X
+          - Value: 2
+            Label: Y
+    - rid: 1015
+      type: {class: SubstanceInputFloat4, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 15
+        Description:
+          Identifier: outputcolor
+          Label: outputcolor
+          GuiGroup: Colour_1
+          GuiDescription: 
+          Type: 3
+          WidgetType: 3
+        Data: {x: 0.34902, y: 0.232179, z: 0.13531, w: 1}
+        NumericalDescription:
+          DefaultValue: {x: 0.34902, y: 0.232179, z: 0.13531, w: 1}
+          MinValue: {x: 0, y: 0, z: 0, w: 0}
+          MaxValue: {x: 0, y: 0, z: 0, w: 0}
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
