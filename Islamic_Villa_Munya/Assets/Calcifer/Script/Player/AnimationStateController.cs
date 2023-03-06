@@ -20,7 +20,7 @@ public class AnimationStateController : MonoBehaviour
     int rb_velZ_hash;
     private int crouch_layer_index;
     private int jump_layer_index;
-    private int base_layer_index;
+    private int movementLayerIndex;
     private float crouch_weight = 10f;
     private float weight = 0f;
     private float stand_jump_time = 0f;
@@ -64,7 +64,7 @@ public class AnimationStateController : MonoBehaviour
         climbLayerIndex = animator.GetLayerIndex("Climbing");
         crouch_layer_index = animator.GetLayerIndex("Crouching");
         jump_layer_index = animator.GetLayerIndex("Jumping");
-        base_layer_index = animator.GetLayerIndex("Base Layer");
+        movementLayerIndex = animator.GetLayerIndex("Movement");
 
         //Get the animation times for specific animations
         UpdateAnimTimes();
@@ -275,10 +275,14 @@ public class AnimationStateController : MonoBehaviour
         if(controller_ref.GetIsClimbing())
         {
             animator.SetLayerWeight(climbLayerIndex, 1.0f);
+            animator.SetLayerWeight(movementLayerIndex, 0.0f);
+           
         }
         else 
         {
-             animator.SetLayerWeight(climbLayerIndex, 0.0f);
+
+            animator.SetLayerWeight(climbLayerIndex, 0.0f);
+            animator.SetLayerWeight(movementLayerIndex, 1.0f);
         }
 
         bool forward_pressed = kb.wKey.isPressed;

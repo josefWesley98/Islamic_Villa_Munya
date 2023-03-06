@@ -37,6 +37,7 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private Transform[] grabbablePositionsLeftHand;
    [SerializeField] private Material newMaterialRefR;
    [SerializeField] private Material newMaterialRefL;
+    private bool isRotatedToWall = false;
     private Transform targetSpotLeftHand;
     private Transform targetSpotRightHand;
     private GameObject currentHandSpotLeft;
@@ -52,7 +53,8 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private bool movingLeftHand = false;
     [SerializeField] private bool movingRightHand = false;
     [SerializeField]  private bool needNewLeftHandSpot = false;
-     [SerializeField] private bool needNewRightHandSpot = false;
+    [SerializeField] private bool needNewRightHandSpot = false;
+    private Vector3 objectToRotateTo = Vector3.zero;
 
     void Start()
     {
@@ -210,7 +212,7 @@ public class UpwardClimbing : MonoBehaviour
             {
                 currentHandSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
             }
-
+            objectToRotateTo = currentHandSpotRight.transform.parent.transform.position;
         }
         
     }
@@ -338,8 +340,14 @@ public class UpwardClimbing : MonoBehaviour
             {
                 currentHandSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
             }
+        
+            objectToRotateTo = currentHandSpotLeft.transform.parent.transform.position;
         }
         
+    }
+    public bool GetIsRotatedToWall()
+    {
+        return isRotatedToWall;
     }
     private void LerpRightHandToTarget()
     {
@@ -475,6 +483,10 @@ public class UpwardClimbing : MonoBehaviour
     public bool GetMoveRightArm()
     {
         return moveRightArm;
+    }
+    public Vector3 GetobjectToRotateTo()
+    {
+        return objectToRotateTo;
     }
     public void FindNewSpots()
     {
