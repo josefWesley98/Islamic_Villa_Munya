@@ -26,8 +26,8 @@ public class ClimbingScript : MonoBehaviour
     [SerializeField] LayerMask lm;
     [SerializeField] float jumpForce;
 
-    [SerializeField] private Transform playerLerpStart;
-    [SerializeField] private Transform endLerpPoint;
+    private Vector3 playerLerpStart = Vector3.zero;
+     private Vector3 endLerpPoint =  Vector3.zero;
     private float interpolateAmount = 0.0f;
     private bool startClimb = false;
     private bool arrived = false;
@@ -69,7 +69,6 @@ public class ClimbingScript : MonoBehaviour
     {
         playercontrols.Disable();
         jump.Disable();
-        climb.Disable();
         stopClimb.Disable();
     }
     // Update is called once per frame
@@ -196,16 +195,16 @@ public class ClimbingScript : MonoBehaviour
     private void GetNextClimbSpot()
     {
         Debug.Log("finding new climbing spot.");
-        playerLerpStart.position = centreMass.position;
-        endLerpPoint.position = upwardClimbing.GetNewMiddleSpot();
+        playerLerpStart = centreMass.position;
+        endLerpPoint = upwardClimbing.GetNewMiddleSpot();
         if(lookDirection[0] || lookDirection[2])
         {
-            endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y -0.4f, endLerpPoint.position.z + climbOffset);
+            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
             Debug.Log(" looking forward or back");
         }
         if(lookDirection[1] || lookDirection[3])
         {
-            endLerpPoint.position = new Vector3(endLerpPoint.position.x + climbOffset, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+            endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y -0.4f, endLerpPoint.z);
             Debug.Log(" looking left or right");
         }
        
@@ -219,7 +218,7 @@ public class ClimbingScript : MonoBehaviour
                 interpolateAmount = (interpolateAmount + Time.deltaTime * 0.35f);
             }
             
-            playerPos.position = Vector3.Lerp(playerLerpStart.position, endLerpPoint.position, interpolateAmount);
+            playerPos.position = Vector3.Lerp(playerLerpStart, endLerpPoint, interpolateAmount);
           
             if(interpolateAmount >= 1.0f)
             {
@@ -230,16 +229,16 @@ public class ClimbingScript : MonoBehaviour
     }
     public void SetNewMovement(Vector3 _newEndPoint)
     {
-        playerLerpStart.position = centreMass.position;
-        endLerpPoint.position = _newEndPoint;
+        playerLerpStart = centreMass.position;
+        endLerpPoint = _newEndPoint;
         if(lookDirection[0] || lookDirection[2])
         {
-            endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y, endLerpPoint.position.z + climbOffset);
+            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y, endLerpPoint.z + climbOffset);
             Debug.Log(" looking forward or back");
         }
         if(lookDirection[1] || lookDirection[3])
         {
-            endLerpPoint.position = new Vector3(endLerpPoint.position.x + climbOffset, endLerpPoint.position.y, endLerpPoint.position.z);
+            endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y, endLerpPoint.z);
             Debug.Log(" looking left or right");
         }
         //endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
