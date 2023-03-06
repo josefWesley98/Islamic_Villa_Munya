@@ -8,6 +8,7 @@ public class ClimbingScript : MonoBehaviour
     PlayerControls playercontrols;
     InputAction jump;
     InputAction climb;
+    InputAction stopClimb;
     InputAction movement;
     Rigidbody rb;
     private MovementController movementController;
@@ -31,7 +32,15 @@ public class ClimbingScript : MonoBehaviour
     private bool startClimb = false;
     private bool arrived = false;
     private bool holding = false;
-
+    private float climbOffset = 0.0f;
+    private bool[] lookDirection = new bool[4]{false, false, false, false};
+    private bool isConnectedToWall = false;
+    private bool detach = true;
+    private float yRotForWall = 0.0f;
+    private float interpolateWallRot = 0.0f;
+    private bool startWallRot = false;
+    private Vector3 start = Vector3.zero;
+    private Vector3 end = Vector3.zero;
     private void Awake() => playercontrols = new PlayerControls();
 
     void Start()
@@ -51,9 +60,9 @@ public class ClimbingScript : MonoBehaviour
         movement = playercontrols.Player.Move;
         movement.Enable();
 
-        climb = playercontrols.Player.DoClimb;
-        climb.Enable();
-        climb.performed += Climb;
+        stopClimb = playercontrols.Player.Drop;
+        stopClimb.Enable();
+        stopClimb.started += StopClimb;
     }
 
     private void OnDisable()
@@ -61,12 +70,52 @@ public class ClimbingScript : MonoBehaviour
         playercontrols.Disable();
         jump.Disable();
         climb.Disable();
+        stopClimb.Disable();
     }
     // Update is called once per frame
     void Update()
     {
+        RotateToWall();
+        
+        if(transform.eulerAngles.y >= 315 || transform.eulerAngles.y < 45f)
+        {
+            lookDirection[0] = true;
+            lookDirection[1] = false;
+            lookDirection[2] = false;
+            lookDirection[3] = false;
+            climbOffset = -0.2f;
+        }
+     
+        if(transform.eulerAngles.y >= 45f && transform.eulerAngles.y < 135f )
+        {
+            climbOffset = -0.2f;
+            lookDirection[0] = false;
+            lookDirection[1] = true;
+            lookDirection[2] = false;
+            lookDirection[3] = false;
+        }
+
+        if(transform.eulerAngles.y >= 135f && transform.eulerAngles.y < 225f )
+        {
+            climbOffset = 0.2f;
+            lookDirection[0] = false;
+            lookDirection[1] = false;
+            lookDirection[2] = true;
+            lookDirection[3] = false;
+        }
+
+        if(transform.eulerAngles.y >= 225 && transform.eulerAngles.y < 315)
+        {
+            climbOffset = 0.2f;
+            lookDirection[0] = false;
+            lookDirection[1] = false;
+            lookDirection[2] = false;
+            lookDirection[3] = true;
+        }
+
         isJumping = true;
         LerpFunction();
+
         if(!upwardClimbing.GetCanClimb())
         {
             startClimb = false;
@@ -94,11 +143,9 @@ public class ClimbingScript : MonoBehaviour
             Debug.Log("jumping");
             rb.AddForce(jumpForce * transform.up * 10.0f, ForceMode.Impulse);
         }
-    }
-    private void Climb(InputAction.CallbackContext context)
-    {
-        if(upwardClimbing.GetCanClimb())
+        if(upwardClimbing.GetCanClimb() && movement.ReadValue<Vector2>().y > 0f)
         {
+            isConnectedToWall = true;
             Debug.Log("starting the climb.");
             startClimb = true;
             arrived = false;
@@ -106,6 +153,44 @@ public class ClimbingScript : MonoBehaviour
             rb.useGravity = false;
             movementController.enabled = false;
             upwardClimbing.SetMoveRightArm(true);
+            detach = false;
+        }
+    }
+    private void StopClimb(InputAction.CallbackContext context)
+    {
+        moveController.enabled = true;
+        startClimb = false;
+        rb.useGravity = true;
+        isConnectedToWall = false;
+        detach = true;
+        moveController.SetIsClimbing(false);
+        
+    }
+    private void Climb(InputAction.CallbackContext context)
+    {
+        
+    }
+    private void RotateToWall()
+    {
+        if(upwardClimbing.GetRotateToWall())
+        {
+            if(startWallRot)
+            {
+                startWallRot = false;
+                start = transform.eulerAngles;
+                end = new Vector3(transform.eulerAngles.x, upwardClimbing.GetWallYRotation(), transform.eulerAngles.y);
+            }
+
+            interpolateWallRot += Time.deltaTime * 1.25f;
+            transform.eulerAngles = Vector3.Slerp(start, end, interpolateWallRot);
+
+            if(interpolateAmount >= 1.0f)
+            {
+                startWallRot = true;
+                interpolateAmount = 0.0f;
+                upwardClimbing.SetRotateToWall(false);
+            }
+            
         }
     }
     private void GetNextClimbSpot()
@@ -113,7 +198,17 @@ public class ClimbingScript : MonoBehaviour
         Debug.Log("finding new climbing spot.");
         playerLerpStart.position = centreMass.position;
         endLerpPoint.position = upwardClimbing.GetNewMiddleSpot();
-        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.1f, endLerpPoint.position.y -0.4f, endLerpPoint.position.z-0.2f);
+        if(lookDirection[0] || lookDirection[2])
+        {
+            endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y -0.4f, endLerpPoint.position.z + climbOffset);
+            Debug.Log(" looking forward or back");
+        }
+        if(lookDirection[1] || lookDirection[3])
+        {
+            endLerpPoint.position = new Vector3(endLerpPoint.position.x + climbOffset, endLerpPoint.position.y -0.4f, endLerpPoint.position.z);
+            Debug.Log(" looking left or right");
+        }
+       
     }
     private void LerpFunction()
     {
@@ -137,7 +232,17 @@ public class ClimbingScript : MonoBehaviour
     {
         playerLerpStart.position = centreMass.position;
         endLerpPoint.position = _newEndPoint;
-        endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
+        if(lookDirection[0] || lookDirection[2])
+        {
+            endLerpPoint.position = new Vector3(endLerpPoint.position.x, endLerpPoint.position.y, endLerpPoint.position.z + climbOffset);
+            Debug.Log(" looking forward or back");
+        }
+        if(lookDirection[1] || lookDirection[3])
+        {
+            endLerpPoint.position = new Vector3(endLerpPoint.position.x + climbOffset, endLerpPoint.position.y, endLerpPoint.position.z);
+            Debug.Log(" looking left or right");
+        }
+        //endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
         interpolateAmount = 0.0f;
     }
     private void Holding(InputAction.CallbackContext context)
@@ -165,5 +270,17 @@ public class ClimbingScript : MonoBehaviour
         holding = false;
         arrived = false;
     }
+    public bool GetIsConnectedToWall()
+    {
+        return isConnectedToWall;
+    }
     
+    public bool GetLookDirection(int i)
+    {
+        return lookDirection[i];
+    }
+    public bool GetDetach()
+    {
+        return detach;
+    }
 }
