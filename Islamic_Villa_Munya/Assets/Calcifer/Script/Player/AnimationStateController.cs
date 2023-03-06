@@ -271,7 +271,7 @@ public class AnimationStateController : MonoBehaviour
         //Get key input using newer input system
 
 
-        animator.SetBool("IsClimbing", controller_ref.GetIsClimbing());
+        //animator.SetBool("IsClimbing", controller_ref.GetIsClimbing());
         if(controller_ref.GetIsClimbing())
         {
             animator.SetLayerWeight(climbLayerIndex, 1.0f);
