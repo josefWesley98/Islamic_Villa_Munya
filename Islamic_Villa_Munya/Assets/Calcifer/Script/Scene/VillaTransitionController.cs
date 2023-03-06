@@ -7,14 +7,13 @@ using UnityEngine;
 
 //This is a test for loading as seamlessly as possible between the hub and the villa vice versa
 //Dynamic Level loading
-public class TransitionController : MonoBehaviour
+public class VillaTransitionController : MonoBehaviour
 {
     public string villa_scene_name;
     private bool is_loading = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Boo");
         if(!is_loading && other.tag == "Player")
         {
             StartCoroutine(LoadVillaScene());

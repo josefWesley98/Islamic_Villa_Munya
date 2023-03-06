@@ -46,6 +46,7 @@ public class NIThirdPersonController : MonoBehaviour
     private bool input_disabled = false;
     private bool hard_landing = false;
     private bool allow_jump = true;
+    private bool artefact_collected;
 
     [Header("Movement")]
     [SerializeField] private float ground_drag;
@@ -64,6 +65,7 @@ public class NIThirdPersonController : MonoBehaviour
     private float stand_jump_delay = 0.5f;  //Change depending on the animation used
     private float run_jump_delay;
     private float disabled_input_delay;
+    private int score = 0;
 
 
     void Awake() 
@@ -217,6 +219,19 @@ public class NIThirdPersonController : MonoBehaviour
                 HardLandCapsuleCollider();
             }
         }
+
+        Debug.Log(artefact_collected);
+    }
+
+    private void OnCollisionEnter(Collision other) 
+    {
+        if(other.gameObject.tag == "Pickup")
+        {
+            Debug.Log("destroyed it");
+            GameManager.SetArtefactCollected(true);
+            Destroy(other.gameObject);
+        }
+        
     }
 
     private void FixedUpdate()
@@ -541,6 +556,17 @@ public class NIThirdPersonController : MonoBehaviour
     public bool GetIsClimbing()
     {
         return isClimbing;
+    }
+
+    public bool GetArtefactCollected()
+    {
+        return artefact_collected;
+    }
+
+    //Setters
+    public void SetArtefactCollected(bool val)
+    {
+        artefact_collected = val;
     }
 }
 
