@@ -201,6 +201,7 @@ public class Door : MonoBehaviour
     }
 
     //editor helpers
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         //Hinge Pos
@@ -222,7 +223,7 @@ public class Door : MonoBehaviour
         Gizmos.color = c;
         Gizmos.DrawWireMesh(mesh, openPos, Quaternion.LookRotation(hingePos - openPos) * Quaternion.Euler(0, -angleOffset, 0), transform.localScale);
     }
-
+#endif
     private void OnDrawGizmos()
     {
         //Open Preview
