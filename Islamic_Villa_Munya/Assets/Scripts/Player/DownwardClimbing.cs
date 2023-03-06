@@ -7,7 +7,7 @@ public class DownwardClimbing : MonoBehaviour
     //scripts
     [SerializeField] private LayerMask climableLayer;
     [SerializeField] private UpwardClimbing upwardClimbing; 
-    [SerializeField] private Transform centrePoint;
+     [SerializeField] private ClimbingScript climbingScript;
     // transforms 
     [SerializeField] private Transform[] grabbablePositionsRightFoot;
     [SerializeField] private Transform[] grabbablePositionsLeftFoot;
@@ -110,7 +110,7 @@ public class DownwardClimbing : MonoBehaviour
         rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
         leftFootRig.weight = Mathf.Lerp(leftFootRig.weight, rigTargetWeightLeftFoot, Time.deltaTime*10);
         
-        if(gotFootHolds)
+        if(gotFootHolds && climbingScript.GetIsConnectedToWall())
         {
             rigTargetWeightRightFoot = 1.0f;
             rigTargetWeightLeftFoot = 1.0f;
@@ -199,12 +199,12 @@ public class DownwardClimbing : MonoBehaviour
             targetSpotRightFoot = grabbablePositionsRightFoot[arrayPosRightFoot];
 
                 
-        if(needNewRightFootSpot)
+        if(needNewRightFootSpot && upwardClimbing.GetNeedNewSpots())
         {
             currentFootSpotRight = targetSpotRightFoot.gameObject;
             needNewRightFootSpot = false;
             GetNewMiddleSpot();
-            if(currentFootSpotRight != null)
+            if(currentFootSpotRight != null && currentFootSpotRight.GetComponent<Renderer>()!= null)
             {
                 currentFootSpotRight.GetComponent<Renderer>().material = newMaterialRefR;
             }
@@ -298,12 +298,12 @@ public class DownwardClimbing : MonoBehaviour
 
         
 
-        if(needNewLeftFootSpot)
+        if(needNewLeftFootSpot && upwardClimbing.GetNeedNewSpots())
         {
             GetNewMiddleSpot();
             currentFootSpotLeft = targetSpotLeftFoot.gameObject;
             needNewLeftFootSpot = false;
-            if(currentFootSpotLeft != null)
+            if(currentFootSpotLeft != null && currentFootSpotLeft.GetComponent<Renderer>() != null)
             {
                 currentFootSpotLeft.GetComponent<Renderer>().material = newMaterialRefL;
             }

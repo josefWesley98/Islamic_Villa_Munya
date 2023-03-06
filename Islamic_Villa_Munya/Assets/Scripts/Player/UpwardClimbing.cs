@@ -32,11 +32,11 @@ public class UpwardClimbing : MonoBehaviour
     private float interpolateAmountLeftArm = 0.0f;
 
     //rigging end.
-
     [SerializeField] private Transform[] grabbablePositionsRightHand;
+    [SerializeField] private Animator animator;
     [SerializeField] private Transform[] grabbablePositionsLeftHand;
-   [SerializeField] private Material newMaterialRefR;
-   [SerializeField] private Material newMaterialRefL;
+    [SerializeField] private Material newMaterialRefR;
+    [SerializeField] private Material newMaterialRefL;
     private bool isRotatedToWall = false;
     private Transform targetSpotLeftHand;
     private Transform targetSpotRightHand;
@@ -55,9 +55,12 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField]  private bool needNewLeftHandSpot = false;
     [SerializeField] private bool needNewRightHandSpot = false;
     private Vector3 objectToRotateTo = Vector3.zero;
+    private bool needNewSpots = true;
 
     void Start()
     {
+        
+
         m_Started = true;
         for(int i = 0; i < 150; i++)
         {
@@ -78,6 +81,24 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!movingLeftHand && canClimb && currentHandSpotLeft != null)
+        {
+            leftRigAimPosition.position = currentHandSpotLeft.transform.position;
+        }
+        if(!movingRightHand && canClimb && currentHandSpotRight != null)
+        {
+            rightRigAimPosition.position = currentHandSpotRight.transform.position;
+        }
+        if(movementDirection.x == 0 && movementDirection.y == 0)
+        {
+            animator.speed = 0.0f;
+            needNewSpots = false;
+        }
+        else
+        {
+            animator.speed = 0.8f;
+            needNewSpots = true;
+        }
         FindRightHandClimbingPositions();
         FindLeftHandClimbingPositions();
         
@@ -95,7 +116,7 @@ public class UpwardClimbing : MonoBehaviour
         rightArmRig.weight = Mathf.Lerp(rightArmRig.weight, rigTargetWeightRightArm, Time.deltaTime*10);
         leftArmRig.weight = Mathf.Lerp(leftArmRig.weight, rigTargetWeightLeftArm, Time.deltaTime*10);
         
-        if(canClimb)
+        if(canClimb && climbingScript.GetIsConnectedToWall())
         {
             rigTargetWeightRightArm = 1.0f;
             rigTargetWeightLeftArm = 1.0f;
@@ -163,18 +184,15 @@ public class UpwardClimbing : MonoBehaviour
 
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
-                chosenReference = 3;
-      
+                chosenReference = 3;    
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
-            
             }
                 
                 System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
-                {
-                    
+                { 
                     float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
                     float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
                     return distanceX.CompareTo(distanceY);
@@ -183,7 +201,7 @@ public class UpwardClimbing : MonoBehaviour
                 targetSpotRightHand = grabbablePositionsRightHand[arrayPosRightHand];
 
                 
-        if(needNewRightHandSpot)
+        if(needNewRightHandSpot) //&& needNewSpots)
         {
 
             currentHandSpotRight = targetSpotRightHand.gameObject;
@@ -308,7 +326,7 @@ public class UpwardClimbing : MonoBehaviour
 
         
 
-        if(needNewLeftHandSpot)
+        if(needNewLeftHandSpot)// && needNewSpots)
         {
             currentHandSpotLeft = targetSpotLeftHand.gameObject;
             needNewLeftHandSpot = false;
@@ -435,38 +453,6 @@ public class UpwardClimbing : MonoBehaviour
 
         return newPos;
     }
-    public Transform GetTargetSpotLeftHand()
-    {
-        return targetSpotLeftHand;
-    }
-    public Transform GetTargetSpotRightHand()
-    {
-        return targetSpotRightHand;
-    }
-    public Vector3 GetCurrentSpotLeftHand()
-    {
-        return currentHandSpotLeft.transform.position;
-    }
-    public void SetCurrentSpotLeftHand(Vector3 _newCurrentSpotLeft)
-    {
-        //currentHandSpotLeft.transform.position = _newCurrentSpotLeft;
-    }
-    public void SetCurrentSpotRightHand(Vector3 _newCurrentSpotRight)
-    {
-        //currentHandSpotRight.transform.position = _newCurrentSpotRight;
-    }
-    public Vector3 GetCurrentSpotRightHand()
-    {
-        return currentHandSpotRight.transform.position;
-    }
-    public void SetMovementDirection(Vector2 _moveDirection)
-    {
-        movementDirection = _moveDirection;
-    }
-    public Vector3 GetMiddlePoint()
-    {
-        return middlePoint;
-    }
     public bool GetCanClimb()
     {
         return canClimb;
@@ -480,15 +466,8 @@ public class UpwardClimbing : MonoBehaviour
         rightArmStartPosition.position = rightArmPos.position;
         leftArmStartPosition.position = leftArmPos.position;
     }
-    public bool GetMoveRightArm()
+    public bool GetNeedNewSpots()
     {
-        return moveRightArm;
-    }
-    public Vector3 GetobjectToRotateTo()
-    {
-        return objectToRotateTo;
-    }
-    public void FindNewSpots()
-    {
+        return needNewSpots;
     }
 }
