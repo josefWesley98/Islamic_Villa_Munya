@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Drop",
+                    "type": "Button",
+                    "id": "9b2d8e4b-fc32-488c-a46f-7fef5c1a53ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -305,12 +314,23 @@
                 },
                 {
                     "name": "",
-                    "id": "edc1e745-65b6-460c-9a9a-6ea6ab761b64",
-                    "path": "<Keyboard>/q",
+                    "id": "d7ba962e-68cd-401f-b72c-b1f07a6fbfd9",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "DoClimb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ea8d5de-34cf-48c1-a9ee-af85ddf67e65",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

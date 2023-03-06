@@ -27,6 +27,7 @@ public class DownwardClimbing : MonoBehaviour
     [SerializeField] private float rigTargetWeightLeftFoot;
     [SerializeField] private Rig leftFootRig;
     [SerializeField] private Transform leftFootPos;
+    [SerializeField] private bool[] direction = new bool[4] { false, false,false,false};
     private float interpolateAmountLeftFoot = 0.0f;
      private bool moveLeftFoot = true;
 
@@ -94,8 +95,13 @@ public class DownwardClimbing : MonoBehaviour
             grabbablePositionsRightFoot[i] = gameObject.transform;
         }
     }
-     void Update()
+    void Update()
     {
+        for(int i = 0; i < 4; i++)
+        {
+            direction[i] = climbingScript.GetLookDirection(i);
+        }
+
         FindRightFootClimbingPositions();
         FindLeftFootClimbingPositions();
         
@@ -110,12 +116,12 @@ public class DownwardClimbing : MonoBehaviour
         rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
         leftFootRig.weight = Mathf.Lerp(leftFootRig.weight, rigTargetWeightLeftFoot, Time.deltaTime*10);
         
-        if(gotFootHolds && climbingScript.GetIsConnectedToWall())
+        if(gotFootHolds && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach())
         {
             rigTargetWeightRightFoot = 1.0f;
             rigTargetWeightLeftFoot = 1.0f;
         }
-        else
+        if(climbingScript.GetDetach() || !gotFootHolds || !climbingScript.GetIsConnectedToWall())
         {
             rigTargetWeightRightFoot = 0.0f;
             rigTargetWeightLeftFoot = 0.0f;
@@ -331,15 +337,10 @@ public class DownwardClimbing : MonoBehaviour
         }
         if(movingRightFoot && currentFootSpotRight != null)
         {
-           //  rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
+            
             interpolateAmountRightFoot += Time.deltaTime *1.25f;
             rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position,  currentFootSpotRight.transform.position, interpolateAmountRightFoot);
-            //  rightRigAimPosition.position = Vector3.Lerp(rightFootStartPosition.position, currentFootSpotRight.transform.position , interpolateAmountRightFoot);
-            //  float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentFootSpotRight.transform.position.x, interpolateAmountRightFoot);
-            //  float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentFootSpotRight.transform.position.y, interpolateAmountRightFoot);
-            //  float newZ = Mathf.Lerp(rightRigAimPosition.position.z, currentFootSpotRight.transform.position.z, interpolateAmountRightFoot);
-            
-            // rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+          
 
             if(interpolateAmountRightFoot >= 1.0f)
             {
