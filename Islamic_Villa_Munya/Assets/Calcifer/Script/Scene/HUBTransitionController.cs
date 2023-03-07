@@ -14,7 +14,7 @@ public class HUBTransitionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!is_loading && other.tag == "Player")
+        if(!is_loading && other.tag == "Player" && GameManager.GetHUBTravel())
         {
             //If the player has picked up the artefact then they can return to the HUB world. Initiate loading
             StartCoroutine(LoadHubScene());

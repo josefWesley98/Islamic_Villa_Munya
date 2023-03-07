@@ -50,7 +50,7 @@ public class Door : MonoBehaviour
 
     void Start()
     {
-        temporaryPlayerReferenceDeleteLaterOk = GameObject.Find("Player_Placeholder").transform;
+        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
         doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
