@@ -73,6 +73,7 @@ public class Door : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F) && Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos) < interactMinDistance)//TEMPORARY
             {
+                print("here");
                 if (unlockNextPress && locked)
                 {
                     locked = false;
@@ -223,7 +224,6 @@ public class Door : MonoBehaviour
         Gizmos.color = c;
         Gizmos.DrawWireMesh(mesh, openPos, Quaternion.LookRotation(hingePos - openPos) * Quaternion.Euler(0, -angleOffset, 0), transform.localScale);
     }
-#endif
     private void OnDrawGizmos()
     {
         //Open Preview
@@ -240,6 +240,7 @@ public class Door : MonoBehaviour
             flipAngleValues = false;
         }
     }
+#endif
     public void ToggleOpen()
     {
         if(doorState == DoorState.Closed)
