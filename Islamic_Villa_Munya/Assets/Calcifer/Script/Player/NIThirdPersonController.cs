@@ -216,7 +216,7 @@ public class NIThirdPersonController : MonoBehaviour
                 float disable_input = animator_ref.GetHardLandAnimTime();
                 StartCoroutine(DisableInput(disable_input));
 
-                HardLandCapsuleCollider();
+                //HardLandCapsuleCollider();
             }
         }
 
@@ -490,12 +490,12 @@ public class NIThirdPersonController : MonoBehaviour
             capsule.radius = capsule_radius;
     }
 
-    private void HardLandCapsuleCollider()
-    {
-        capsule.height = capsule_height / 2;
-        capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
-        capsule.radius = capsule_radius * 2;
-    }
+    // private void HardLandCapsuleCollider()
+    // {
+    //     capsule.height = capsule_height / 2;
+    //     capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+    //     capsule.radius = capsule_radius * 2;
+    // }
 
     //Getters relevant for passing variables into the animator controller
     public Vector3 GetRBVelocity(Vector3 vel)

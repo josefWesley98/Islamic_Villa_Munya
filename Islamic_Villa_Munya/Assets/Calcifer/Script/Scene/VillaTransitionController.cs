@@ -14,7 +14,7 @@ public class VillaTransitionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!is_loading && other.tag == "Player")
+        if(!is_loading && other.tag == "Player" && !GameManager.GetHaveKey())
         {
             StartCoroutine(LoadVillaScene());
         }
