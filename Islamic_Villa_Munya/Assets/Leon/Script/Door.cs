@@ -50,14 +50,16 @@ public class Door : MonoBehaviour
 
     void Start()
     {
-        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
+        //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
         doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
         //on game start, make a hinge for this door object
         if (Application.isPlaying)
         {
-            CreateDoorParent();
+            Invoke(nameof(CreateDoorParent), 3f);
+            //print("ok");
+            //CreateDoorParent();
         }
     }
 
