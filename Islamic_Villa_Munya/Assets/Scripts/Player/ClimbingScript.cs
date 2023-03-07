@@ -159,6 +159,10 @@ public class ClimbingScript : MonoBehaviour
     }
     private void StopClimb(InputAction.CallbackContext context)
     {
+        if(startClimb)
+        {
+            rb.AddForce(-transform.forward * 100, ForceMode.Impulse);
+        }
         moveController.enabled = true;
         startClimb = false;
         rb.useGravity = true;

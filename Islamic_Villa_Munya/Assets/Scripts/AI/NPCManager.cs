@@ -1553,12 +1553,13 @@ public class NPCManager : MonoBehaviour
        
         return partnerArrived;
     }
+    // quick fix here for AI
     public bool FindIdleAIInAreaToSocialise(int id, string area, int currentPosID)
     {
         Vector3 socialDestination = Vector3.zero;
         string currentJob = "null";
         int socialPosID = 0;
-
+        int AILastPos = 0;
         if(area == A1)
         {
             for(int i = 0; i < AI.Length; i++)
@@ -1575,6 +1576,7 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
+                            AILastPos = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                         if(oddNumbers[j] == currentPosID)
@@ -1583,30 +1585,34 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
+                            AILastPos = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                     }
                     
                     currentJob = AI[rand].GetComponent<AIController2>().GetCurrentJob();
-                    if(currentJob == "Walking")
+                    if(AILastPos != -1)
                     {
-                        walkingPointsA1Occupied[socialPosID] = false;
-                        AI_ID_A1_WP[socialPosID] = -1;
-                    }
-                    if(currentJob == "Inspecting")
-                    {
-                        inspectionAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Inspection[socialPosID] = -1;
-                    }
-                    if(currentJob == "Idling")
-                    {
-                        idleAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Idle[socialPosID] = -1;
-                    }
-                    if(currentJob == "Sitting")
-                    {
-                        seatingAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Seating[socialPosID] = -1;
+                        if(currentJob == "Walking")
+                        {
+                            walkingPointsA1Occupied[AILastPos] = false;
+                            AI_ID_A1_WP[AILastPos] = -1;
+                        }
+                        if(currentJob == "Inspecting")
+                        {
+                            inspectionAreasA1Occupied[AILastPos] = false;
+                            AI_ID_A1_Inspection[AILastPos] = -1;
+                        }
+                        if(currentJob == "Idling")
+                        {
+                            idleAreasA1Occupied[AILastPos] = false;
+                            AI_ID_A1_Idle[AILastPos] = -1;
+                        }
+                        if(currentJob == "Sitting")
+                        {
+                            seatingAreasA1Occupied[AILastPos] = false;
+                            AI_ID_A1_Seating[AILastPos] = -1;
+                        }
                     }
 
                     AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");

@@ -863,6 +863,10 @@ public class AIController2 : MonoBehaviour
     {
         currentWaypointPos = WP;
     }
+    public int GetCurrentWayPointPos()
+    {
+        return currentWaypointPos;
+    }
     public void SetNewJob(string jobChange)
     {
         newJob = jobChange;
