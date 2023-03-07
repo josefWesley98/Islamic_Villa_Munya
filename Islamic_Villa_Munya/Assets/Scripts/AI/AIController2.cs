@@ -507,7 +507,7 @@ public class AIController2 : MonoBehaviour
             if(actionTimer >= doWalkingFor)
             {
                 isWalking = false;
-                //canDoWalking = false;
+                canDoWalking = false;
                 actionTimer = 0.0f;
                 findNewJob = true;
             }
@@ -833,12 +833,12 @@ public class AIController2 : MonoBehaviour
     }
     private float ActionRandomTimer()
     {
-        float result = Random.Range(15.0f, 60.0f);
+        float result = Random.Range(30.0f, 60.0f);
         return result; 
     }    
     private float ActionCdRandomTimer()
     {
-        float result = Random.Range(45.0f, 90.0f);
+        float result = Random.Range(30.0f, 60.0f);
         return result; 
     }
     public void SetID(int _id)

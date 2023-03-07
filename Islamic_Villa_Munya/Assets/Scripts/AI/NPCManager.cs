@@ -3135,6 +3135,7 @@ public class NPCManager : MonoBehaviour
         }
         return hasPartner;
     }
+   // quick fix for clearing the spot the social partner was in, still needs to be done for all other zones.
     public void TellSocialPartnerAILeft(int id, string area, int currentPosID)
     {
         int socialPosID = 0;
@@ -3150,6 +3151,8 @@ public class NPCManager : MonoBehaviour
                     {   
                         int newId = AI_ID_A1_Social[socialPosID];
                         AI[newId].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[newId] = -1;
+                        socialAreasA1Occupied[newId] = false;
                         break;
                     }          
                 }
@@ -3160,6 +3163,8 @@ public class NPCManager : MonoBehaviour
                     {   
                         int newId = AI_ID_A1_Social[socialPosID];
                         AI[newId].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[newId] = -1;
+                        socialAreasA1Occupied[newId] = false;
                         break;
                     }
                 }
