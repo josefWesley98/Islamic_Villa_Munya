@@ -8,14 +8,14 @@ public class SpawnAudioPrefabs : MonoBehaviour
     [SerializeField] private GameObject[] WhatToSpawn;
 
 
-    public void spawnAudioPrefab(int Num, bool attachTo = false)
+    public void spawnAudioPrefab(int Num,int sound, bool attachTo = false)
     {
-        WhatToSpawn[0] = Instantiate(WhatToSpawn[0], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        WhatToSpawn[sound] = Instantiate(WhatToSpawn[sound], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
         // spawns prefabs number
 
         if (attachTo)
         {
-            WhatToSpawn[0].transform.parent = spawnLocations[Num].transform;
+            WhatToSpawn[sound].transform.parent = spawnLocations[Num].transform;
             // If TRUE, spawns object as child of spawn location
         }
     }

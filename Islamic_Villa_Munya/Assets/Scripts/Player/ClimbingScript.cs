@@ -38,9 +38,11 @@ public class ClimbingScript : MonoBehaviour
     private bool detach = true;
     private float yRotForWall = 0.0f;
     private float interpolateWallRot = 0.0f;
-    private bool startWallRot = false;
-    private Vector3 start = Vector3.zero;
-    private Vector3 end = Vector3.zero;
+    private bool startWallRot = true;
+    private Vector3 direction = Vector3.zero;
+    private Vector3 target = Vector3.zero;
+    private Quaternion slerpStart = Quaternion.identity;
+    private Quaternion lookRotation = Quaternion.identity;
     private void Awake() => playercontrols = new PlayerControls();
 
     void Start()
@@ -175,18 +177,23 @@ public class ClimbingScript : MonoBehaviour
         {
             if(startWallRot)
             {
+                target =  upwardClimbing.GetWallRotation();
+                slerpStart = gameObject.transform.rotation;
                 startWallRot = false;
-                start = transform.eulerAngles;
-                end = new Vector3(transform.eulerAngles.x, upwardClimbing.GetWallYRotation(), transform.eulerAngles.y);
             }
 
+            direction = (target - transform.position).normalized;
+            lookRotation = Quaternion.LookRotation(direction);
+
+            transform.rotation = Quaternion.Slerp(slerpStart, lookRotation, interpolateWallRot);
             interpolateWallRot += Time.deltaTime * 1.25f;
-            transform.eulerAngles = Vector3.Slerp(start, end, interpolateWallRot);
 
             if(interpolateAmount >= 1.0f)
             {
+                lookRotation = Quaternion.identity;
+                direction = Vector3.zero;
                 startWallRot = true;
-                interpolateAmount = 0.0f;
+                interpolateWallRot = 0.0f;
                 upwardClimbing.SetRotateToWall(false);
             }
             

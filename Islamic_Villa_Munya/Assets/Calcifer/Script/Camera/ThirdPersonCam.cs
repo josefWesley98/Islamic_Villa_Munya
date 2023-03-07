@@ -27,11 +27,19 @@ public class ThirdPersonCam : MonoBehaviour
         orientation.forward = view_dir.normalized;
 
         //Rotate the player
-        Vector2 look_at = p.GetPlayerInput();
-        Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
+        if(p.GetIsClimbing())
+        {
+            ground_rot_speed = 0;
+        }
+        else
+        {
+            ground_rot_speed = 15;
+        }
 
-        player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
+            Vector2 look_at = p.GetPlayerInput();
+            Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
 
+            player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
     }
 
 }

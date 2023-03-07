@@ -456,7 +456,8 @@ public class AIController2 : MonoBehaviour
                 // do audio.
                 if(doSocialAudio)
                 {
-                    spawnAudioPrefabs.spawnAudioPrefab(id, true);
+                    int rand = Random.Range(0,2);
+                    spawnAudioPrefabs.spawnAudioPrefab(id,rand ,true);
                     doSocialAudio = false;
                 }
 

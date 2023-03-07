@@ -60,7 +60,7 @@ public class UpwardClimbing : MonoBehaviour
     private bool stopLeft = false;
     private bool stopRight = false;
     private bool rotateToWall = false;
-    private float wallYRotation = 0.0f;
+    private Vector3 wallRotation = Vector3.zero;
 
     void Start()
     {
@@ -86,12 +86,23 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(middlePoint != null && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach())
+        {
+            Vector3 pos = new Vector3(middlePoint.x, transform.position.y, middlePoint.z);
+            wallRotation = pos;
+            rotateToWall = true;
+        }
+        else 
+        {
+            rotateToWall = false;
+        }
+
         for(int i = 0; i < 4; i++)
         {
             direction[i] = climbingScript.GetLookDirection(i);
         }
 
-        if(movementDirection.x == 0 && movementDirection.y == 0 && climbingScript.GetIsConnectedToWall()) 
+        if(movementDirection.x == 0 && movementDirection.y == 0 && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach()) 
         {
            
             needNewSpots = false;
@@ -494,9 +505,9 @@ public class UpwardClimbing : MonoBehaviour
     {
         return rotateToWall;
     }
-    public float GetWallYRotation()
+    public Vector3 GetWallRotation()
     {
-        return wallYRotation;
+        return wallRotation;
     }
     public void SetRotateToWall(bool value)
     {
