@@ -12,7 +12,6 @@ public class PrefabInitiate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Slaaaaaaaaag");
         if(GameManager.GetArtefactCollected())
         {
             artefact.SetActive(true);

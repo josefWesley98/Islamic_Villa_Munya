@@ -220,15 +220,14 @@ public class NIThirdPersonController : MonoBehaviour
             }
         }
 
-        Debug.Log(artefact_collected);
     }
 
     private void OnCollisionEnter(Collision other) 
     {
         if(other.gameObject.tag == "Pickup")
         {
-            Debug.Log("destroyed it");
             GameManager.SetArtefactCollected(true);
+            GameManager.SetHUBTravel(true);
             Destroy(other.gameObject);
         }
         
@@ -469,16 +468,16 @@ public class NIThirdPersonController : MonoBehaviour
             if(crouch.started)
             {
                 is_crouching = true;
-                capsule.height = capsule_height / 2;
-                capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
-                capsule.radius = capsule_radius * 2;
+                // capsule.height = capsule_height / 2;
+                // capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+                // capsule.radius = capsule_radius * 2;
             }
             if(crouch.canceled && !is_roof)
             {
                 is_crouching = false;
-                capsule.height = capsule_height;
-                capsule.center = new Vector3(0f, capsule_centre, 0f);
-                capsule.radius = capsule_radius;
+                // capsule.height = capsule_height;
+                // capsule.center = new Vector3(0f, capsule_centre, 0f);
+                // capsule.radius = capsule_radius;
             }
         }
     }
