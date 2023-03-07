@@ -58,7 +58,7 @@ public class AIController2 : MonoBehaviour
 
     bool arrivedAtDestination = false;
     bool hasSocialPartner = false;
-    private Vector3 destination = Vector3.zero;
+    private Vector3 destination =  new Vector3(1111,111,111);
     private NavMeshAgent agent;
     private Animator animator;
     private int currentWaypointPos = -1;
@@ -324,10 +324,21 @@ public class AIController2 : MonoBehaviour
         {
             findNewJob = true;
         }
-        if(transform.position.x == destination.x && transform.position.z == destination.z)
+       
+        if(agent.remainingDistance > 0.1)
         {
-            arrivedAtDestination = true; 
+            arrivedAtDestination = false;
         }
+        if(currentJob != "null" && agent.remainingDistance < 0.1 )
+        {
+           arrivedAtDestination = true; 
+        }
+        // if(transform.position.z == destination.z)// && transform.position.z == destination.z)
+        // {
+        //     transform.position.x == destination.x
+            //arrivedAtDestination = true; 
+        //     
+        // }
         AnimationManagement();
         if(socialPartnerLeftEarly)
         {
