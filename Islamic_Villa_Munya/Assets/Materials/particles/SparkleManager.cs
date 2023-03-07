@@ -9,7 +9,7 @@ public class SparkleManager : MonoBehaviour
     [SerializeField] private bool sparklesOneActive = true;
     [SerializeField] private bool sparklesTwoActive = false;
     [SerializeField] private bool leavingPuzzle = false;
-    
+    [SerializeField] private int id;
     // Start is called before the first frame update
   
 
@@ -31,6 +31,12 @@ public class SparkleManager : MonoBehaviour
         {
             sparklesOneActive = true;
             sparkles.gameObject.SetActive(true);
+           
+        }
+        if(id == 10 && GameManager.GetArtefactCollected())
+        {
+            sparklesOneActive = false;
+            sparkles.gameObject.SetActive(false);
         }
         // if(sparkles2 != null)
         // {

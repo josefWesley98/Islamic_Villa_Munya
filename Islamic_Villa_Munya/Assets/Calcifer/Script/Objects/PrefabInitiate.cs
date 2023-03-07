@@ -18,7 +18,7 @@ public class PrefabInitiate : MonoBehaviour
             //Instantiate the object at desired location with rotation
 
             //Set the instantiation to false
-            GameManager.SetArtefactCollected(false);
+            //GameManager.SetArtefactCollected(false);
         }
     }
 
