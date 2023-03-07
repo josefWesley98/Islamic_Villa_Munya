@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
     {
-        SceneManager.LoadScene("PlayerTesting");  
+        SceneManager.LoadScene("IraklisScene");  
     }
 
     public void PlayGame2()                         // when playgame2 is called, it switches scene to "SampleScene" which is the ai testing
