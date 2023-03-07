@@ -104,8 +104,6 @@ public class AIController2 : MonoBehaviour
     [SerializeField] private bool allowSocialising = true;
     [SerializeField] private bool allowIdling = true;
     [SerializeField] private bool allowSitting = true;
-
-    [SerializeField] private bool doAudio = true;
     private bool doIdleLean = false;
     private bool idleLeanLeft = false;
     private bool idleLeanRight = false;
@@ -467,7 +465,7 @@ public class AIController2 : MonoBehaviour
                 actionTimer += Time.deltaTime;
                 doSocialAnim = true;
                 // do audio.
-                if(doSocialAudio && doAudio)
+                if(doSocialAudio)
                 {
                     int rand = Random.Range(0,2);
                     spawnAudioPrefabs.spawnAudioPrefab(id,rand ,true);
@@ -509,7 +507,7 @@ public class AIController2 : MonoBehaviour
             if(actionTimer >= doWalkingFor)
             {
                 isWalking = false;
-                canDoWalking = false;
+                //canDoWalking = false;
                 actionTimer = 0.0f;
                 findNewJob = true;
             }
@@ -835,12 +833,12 @@ public class AIController2 : MonoBehaviour
     }
     private float ActionRandomTimer()
     {
-        float result = Random.Range(30.0f, 60.0f);
+        float result = Random.Range(15.0f, 60.0f);
         return result; 
     }    
     private float ActionCdRandomTimer()
     {
-        float result = Random.Range(10.0f, 60.0f);
+        float result = Random.Range(45.0f, 90.0f);
         return result; 
     }
     public void SetID(int _id)
@@ -864,10 +862,6 @@ public class AIController2 : MonoBehaviour
     public void SetCurrentWayPointPos(int WP)
     {
         currentWaypointPos = WP;
-    }
-    public int GetCurrentWayPointPos()
-    {
-        return currentWaypointPos;
     }
     public void SetNewJob(string jobChange)
     {
