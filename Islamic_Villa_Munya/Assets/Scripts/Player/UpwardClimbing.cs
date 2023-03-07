@@ -86,17 +86,7 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(middlePoint != null && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach())
-        {
-            Vector3 pos = new Vector3(middlePoint.x, transform.position.y, middlePoint.z);
-            wallRotation = pos;
-            rotateToWall = true;
-        }
-        else 
-        {
-            rotateToWall = false;
-        }
-
+       
         for(int i = 0; i < 4; i++)
         {
             direction[i] = climbingScript.GetLookDirection(i);

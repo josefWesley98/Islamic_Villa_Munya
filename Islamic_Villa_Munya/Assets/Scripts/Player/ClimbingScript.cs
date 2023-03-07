@@ -76,7 +76,7 @@ public class ClimbingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateToWall();
+     
         
         if(transform.eulerAngles.y >= 315 || transform.eulerAngles.y < 45f)
         {
@@ -171,34 +171,7 @@ public class ClimbingScript : MonoBehaviour
     {
         
     }
-    private void RotateToWall()
-    {
-        if(upwardClimbing.GetRotateToWall())
-        {
-            if(startWallRot)
-            {
-                target =  upwardClimbing.GetWallRotation();
-                slerpStart = gameObject.transform.rotation;
-                startWallRot = false;
-            }
-
-            direction = (target - transform.position).normalized;
-            lookRotation = Quaternion.LookRotation(direction);
-
-            transform.rotation = Quaternion.Slerp(slerpStart, lookRotation, interpolateWallRot);
-            interpolateWallRot += Time.deltaTime * 1.25f;
-
-            if(interpolateAmount >= 1.0f)
-            {
-                lookRotation = Quaternion.identity;
-                direction = Vector3.zero;
-                startWallRot = true;
-                interpolateWallRot = 0.0f;
-                upwardClimbing.SetRotateToWall(false);
-            }
-            
-        }
-    }
+    
     private void GetNextClimbSpot()
     {
         Debug.Log("finding new climbing spot.");
