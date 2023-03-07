@@ -6,6 +6,7 @@ public class Key : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        GameManager.SetHasKey(true);
         doorToUnlock.unlockNextPress = true;
         Destroy(gameObject, 0.3f);
     }

@@ -6,32 +6,25 @@ using UnityEngine.InputSystem;
 /*Cal's script starts here*/
 public class DoorScript : MonoBehaviour
 {
-    public float open_angle = 70f;
-
-    public Transform pivot;
-    bool is_open = false;
-
     private Keyboard kb;
+    public Transform doorTransform;  // The transform of the door object
+    public float openAngle = 90f;    // The angle to open the door
 
-    //Open the door if the player has the key
-    private void Start() 
-    {
-        kb = InputSystem.GetDevice<Keyboard>();
-    }
+    private bool isOpen = false;     // Whether the door is currently open
 
-    private void OnTriggerEnter(Collider other) 
+    private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.tag == "Player")
+        if (!isOpen && other.gameObject.tag == "Player")
         {
             Debug.Log(GameManager.GetHaveKey());
-            if(GameManager.GetHaveKey() && kb.spaceKey.isPressed)
+            if(GameManager.GetHaveKey())
             {
-                Debug.Log("should be opening");
-                pivot.Rotate(Vector3.up, open_angle);
-                is_open = true;
+            Debug.Log("trigger");
+            // Open the door
+            doorTransform.Rotate(Vector3.up, openAngle);
+            isOpen = true;
             }
         }
-        
     }
 }
 
