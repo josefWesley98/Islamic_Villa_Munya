@@ -1553,12 +1553,13 @@ public class NPCManager : MonoBehaviour
        
         return partnerArrived;
     }
+    // did quick fix for area one for ai last location.
     public bool FindIdleAIInAreaToSocialise(int id, string area, int currentPosID)
     {
         Vector3 socialDestination = Vector3.zero;
         string currentJob = "null";
         int socialPosID = 0;
-
+        int AIsCurrentLocation = 0;
         if(area == A1)
         {
             for(int i = 0; i < AI.Length; i++)
@@ -1575,6 +1576,7 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
+                            AIsCurrentLocation = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                         if(oddNumbers[j] == currentPosID)
@@ -1583,30 +1585,34 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
+                            AIsCurrentLocation = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                     }
                     
                     currentJob = AI[rand].GetComponent<AIController2>().GetCurrentJob();
-                    if(currentJob == "Walking")
+                    if(AIsCurrentLocation != -1)
                     {
-                        walkingPointsA1Occupied[socialPosID] = false;
-                        AI_ID_A1_WP[socialPosID] = -1;
-                    }
-                    if(currentJob == "Inspecting")
-                    {
-                        inspectionAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Inspection[socialPosID] = -1;
-                    }
-                    if(currentJob == "Idling")
-                    {
-                        idleAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Idle[socialPosID] = -1;
-                    }
-                    if(currentJob == "Sitting")
-                    {
-                        seatingAreasA1Occupied[socialPosID] = false;
-                        AI_ID_A1_Seating[socialPosID] = -1;
+                        if(currentJob == "Walking")
+                        {
+                            walkingPointsA1Occupied[AIsCurrentLocation] = false;
+                            AI_ID_A1_WP[AIsCurrentLocation] = -1;
+                        }
+                        if(currentJob == "Inspecting")
+                        {
+                            inspectionAreasA1Occupied[AIsCurrentLocation] = false;
+                            AI_ID_A1_Inspection[AIsCurrentLocation] = -1;
+                        }
+                        if(currentJob == "Idling")
+                        {
+                            idleAreasA1Occupied[AIsCurrentLocation] = false;
+                            AI_ID_A1_Idle[AIsCurrentLocation] = -1;
+                        }
+                        if(currentJob == "Sitting")
+                        {
+                            seatingAreasA1Occupied[AIsCurrentLocation] = false;
+                            AI_ID_A1_Seating[AIsCurrentLocation] = -1;
+                        }
                     }
 
                     AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
@@ -3144,6 +3150,8 @@ public class NPCManager : MonoBehaviour
                     {   
                         int newId = AI_ID_A1_Social[socialPosID];
                         AI[newId].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[socialPosID] = -1;
+                        socialAreasA1Occupied[socialPosID] = false;
                         break;
                     }          
                 }
@@ -3154,6 +3162,8 @@ public class NPCManager : MonoBehaviour
                     {   
                         int newId = AI_ID_A1_Social[socialPosID];
                         AI[newId].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[socialPosID] = -1;
+                        socialAreasA1Occupied[socialPosID] = false;
                         break;
                     }
                 }
