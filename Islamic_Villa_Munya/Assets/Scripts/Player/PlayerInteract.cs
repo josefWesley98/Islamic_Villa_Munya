@@ -18,8 +18,9 @@ public class PlayerInteract : MonoBehaviour
     Transform LookAt;
     Vector3 destination;
     Vector3 scale;
+    Vector3 rotationForSpawn;
     bool artifactGenerated = false;
-    
+    [SerializeField] NIThirdPersonController controller;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
     [SerializeField] TMPro.TMP_Text inspect;
     [SerializeField] TMPro.TMP_Text info;
@@ -65,6 +66,8 @@ public class PlayerInteract : MonoBehaviour
             interactableObj = other.GetComponent<InteractalbeObject>();
             objRenderer = other.GetComponent<MeshRenderer>();
             scale = other.GetComponent<InteractalbeObject>().GetScale();
+            rotationForSpawn =  other.GetComponent<InteractalbeObject>().GetRotation();
+            destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
             inspect.gameObject.SetActive(true);
             isTouching = true;
@@ -102,6 +105,7 @@ public class PlayerInteract : MonoBehaviour
 
         if(isInspecting)
         {
+            controller.ShowCursor();
             objRenderer.enabled = false;
             ASC.enabled = false;
             firstPersonCamera.Priority = 15;
@@ -114,17 +118,18 @@ public class PlayerInteract : MonoBehaviour
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit)){
                     //destination = hit.point;
-                    destination = ray.GetPoint(distFromCam);
+                   // destination = ray.GetPoint(distFromCam);
                 }
                 else
                 {
-                    destination = ray.GetPoint(distFromCam);
+                    //destination = ray.GetPoint(distFromCam);
                 }
                 Quaternion rotation = Quaternion.identity;
-                destination = new Vector3(destination.x,destination.y - 0.25f,destination.z);
+                destination = new Vector3(destination.x ,destination.y +0.15f,destination.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
                 inspectObject.GetComponent<MeshRenderer>().enabled = true;
                 inspectObject.transform.localScale = scale;
+                inspectObject.transform.eulerAngles = rotationForSpawn;
                 holder = inspectObject;
                 artifactGenerated = true;
                 firstPersonCamera.LookAt = LookAt;
@@ -145,11 +150,13 @@ public class PlayerInteract : MonoBehaviour
     {
         if(canInspect)
         {
+            
             isInspecting = true;
         }
     }
     public void ButtonCloseInspection()
     {
+        controller.HideCursor();
         isInspecting = false;
         objRenderer.enabled = true;
         ASC.enabled = true;
