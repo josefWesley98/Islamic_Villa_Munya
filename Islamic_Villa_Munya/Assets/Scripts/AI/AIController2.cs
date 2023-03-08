@@ -129,7 +129,7 @@ public class AIController2 : MonoBehaviour
         if(animator != null)
         {
             int rand = Random.Range(0,3);
-            animator.SetInteger("SetAnimStartNumber", rand);
+            animator.SetInteger("AnimStartNumber", rand);
             animator.SetBool("Walking", doWalkingAnim);
             animator.SetBool("SittingUp", doSitUp);
             animator.SetBool("SittingDown", doSitDown);
@@ -331,8 +331,11 @@ public class AIController2 : MonoBehaviour
         {
             arrivedAtDestination = false;
         }
-
-        distToDestination = agent.remainingDistance;
+        if(destination != null && currentJob != "null" && destination != new Vector3(0,0,0) && distToDestination != Mathf.Infinity)
+        {
+            distToDestination = agent.remainingDistance;
+            //Debug.Log(distToDestination);
+        }
 
         if(currentJob != "null" && agent.remainingDistance < 0.1 )
         {
@@ -623,7 +626,7 @@ public class AIController2 : MonoBehaviour
         {
             inspectionCdTimer += Time.deltaTime;
             
-            if(inspectionCdTimer >= inspectionCd)
+            if(inspectionCdTimer >= 10.0f)
             {
                 
                 canDoInspecting = true;

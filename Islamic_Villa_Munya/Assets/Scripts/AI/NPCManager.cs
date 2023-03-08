@@ -1370,7 +1370,10 @@ public class NPCManager : MonoBehaviour
                 {
                     socialPosID = evenNumbers[i] + 1;
                     partnerId = AI_ID_A1_Social[socialPosID];
-
+                    if(AI_ID_A1_Social[socialPosID] == -1)
+                    {
+                        Debug.Log("this is the problem");
+                    }
                     if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
                     {
                         partnerArrived = true;
@@ -1385,6 +1388,10 @@ public class NPCManager : MonoBehaviour
                 if(oddNumbers[i] == currentPosID)
                 {
                     socialPosID = oddNumbers[i] - 1;
+                    if(AI_ID_A1_Social[socialPosID] == -1)
+                    {
+                        Debug.Log("this is the problem");
+                    }
                     partnerId = AI_ID_A1_Social[socialPosID];
 
                     if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
@@ -4044,5 +4051,28 @@ public class NPCManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void Update()
+    {
+        bool somoneSocialising = true;
+        int socialisingNumber = AI.Length;
+
+        for(int i = 0; i < AI.Length; i++)
+        {
+            if(AI[i].GetComponent<AIController2>().GetCurrentJob() != "Socialising")
+            {
+                socialisingNumber -= 1;
+            }
+        }
+        
+        if(socialisingNumber == 0)
+        {
+            for(int i = 0; i < socialAreasA1.Length; i++)
+            {
+                socialAreasA1Occupied[i] = false;
+                AI_ID_A1_Social[i] = -1;
+            }
+        }
     }
 }
