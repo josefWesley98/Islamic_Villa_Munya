@@ -20,7 +20,7 @@ public class NPCManager : MonoBehaviour
     [SerializeField] private GameObject areaSeven;
     private string A7 = "AreaSeven";
     private int locationCount = 7;
-
+    private int iterator = 0; 
     [Header("AI")]
     [SerializeField] private GameObject[] AI;
     
@@ -709,7 +709,7 @@ public class NPCManager : MonoBehaviour
         string currentLocation  = area;
         int wayPointNowInUse = -1;
         int lastJobIterator = _lastJobIterator;
-        
+        iterator = 0;
         if(AI[id].GetComponent<AIController2>().GetCurrentLocation() == "null")
         {
             currentLocation = FindNearestLocation(id);
@@ -718,8 +718,10 @@ public class NPCManager : MonoBehaviour
 
         if(currentLocation == A1)
         {
+            
             for(int i = 0; ; i++)
             {
+                iterator++;
                 int rand = Random.Range(0, walkingWaypointsA1.Length);
                 if(!walkingPointsA1Occupied[rand])
                 {
@@ -757,6 +759,11 @@ public class NPCManager : MonoBehaviour
                             socialAreasA1Occupied[lastJobIterator] = false;
                         }
                     }
+                    break;
+                }
+                if(iterator >= 100)
+                {
+                    AI[id].GetComponent<AIController2>().SetFindNewJob(true);
                     break;
                 }
             }
@@ -1030,7 +1037,8 @@ public class NPCManager : MonoBehaviour
         string currentLocation  = area;
         int wayPointNowInUse = -1;
         int lastJobIterator = _lastJobIterator;
-        
+        iterator = 0;
+
         if(AI[id].GetComponent<AIController2>().GetCurrentLocation() == "null")
         {
             currentLocation = FindNearestLocation(id);
@@ -1040,6 +1048,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int i = 0; ; i++)
             {
+                iterator++;
                 int rand = Random.Range(0, socialAreasA1.Length);
                 if(!socialAreasA1Occupied[rand])
                 {
@@ -1076,6 +1085,11 @@ public class NPCManager : MonoBehaviour
                             socialAreasA1Occupied[lastJobIterator] = false;
                         }
                     }
+                    break;
+                }
+                if(iterator >= 100)
+                {
+                    AI[id].GetComponent<AIController2>().SetFindNewJob(true);
                     break;
                 }
             }
@@ -2014,7 +2028,8 @@ public class NPCManager : MonoBehaviour
         string currentLocation  = area;
         int wayPointNowInUse = -1;
         int lastJobIterator = _lastJobIterator;
-        
+        iterator = 0;
+
         if(AI[id].GetComponent<AIController2>().GetCurrentLocation() == "null")
         {
             currentLocation = FindNearestLocation(id);
@@ -2024,6 +2039,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int i = 0; ; i++)
             {
+                iterator++;
                 int rand = Random.Range(0, seatingAreasA1.Length);
                 if(!seatingAreasA1Occupied[rand])
                 {
@@ -2060,6 +2076,11 @@ public class NPCManager : MonoBehaviour
                             socialAreasA1Occupied[lastJobIterator] = false;
                         }
                     }
+                    break;
+                }
+                if(iterator >=  100)
+                {
+                    AI[id].GetComponent<AIController2>().SetFindNewJob(true);
                     break;
                 }
             }
@@ -2332,7 +2353,7 @@ public class NPCManager : MonoBehaviour
         string currentLocation  = area;
         int wayPointNowInUse = -1;
         int lastJobIterator = _lastJobIterator;
-        
+        iterator = 0;
         if(AI[id].GetComponent<AIController2>().GetCurrentLocation() == "null")
         {
             currentLocation = FindNearestLocation(id);
@@ -2342,6 +2363,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int i = 0; ; i++)
             {
+                iterator++;
                 int rand = Random.Range(0, inspectionAreasA1.Length);
                 if(!inspectionAreasA1Occupied[rand])
                 {
@@ -2378,6 +2400,11 @@ public class NPCManager : MonoBehaviour
                             socialAreasA1Occupied[lastJobIterator] = false;
                         }
                     }
+                    break;
+                }
+                if(iterator >= 100)
+                {
+                    AI[id].GetComponent<AIController2>().SetFindNewJob(true);
                     break;
                 }
             }
@@ -2649,7 +2676,7 @@ public class NPCManager : MonoBehaviour
         string currentLocation  = area;
         int wayPointNowInUse = -1;
         int lastJobIterator = _lastJobIterator;
-        
+        iterator = 0;
         if(AI[id].GetComponent<AIController2>().GetCurrentLocation() == "null")
         {
             currentLocation = FindNearestLocation(id);
@@ -2659,6 +2686,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int i = 0; ; i++)
             {
+                iterator++;
                 int rand = Random.Range(0, idleAreasA1.Length);
                 if(!idleAreasA1Occupied[rand])
                 {
@@ -2695,6 +2723,11 @@ public class NPCManager : MonoBehaviour
                             socialAreasA1Occupied[lastJobIterator] = false;
                         }
                     }
+                    break;
+                }
+                if(iterator >= 100)
+                {
+                    AI[id].GetComponent<AIController2>().SetFindNewJob(true);
                     break;
                 }
             }
