@@ -14,6 +14,7 @@ public class Key : MonoBehaviour
     {
         GameManager.SetHasKey(true);
         doorToUnlock.unlockNextPress = true;
+        //Destroy(lockRB);
         Destroy(gameObject, 0.3f);
     }
 
