@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     //[SerializeField] SpawnAudioPrefabs SpawnAudio;
     // Get AudioManager for audio spawning
+    [SerializeField] private AudioMixer mixer;
 
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
     {
@@ -21,5 +23,10 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quit");
         Application.Quit();
+    }
+
+    public void SetLevel(float sliderValue)
+    {
+        mixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
     }
 }
