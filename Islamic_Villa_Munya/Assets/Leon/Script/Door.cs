@@ -79,6 +79,7 @@ public class Door : MonoBehaviour
                 {
                     locked = false;
                     //play unlock sound
+                    lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
                     lockRB.transform.parent = null;
                     lockRB.isKinematic = false;
 
