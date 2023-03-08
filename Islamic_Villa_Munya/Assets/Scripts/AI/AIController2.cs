@@ -6,6 +6,7 @@ public class AIController2 : MonoBehaviour
 {
     [SerializeField] private NPCManager manager;
     [SerializeField] private int id = 0;
+    [SerializeField] private bool doAudio = true;
     [SerializeField] private SpawnAudioPrefabs spawnAudioPrefabs;
     // job checks
     private bool isInspecting = false;
@@ -111,6 +112,7 @@ public class AIController2 : MonoBehaviour
     private bool doSitDown = false;
     private bool doSitUp = false;
     private bool doingSitUp = false;
+    private float distToDestination = 0.0f;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -329,6 +331,9 @@ public class AIController2 : MonoBehaviour
         {
             arrivedAtDestination = false;
         }
+
+        distToDestination = agent.remainingDistance;
+
         if(currentJob != "null" && agent.remainingDistance < 0.1 )
         {
            arrivedAtDestination = true; 
@@ -465,10 +470,10 @@ public class AIController2 : MonoBehaviour
                 actionTimer += Time.deltaTime;
                 doSocialAnim = true;
                 // do audio.
-                if(doSocialAudio)
+                if(doSocialAudio && doAudio)
                 {
                     int rand = Random.Range(0,2);
-                    spawnAudioPrefabs.spawnAudioPrefab(id,rand ,true);
+                    spawnAudioPrefabs.spawnAudioPrefab(id, rand, true);
                     doSocialAudio = false;
                 }
 
@@ -781,7 +786,7 @@ public class AIController2 : MonoBehaviour
             actionTimer = 0.0f;
             doSocialisingFor = ActionRandomTimer();
             socialisingCd = ActionCdRandomTimer();
-            doSocialAudio = true;
+            //doSocialAudio = true;
             if(socialDestination != Vector3.zero)
             {
                 hasSocialPartner = true;
@@ -918,5 +923,13 @@ public class AIController2 : MonoBehaviour
             idleLeanBack = true;
         }
         doIdleLean = true;
+    }
+    public float GetDistToDestination()
+    {
+        return distToDestination;
+    }
+    public void SetSocialAudio(bool change)
+    {
+        doSocialAudio = change;
     }
 }

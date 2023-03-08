@@ -1342,6 +1342,7 @@ public class NPCManager : MonoBehaviour
         AI[id].GetComponent<AIController2>().SetCurrentWayPointPos(wayPointNowInUse);
         return newDestination;
     }
+    // quick fix for check fixes check if partner has arrived at social point
     public bool CheckIfPartnerHasArrivedAtSocialDestination(int id, string area, int currentPosID)
     {
         bool partnerArrived = false;
@@ -1355,7 +1356,7 @@ public class NPCManager : MonoBehaviour
                 {
                     socialPosID = evenNumbers[i] + 1;
                     partnerId = AI_ID_A1_Social[socialPosID];
-                    if(AI[partnerId].transform.position.x == socialAreasA1[socialPosID].position.x && AI[partnerId].transform.position.z == socialAreasA1[socialPosID].position.z)
+                    if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
                     {
                         partnerArrived = true;
                     }
@@ -1365,7 +1366,7 @@ public class NPCManager : MonoBehaviour
                 {
                     socialPosID = oddNumbers[i] - 1;
                     partnerId = AI_ID_A1_Social[socialPosID];
-                    if(AI[partnerId].transform.position.x == socialAreasA1[socialPosID].position.x && AI[partnerId].transform.position.z == socialAreasA1[socialPosID].position.z)
+                    if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
                     {
                         partnerArrived = true;
                     }
@@ -1458,8 +1459,8 @@ public class NPCManager : MonoBehaviour
                     }
                     else
                     {
+                        return partnerArrived;
                     }
-                    return partnerArrived;
                 }
             }
         }
@@ -1576,7 +1577,7 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
-                            AILastPos = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
+                            AILastPos = AI[rand].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                         if(oddNumbers[j] == currentPosID)
@@ -1585,7 +1586,7 @@ public class NPCManager : MonoBehaviour
                             socialDestination = socialAreasA1[socialPosID].position;
                             socialAreasA1Occupied[socialPosID] = true;
                             AI_ID_A1_Social[socialPosID] = rand;
-                            AILastPos = AI[socialPosID].GetComponent<AIController2>().GetCurrentWayPointPos();
+                            AILastPos = AI[rand].GetComponent<AIController2>().GetCurrentWayPointPos();
                             break;
                         }
                     }
@@ -2932,6 +2933,7 @@ public class NPCManager : MonoBehaviour
                     int altJ = evenNumbers[j] + 1;
                     if(socialAreasA1Occupied[altJ])
                     {
+                        AI[altJ].GetComponent<AIController2>().SetSocialAudio(true);
                         return true;
                     }
                     else
@@ -2944,6 +2946,7 @@ public class NPCManager : MonoBehaviour
                     int altJ = oddNumbers[j] - 1;
                     if(socialAreasA1Occupied[altJ])
                     {
+                        AI[altJ].GetComponent<AIController2>().SetSocialAudio(true);
                         return true;
                     }
                     else
