@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Insect : MonoBehaviour
 {
-    public float hoverRadius = 4f;
+    //public float hoverRadius = 4f;
     public float changeTargetTimeMin = 1f;
     public float changeTargetTimeMax = 4f;
-    public float moveSpeedMult = 1f;
+    //public float moveSpeedMult = 1f;
     float changeTargetTime;
 
     float time = 0f;
@@ -15,16 +15,17 @@ public class Insect : MonoBehaviour
 
     Transform insect;
 
-    public float rotationSpeed;
-
+    //public float rotationSpeed;
+    public float forceMult = 100;
     //values for internal use
     private Quaternion _lookRotation;
     private Vector3 _direction;
-
+    Rigidbody rb;
 
     void Start()
     {
-        insect = transform.GetChild(0);
+        rb = GetComponent<Rigidbody>();
+        //insect = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -34,29 +35,32 @@ public class Insect : MonoBehaviour
 
         if(time > changeTargetTime)
         {
-            time = 0f;
+            rb.AddForce(Random.onUnitSphere * forceMult);
+            rb.AddTorque(Vector3.up * Random.Range(-0.1f, 0.1f));
+            //time = 0f;
 
-            targetPos = transform.position + Random.insideUnitSphere * hoverRadius;
+            //targetPos = transform.position + Random.insideUnitSphere * hoverRadius;
 
             changeTargetTime = Random.Range(changeTargetTimeMin, changeTargetTimeMax);
         }
-
-        insect.transform.position =  Vector3.Lerp(insect.transform.position, targetPos, Time.deltaTime * moveSpeedMult);
+        rb.velocity *= 0.999f;
+        rb.angularVelocity *= 0.99f;
+        //insect.transform.position =  Vector3.Lerp(insect.transform.position, targetPos, Time.deltaTime * moveSpeedMult);
 
 
         //find the vector pointing from our position to the target
-        _direction = (targetPos - insect.transform.position).normalized;
+        //_direction = (targetPos - insect.transform.position).normalized;
 
         //create the rotation we need to be in to look at the target
-        _lookRotation = Quaternion.LookRotation(_direction);
+        //_lookRotation = Quaternion.LookRotation(_direction);
 
         //rotate us over time according to speed until we are in the required rotation
-        insect.transform.rotation = Quaternion.Slerp(insect.transform.rotation, _lookRotation, Time.deltaTime * rotationSpeed);
+        //insect.transform.rotation = Quaternion.Slerp(insect.transform.rotation, _lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, hoverRadius);
+        //Gizmos.color = Color.yellow;
+        //Gizmos.DrawWireSphere(transform.position, hoverRadius);
     }
 }
