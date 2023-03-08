@@ -47,7 +47,7 @@ public class Door : MonoBehaviour
 
     public Transform temporaryPlayerReferenceDeleteLaterOk;
     public float interactMinDistance = 1f;
-
+    public Rigidbody lockRB;
     void Start()
     {
         //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
@@ -79,6 +79,10 @@ public class Door : MonoBehaviour
                 {
                     locked = false;
                     //play unlock sound
+                    lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
+                    lockRB.transform.parent = null;
+                    lockRB.isKinematic = false;
+
                     return;
                 }
                 ToggleOpen();

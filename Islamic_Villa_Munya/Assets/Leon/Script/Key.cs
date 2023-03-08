@@ -4,6 +4,7 @@ public class Key : MonoBehaviour
 {
     public Door doorToUnlock;
     float startY;
+    bool triggered = false;
 
     private void Start()
     {
@@ -12,9 +13,16 @@ public class Key : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (triggered)
+            return;
         GameManager.SetHasKey(true);
         doorToUnlock.unlockNextPress = true;
-        Destroy(gameObject, 0.3f);
+        //Destroy(lockRB);
+
+        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        transform.GetChild(1).transform.GetComponent<ParticleSystem>().Play();
+        triggered = true;
+        Destroy(gameObject, 2f);
     }
 
     private void Update()
