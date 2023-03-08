@@ -1360,6 +1360,7 @@ public class NPCManager : MonoBehaviour
                     if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
                     {
                         partnerArrived = true;
+                        AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
                     }
                     else
                     {
@@ -1375,6 +1376,7 @@ public class NPCManager : MonoBehaviour
                     if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
                     {
                         partnerArrived = true;
+                        AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
                     }
                     else
                     {
