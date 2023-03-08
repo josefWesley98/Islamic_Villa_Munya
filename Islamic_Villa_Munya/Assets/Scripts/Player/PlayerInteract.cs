@@ -19,7 +19,7 @@ public class PlayerInteract : MonoBehaviour
     Vector3 destination;
     Vector3 scale;
     bool artifactGenerated = false;
-    
+    [SerializeField] NIThirdPersonController controller;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
     [SerializeField] TMPro.TMP_Text inspect;
     [SerializeField] TMPro.TMP_Text info;
@@ -102,6 +102,7 @@ public class PlayerInteract : MonoBehaviour
 
         if(isInspecting)
         {
+            controller.ShowCursor();
             objRenderer.enabled = false;
             ASC.enabled = false;
             firstPersonCamera.Priority = 15;
@@ -145,11 +146,13 @@ public class PlayerInteract : MonoBehaviour
     {
         if(canInspect)
         {
+            
             isInspecting = true;
         }
     }
     public void ButtonCloseInspection()
     {
+        controller.HideCursor();
         isInspecting = false;
         objRenderer.enabled = true;
         ASC.enabled = true;

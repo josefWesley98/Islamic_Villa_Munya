@@ -431,7 +431,7 @@ public class NIThirdPersonController : MonoBehaviour
     // }
 
     //Hide cursor function
-    private void HideCursor()
+    public void HideCursor()
     {
         //Hides cursor while playing
         Cursor.lockState = CursorLockMode.Locked;
@@ -439,7 +439,7 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     //Show the cursor
-    private void ShowCursor()
+    public void ShowCursor()
     {
         //Shows cursor while playing
         Cursor.lockState = CursorLockMode.None;
