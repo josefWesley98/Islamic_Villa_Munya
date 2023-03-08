@@ -932,4 +932,8 @@ public class AIController2 : MonoBehaviour
     {
         doSocialAudio = change;
     }
+    public void SetFindNewJob(bool change)
+    {
+        findNewJob = change;
+    }
 }
