@@ -6,16 +6,17 @@ public class SpawnAudioPrefabs : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnLocations;
     [SerializeField] private GameObject[] WhatToSpawn;
+    [SerializeField] private GameObject[] WhatToSpawnClone;  // instantiated clone
 
 
     public void spawnAudioPrefab(int Num,int sound, bool attachTo = false)
     {
-        WhatToSpawn[sound] = Instantiate(WhatToSpawn[sound], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        WhatToSpawnClone[sound] = Instantiate(WhatToSpawn[sound], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
         // spawns prefabs number
 
         if (attachTo)
         {
-            WhatToSpawn[sound].transform.parent = spawnLocations[Num].transform;
+            WhatToSpawnClone[sound].transform.parent = spawnLocations[Num].transform;
             // If TRUE, spawns object as child of spawn location
         }
     }
