@@ -337,8 +337,15 @@ public class DownwardClimbing : MonoBehaviour
         }
         if(movingRightFoot && currentFootSpotRight != null)
         {
-            
-            interpolateAmountRightFoot += Time.deltaTime *1.25f;
+            if(upwardClimbing.GetMovingDirecionally())
+            {
+                 interpolateAmountRightFoot += Time.deltaTime *1.5f;
+            }
+            else
+            {
+                 interpolateAmountRightFoot += Time.deltaTime *1.25f;
+            }
+            //interpolateAmountRightFoot += Time.deltaTime *1.25f;
             rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position,  currentFootSpotRight.transform.position, interpolateAmountRightFoot);
           
 
@@ -369,8 +376,15 @@ public class DownwardClimbing : MonoBehaviour
         }
         if(movingLeftFoot && currentFootSpotLeft != null)
         {
-           
-            interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
+            if(upwardClimbing.GetMovingDirecionally())
+            {
+                interpolateAmountLeftFoot += Time.deltaTime * 1.5f;
+            }
+            else
+            {
+                interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
+            }
+            //interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
             leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, currentFootSpotLeft.transform.position, interpolateAmountLeftFoot);
             // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentFootSpotLeft.transform.position.x, interpolateAmountLeftFoot);
             // float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentFootSpotLeft.transform.position.y, interpolateAmountLeftFoot);

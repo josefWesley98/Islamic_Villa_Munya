@@ -199,7 +199,14 @@ public class ClimbingScript : MonoBehaviour
         {
             if(upwardClimbing.GetMovementDirection().y != 0 || upwardClimbing.GetMovementDirection().x != 0)
             {
-                interpolateAmount = (interpolateAmount + Time.deltaTime * 0.35f);
+                if(!upwardClimbing.GetMovingDirecionally())
+                {
+                    interpolateAmount = (interpolateAmount + Time.deltaTime * 0.35f);
+                }
+                if(upwardClimbing.GetMovingDirecionally())
+                {
+                    interpolateAmount = (interpolateAmount + Time.deltaTime * 0.75f);
+                }
             }
             
             playerPos.position = Vector3.Lerp(playerLerpStart, endLerpPoint, interpolateAmount);

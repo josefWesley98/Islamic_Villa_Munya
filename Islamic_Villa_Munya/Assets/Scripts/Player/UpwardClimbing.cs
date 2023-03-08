@@ -30,7 +30,7 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private Rig leftArmRig;
     [SerializeField] private Transform leftArmPos;
     private float interpolateAmountLeftArm = 0.0f;
-
+    private bool movingDirecionally = false;
     //rigging end.
     [SerializeField] private Transform[] grabbablePositionsRightHand;
     [SerializeField] private Animator animator;
@@ -196,14 +196,16 @@ public class UpwardClimbing : MonoBehaviour
               
                 }
             }     
-
+            movingDirecionally = false;
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
-                chosenReference = 3;    
+                chosenReference = 3;  
+                movingDirecionally = true;  
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
+                movingDirecionally = true;
             }
                 
                 System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
@@ -311,17 +313,17 @@ public class UpwardClimbing : MonoBehaviour
            
                 }
             }     
-
+            movingDirecionally = false;
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
                 chosenReference = 2;
-     
+                movingDirecionally = true;
                
             }
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
                 chosenReference = 3;
-
+                movingDirecionally = true;
             }
         
 
@@ -399,7 +401,15 @@ public class UpwardClimbing : MonoBehaviour
             //rightRigAimPosition.position = new Vector3(newX, newY, newZ);
 
             Vector3 LHandPos =  new Vector3(currentHandSpotRight.transform.position.x, currentHandSpotRight.transform.position.y, currentHandSpotRight.transform.position.z);
-            interpolateAmountRightArm += Time.deltaTime * 1.25f;
+            if(movingDirecionally)
+            {
+                 interpolateAmountRightArm += Time.deltaTime * 1.5f;
+            }
+            else
+            {
+                 interpolateAmountRightArm += Time.deltaTime * 1.25f;
+            }
+            //interpolateAmountRightArm += Time.deltaTime * 1.25f;
 
             rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position, LHandPos, interpolateAmountRightArm);
 
@@ -431,8 +441,15 @@ public class UpwardClimbing : MonoBehaviour
         }
         if(movingLeftHand && currentHandSpotLeft != null && !stopLeft)
         {
-  
-            interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
+            
+            if(movingDirecionally)
+            {
+                interpolateAmountLeftArm  += Time.deltaTime * 1.5f;
+            }
+            else
+            {
+                interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
+            }
             Vector3 RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z);
             
             leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, RHandPos, interpolateAmountLeftArm);
@@ -502,5 +519,9 @@ public class UpwardClimbing : MonoBehaviour
     public void SetRotateToWall(bool value)
     {
         rotateToWall = value;
+    }
+    public bool GetMovingDirecionally()
+    {
+        return movingDirecionally;
     }
 }
