@@ -262,17 +262,17 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
-                    Debug.Log("moving down and to the left");
+                    //Debug.Log("moving down and to the left");
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
-                    Debug.Log("moving down and to the right");
+                    //Debug.Log("moving down and to the right");
                 }
                 else // down
                 {
                     chosenReference = 1;
-                    Debug.Log("just moving down");
+                    //Debug.Log("just moving down");
                 }
             }     
 

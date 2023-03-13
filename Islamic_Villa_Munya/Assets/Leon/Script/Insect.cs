@@ -4,63 +4,133 @@ using UnityEngine;
 
 public class Insect : MonoBehaviour
 {
-    //public float hoverRadius = 4f;
-    public float changeTargetTimeMin = 1f;
-    public float changeTargetTimeMax = 4f;
-    //public float moveSpeedMult = 1f;
-    float changeTargetTime;
+    public float changeDirTimeMin = 1f;
+    public float changeDirTimeMax = 4f;
+    public float landedTimeMin = 5f;
+    public float landedTimeMax = 12f;
+    public float dirMult = 2;
 
-    float time = 0f;
-    Vector3 targetPos = Vector3.zero;
+    float switchDirectionTime;
+    public float switchTimer = 0f;
 
-    Transform insect;
-
-    //public float rotationSpeed;
-    public float forceMult = 100;
-    //values for internal use
-    private Quaternion _lookRotation;
-    private Vector3 _direction;
     Rigidbody rb;
+    Collider col;
+    Animator anim;
 
+    public bool flying = true;
+    public LayerMask landLayers;
+    public GameObject lastObjectLandedOn;
+
+    public Collider pointOfInterest;
+    public bool visitedPOIAlready = false;
+    public float forgetPOITimer = 0f;
+    public float memoryPOI = 10f;
+
+    public float landCooldown = 5f;
+    float canLandTimer = 0f;
+    bool canLand = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //insect = transform.GetChild(0);
+        col = GetComponent<Collider>();
+        anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        time += Time.deltaTime;
+        switchTimer += Time.deltaTime;
 
-        if(time > changeTargetTime)
+        if (switchTimer > switchDirectionTime)
         {
-            rb.AddForce(Random.onUnitSphere * forceMult);
-            rb.AddTorque(Vector3.up * Random.Range(-0.1f, 0.1f));
-            //time = 0f;
+            if (flying)
+            {
+                rb.AddForce(Random.onUnitSphere * dirMult);
+                rb.AddTorque(Vector3.up * Random.Range(-0.01f, 0.01f));
 
-            //targetPos = transform.position + Random.insideUnitSphere * hoverRadius;
+                if(pointOfInterest != null && !visitedPOIAlready)
+                    rb.AddForce((pointOfInterest.transform.position - transform.position).normalized * dirMult);
 
-            changeTargetTime = Random.Range(changeTargetTimeMin, changeTargetTimeMax);
+                switchDirectionTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
+                switchTimer = 0;
+            }
+            else
+            {
+                TakeOff();
+            }
         }
-        rb.velocity *= 0.999f;
-        rb.angularVelocity *= 0.99f;
-        //insect.transform.position =  Vector3.Lerp(insect.transform.position, targetPos, Time.deltaTime * moveSpeedMult);
 
-
-        //find the vector pointing from our position to the target
-        //_direction = (targetPos - insect.transform.position).normalized;
-
-        //create the rotation we need to be in to look at the target
-        //_lookRotation = Quaternion.LookRotation(_direction);
-
-        //rotate us over time according to speed until we are in the required rotation
-        //insect.transform.rotation = Quaternion.Slerp(insect.transform.rotation, _lookRotation, Time.deltaTime * rotationSpeed);
+        if (visitedPOIAlready)
+        {
+            forgetPOITimer += Time.deltaTime;
+            if (forgetPOITimer > memoryPOI)
+            {
+                forgetPOITimer = 0;
+                visitedPOIAlready = false;
+            }
+        }
+        if(!canLand)
+            canLandTimer += Time.deltaTime;
+        if (canLandTimer > landCooldown)
+            canLand = true;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnCollisionEnter(Collision c)
     {
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawWireSphere(transform.position, hoverRadius);
+        if (!canLand)
+            return;
+        //if we can land on this layer and the previous landing wasnt on this object
+        print(lastObjectLandedOn == c.gameObject);
+        if (!IsInLayerMask(c.gameObject, landLayers) || lastObjectLandedOn == c.gameObject)
+            return;
+
+        Land(c);
+    }
+
+    void Land(Collision c)
+    {
+        if (!flying)
+            return;
+        if (c.collider == pointOfInterest)
+        {
+            if (visitedPOIAlready)
+                return;
+            else
+                visitedPOIAlready = true;
+        }
+           
+        lastObjectLandedOn = c.gameObject;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.None;
+        col.enabled = false;
+        transform.parent = c.transform;
+        transform.position += c.contacts[0].normal * -0.03f;
+        transform.rotation = Quaternion.LookRotation(c.contacts[0].normal);
+        anim.SetBool("grounded", true);
+        switchTimer = 0;
+        switchDirectionTime = Random.Range(landedTimeMin, landedTimeMax);
+        flying = false;
+    }
+
+    void TakeOff()
+    {
+        if (flying)
+            return;
+        transform.parent = null;
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        col.enabled = true;
+        transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.Euler(-90, 0, 0);
+        anim.SetBool("grounded", false);
+        switchTimer = 999;
+        canLand = false;
+        flying = true;
+    }
+
+    public bool IsInLayerMask(GameObject obj, LayerMask layerMask)
+    {
+        return ((layerMask.value & (1 << obj.layer)) > 0);
     }
 }
