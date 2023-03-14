@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -60,7 +60,7 @@ public class UpwardClimbing : MonoBehaviour
     private bool stopLeft = false;
     private bool stopRight = false;
     private bool rotateToWall = false;
-    private Vector3 wallRotation = Vector3.zero;
+	private Vector3 wallPosition = Vector3.zero;
 
     void Start()
     {
@@ -86,7 +86,11 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if(currentHandSpotLeft != null && currentHandSpotRight != null)
+        {
+            wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position);
+        }
+
         for(int i = 0; i < 4; i++)
         {
             direction[i] = climbingScript.GetLookDirection(i);
@@ -220,9 +224,9 @@ public class UpwardClimbing : MonoBehaviour
                 
         if(needNewRightHandSpot && needNewSpots)
         {
-
             currentHandSpotRight = targetSpotRightHand.gameObject;
             needNewRightHandSpot = false;
+	        //wallPosition = currentHandSpotRight.transform.parent.gameObject.transform.localPosition;
 
             if(chosenReference == 2)
             {
@@ -347,7 +351,7 @@ public class UpwardClimbing : MonoBehaviour
         {
             currentHandSpotLeft = targetSpotLeftHand.gameObject;
             needNewLeftHandSpot = false;
-            
+	        //wallPosition = currentHandSpotLeft.transform.parent.gameObject.transform.localPosition;
             if(chosenReference == 2)
             {
                 //Debug.Log("getting a middle point to the left");
@@ -512,9 +516,9 @@ public class UpwardClimbing : MonoBehaviour
     {
         return rotateToWall;
     }
-    public Vector3 GetWallRotation()
+	public Vector3 GetWallPosition()
     {
-        return wallRotation;
+        return wallPosition;
     }
     public void SetRotateToWall(bool value)
     {
