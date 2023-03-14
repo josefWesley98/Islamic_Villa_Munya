@@ -342,7 +342,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8915718965617180231}
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 21.736683, y: 16.61, z: -0.18}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.03}
   m_ConstrainProportionsScale: 0
@@ -351,8 +351,8 @@ Transform:
   - {fileID: 8349381309717065257}
   - {fileID: 4762599453618430647}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5142816177188006744
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -469,6 +469,14 @@ MonoBehaviour:
   landedTimeMin: 3
   landedTimeMax: 12
   dirMult: 8
+  switchTimer: 0
+  flying: 1
   landLayers:
     serializedVersion: 2
     m_Bits: 577
+  lastObjectLandedOn: {fileID: 0}
+  pointOfInterest: {fileID: 0}
+  visitedPOIAlready: 0
+  forgetPOITimer: 0
+  memoryPOI: 10
+  landCooldown: 5

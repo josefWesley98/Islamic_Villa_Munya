@@ -33,7 +33,7 @@ public class Insect : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        anim = GetComponent<Animator>();
+        anim = transform.GetChild(0).GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -48,14 +48,14 @@ public class Insect : MonoBehaviour
                 rb.AddTorque(Vector3.up * Random.Range(-0.01f, 0.01f));
 
                 if(pointOfInterest != null && !visitedPOIAlready)
-                    rb.AddForce((pointOfInterest.transform.position - transform.position).normalized * dirMult);
+                    //rb.AddForce((pointOfInterest.transform.position - transform.position).normalized * dirMult);
 
                 switchDirectionTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
                 switchTimer = 0;
             }
             else
             {
-                TakeOff();
+                //TakeOff();
             }
         }
 
@@ -68,16 +68,19 @@ public class Insect : MonoBehaviour
                 visitedPOIAlready = false;
             }
         }
-        if(!canLand)
-            canLandTimer += Time.deltaTime;
-        if (canLandTimer > landCooldown)
-            canLand = true;
+        //if(!canLand)
+        //    canLandTimer += Time.deltaTime;
+        //if (canLandTimer > landCooldown)
+        //    canLand = true;
+
+        //transform.Rotate(new Vector3(0, 0, 1));
+        //transform.rotation = Quaternion.LookRotation(pointOfInterest.transform.position - transform.position, Vector3.up);
     }
 
     private void OnCollisionEnter(Collision c)
     {
-        if (!canLand)
-            return;
+        //if (!canLand)
+        //    return;
         //if we can land on this layer and the previous landing wasnt on this object
         print(lastObjectLandedOn == c.gameObject);
         if (!IsInLayerMask(c.gameObject, landLayers) || lastObjectLandedOn == c.gameObject)
@@ -105,10 +108,12 @@ public class Insect : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.None;
         col.enabled = false;
         transform.parent = c.transform;
-        transform.position += c.contacts[0].normal * -0.03f;
-        transform.rotation = Quaternion.LookRotation(c.contacts[0].normal);
+        //transform.position += c.contacts[0].normal * -0.03f;
+        transform.rotation = Quaternion.LookRotation(c.contacts[0].normal - transform.position, Vector3.up);
+        //transform.Rotate(new Vector3(0, 0, Random.Range(-180f, 180f)));
         anim.SetBool("grounded", true);
         switchTimer = 0;
+
         switchDirectionTime = Random.Range(landedTimeMin, landedTimeMax);
         flying = false;
     }
@@ -122,7 +127,7 @@ public class Insect : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         col.enabled = true;
         transform.rotation = Quaternion.identity;
-        transform.rotation = Quaternion.Euler(-90, 0, 0);
+        transform.Rotate(new Vector3(90, 0, 0));
         anim.SetBool("grounded", false);
         switchTimer = 999;
         canLand = false;
