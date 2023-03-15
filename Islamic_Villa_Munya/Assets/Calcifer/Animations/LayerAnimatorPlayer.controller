@@ -290,6 +290,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &-2613020900751402509
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: H_ClimbDown
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 34d19f2f9da9a5849b1aadfc7e020941, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &-2337380555357244703
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -720,6 +746,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 792591405107859663}
     m_Position: {x: -100, y: 260, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -2613020900751402509}
+    m_Position: {x: 80, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -739,7 +768,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 0c1eca5a2388acc4da6fafcb6f9b73c6, type: 2}
+    m_Motion: {fileID: 7400000, guid: b0b14a264fff90a42bde771bc9130ebb, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0.1}
     m_TimeScale: 1
@@ -757,7 +786,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c597334590226db4aaf2f70e50d0b680, type: 2}
     m_Threshold: 0.5
-    m_Position: {x: 0, y: -0.1}
+    m_Position: {x: -0.1, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: RB_velX
@@ -765,7 +794,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 34d19f2f9da9a5849b1aadfc7e020941, type: 2}
     m_Threshold: 0.75
-    m_Position: {x: -0.1, y: 0}
+    m_Position: {x: 0, y: -0.1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: RB_velX
