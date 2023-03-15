@@ -453,8 +453,9 @@ Transform:
   m_Children:
   - {fileID: 1375436076326649363}
   - {fileID: 4656323390176398398}
+  - {fileID: 5912975649106200235}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3223793138454786454
 MonoBehaviour:
@@ -468,22 +469,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f5e967d856c40e4b9b1b263ea370f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dirForceMult: 2
   changeDirTimeMin: 0.2
   changeDirTimeMax: 0.5
-  landedTimeMin: 2
-  landedTimeMax: 2
-  dirMult: 8
-  switchTimer: 0
-  flying: 1
+  landedTimeMin: 3
+  landedTimeMax: 6
+  landCooldownTime: 5
   landLayers:
     serializedVersion: 2
     m_Bits: 577
-  lastObjectLandedOn: {fileID: 0}
   pointOfInterest: {fileID: 0}
-  visitedPOIAlready: 0
-  forgetPOITimer: 0
-  memoryPOI: 10
-  landCooldown: 5
 --- !u!54 &6700045575214096299
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -596,3 +591,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8906750221332083217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5912975649106200235}
+  m_Layer: 0
+  m_Name: RotHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5912975649106200235
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8906750221332083217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5831135300182027578}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
