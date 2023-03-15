@@ -61,6 +61,7 @@ public class UpwardClimbing : MonoBehaviour
     private bool stopRight = false;
     private bool rotateToWall = false;
 	private Vector3 wallPosition = Vector3.zero;
+    private bool movingDown = false;
 
     void Start()
     {
@@ -181,9 +182,11 @@ public class UpwardClimbing : MonoBehaviour
                 {
                     chosenReference = 0;
                 }
-            }   
+            }
+            movingDown = false;   
             if(movementDirection.y < 0)//Down
             {
+                movingDown = true;
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
@@ -298,8 +301,10 @@ public class UpwardClimbing : MonoBehaviour
            
                 }
             }   
+            movingDown = false;
             if(movementDirection.y < 0)//Down
             {
+                movingDown = true;
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
@@ -527,5 +532,9 @@ public class UpwardClimbing : MonoBehaviour
     public bool GetMovingDirecionally()
     {
         return movingDirecionally;
+    }
+    public bool GetMovingDownwards()
+    {
+        return movingDown;
     }
 }
