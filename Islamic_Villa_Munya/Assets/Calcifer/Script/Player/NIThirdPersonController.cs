@@ -11,7 +11,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private AnimationStateController animator_ref;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider capsule;
-    [SerializeField] private PlayerControls_Cal controls;
+    [SerializeField] private PlayerControls controls;
     Keyboard kb;
     InputAction hide_cursor;
     InputAction show_cursor;
@@ -71,7 +71,7 @@ public class NIThirdPersonController : MonoBehaviour
     void Awake() 
     {
         //Assign the new input controller
-        controls = new PlayerControls_Cal();
+        controls = new PlayerControls();
         kb = InputSystem.GetDevice<Keyboard>();
     }
     private void Start()
