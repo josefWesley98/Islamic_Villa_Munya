@@ -33,7 +33,6 @@ public class UpwardClimbing : MonoBehaviour
     private bool movingDirecionally = false;
     //rigging end.
     [SerializeField] private Transform[] grabbablePositionsRightHand;
-    [SerializeField] private Animator animator;
     [SerializeField] private Transform[] grabbablePositionsLeftHand;
     [SerializeField] private Material newMaterialRefR;
     [SerializeField] private Material newMaterialRefL;
@@ -104,13 +103,13 @@ public class UpwardClimbing : MonoBehaviour
             finishCurrentGrab = true;
             if(stopLeft && stopRight)
             {
-                animator.speed = 0.0f;
+                //animator.speed = 0.0f;
             }
         }
         else if(climbingScript.GetIsConnectedToWall())
         {
             finishCurrentGrab = false;
-            animator.speed = 0.8f;
+            //animator.speed = 0.8f;
             needNewSpots = true;
             stopLeft = false;
             stopRight = false;
