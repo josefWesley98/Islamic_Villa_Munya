@@ -19,6 +19,7 @@ public class NIThirdPersonController : MonoBehaviour
     InputAction jumping;
     InputAction running;
     InputAction crouching;
+    InputAction push_or_pull;
 
     [SerializeField] private Transform cam;
     [SerializeField] private Transform orientation;
@@ -47,6 +48,7 @@ public class NIThirdPersonController : MonoBehaviour
     private bool hard_landing = false;
     private bool allow_jump = true;
     private bool artefact_collected;
+    private bool pushing = false;
 
     [Header("Movement")]
     [SerializeField] private float ground_drag;
@@ -110,6 +112,9 @@ public class NIThirdPersonController : MonoBehaviour
             crouching = controls.Player.Crouch;
             crouching.Enable();
 
+            push_or_pull = controls.Player.PushPull;
+            push_or_pull.Enable();
+
             jumping.started += _ => Jump();
 
             running.started += _ => ToggleRunning(_);
@@ -117,6 +122,9 @@ public class NIThirdPersonController : MonoBehaviour
 
             crouching.started += _ => ToggleCrouch(_);
             crouching.canceled += _ => ToggleCrouch(_);
+
+            push_or_pull.started += _ => PushOrPull(_);
+            push_or_pull.canceled += _ => PushOrPull(_);
         }
 
         //Use input actions to call necessary functions for player functionality
@@ -219,6 +227,10 @@ public class NIThirdPersonController : MonoBehaviour
                 //HardLandCapsuleCollider();
             }
         }
+        else
+        {
+            Debug.Log("Cancelled climbing");
+        }
 
     }
 
@@ -230,7 +242,17 @@ public class NIThirdPersonController : MonoBehaviour
             GameManager.SetHUBTravel(true);
             Destroy(other.gameObject);
         }
-        
+    }
+
+    private void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.GetComponent<PushOrPull>() != null)
+        {
+            Debug.Log("CUuuuuuunt");
+            //Call the game object function to set it's transform as that of the child of the player
+            //If player pressing this then do this
+            other.gameObject.GetComponent<PushOrPull>().Push(pushing, gameObject);
+        }
     }
 
     private void FixedUpdate()
@@ -444,6 +466,22 @@ public class NIThirdPersonController : MonoBehaviour
         //Shows cursor while playing
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    //Function for pushing or pulling object
+    private void PushOrPull(InputAction.CallbackContext pop)
+    {
+        //Set the transform of the object to be the child of the player.
+        //If the bool is true or false then the player class will call the objects function to set itself as a child
+        //object of the player, effectively joining them
+        if(!pushing)
+        {
+            pushing = true;
+        }
+        else
+        {
+            pushing = false;
+        }
     }
 
     //Function for determining whether the player wants to jump or not
