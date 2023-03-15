@@ -10,7 +10,7 @@ public class ClimbingScript : MonoBehaviour
     InputAction climb;
     InputAction stopClimb;
     InputAction movement;
-    Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
 
     [SerializeField] private NIThirdPersonController moveController;
     [SerializeField] private UpwardClimbing upwardClimbing;
@@ -57,7 +57,7 @@ public class ClimbingScript : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+       
        
     }
     private void OnEnable()
@@ -92,73 +92,45 @@ public class ClimbingScript : MonoBehaviour
     void Update()
     {
      
-        //if(upwardClimbing.GetWallPosition() != Vector3.zero)
-		//{
-		//	Vector3 targetDir = upwardClimbing.GetWallPosition() - transform.position;
-		//	Quaternion targetRotation = Quaternion.LookRotation(targetDir);
-		//	transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 50.0f * Time.deltaTime);			
-	    //}
-		
-	    // Get the target direction
-	    // Vector3 targetDir = upwardClimbing.GetWallPosition() - transform.position;
+      
+        // if(startClimb && doRotate)
+        // {
+        //     if(!startedRotation)
+        //     {
+        //         slerpStart = transform.rotation;
+        //         startedRotation = true;
+        //     }
+        //     Debug.Log("i am rotating on wall");
+        //     Vector3 rotationTarget = upwardClimbing.GetWallPosition();
+        //     rotationTarget.y = transform.localPosition.y;
 
-	    // // Get the rotation to face the target direction
-	    // Quaternion targetRot = Quaternion.LookRotation(targetDir);
-
-	    // // Slerp the object's rotation towards the target rotation over time
-	    // float rotateSpeed = 10.0f; // Adjust as needed
-	    // transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
-	    // Get the target direction
-        // Vector3 targetDir = upwardClimbing.GetWallPosition() - transform.position;
-
-        // // Calculate the target rotation
-        // Quaternion targetRotation = Quaternion.LookRotation(targetDir);
-
-        // // Keep the current x and z rotations, only update the y rotation
-        // targetRotation.eulerAngles = new Vector3(transform.rotation.eulerAngles.x, targetRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-        // // Slerp the rotation to the target rotation over time
-        // float rotationSpeed = 20.0f;
-        // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        // Get the position of the target object
-        if(startClimb && doRotate)
-        {
-            if(!startedRotation)
-            {
-                slerpStart = gameObject.transform.rotation;
-                startedRotation = true;
-            }
-            Debug.Log("i am rotating on wall");
-            Vector3 rotationTarget = upwardClimbing.GetWallPosition();
-            rotationTarget.y = transform.localPosition.y;
-
-            rotationDirection = (rotationTarget - transform.position).normalized;
+        //     rotationDirection = (rotationTarget - transform.position).normalized;
  
-            lookRotation = Quaternion.LookRotation(rotationDirection);
+        //     lookRotation = Quaternion.LookRotation(rotationDirection);
             
-            slerpPercent = Mathf.MoveTowards(slerpPercent, 1f, Time.deltaTime * slerpSpeed);
+        //     slerpPercent = Mathf.MoveTowards(slerpPercent, 1f, Time.deltaTime * slerpSpeed);
 
-            transform.rotation = Quaternion.Slerp(slerpStart, lookRotation, slerpPercent);
+        //     transform.rotation = Quaternion.Slerp(slerpStart, lookRotation, slerpPercent);
             
-            if(slerpPercent >= 1.0f)
-            {
-                doRotate = false;
-                startedRotation = false;
-                slerpPercent = 0f;
-                direction = Vector3.zero;
-                lookRotation = Quaternion.identity;
+        //     if(slerpPercent >= 1.0f)
+        //     {
+        //         doRotate = false;
+        //         startedRotation = false;
+        //         slerpPercent = 0f;
+        //         direction = Vector3.zero;
+        //         lookRotation = Quaternion.identity;
            
-            }
-            // Vector3 targetPosition = upwardClimbing.GetWallPosition();
-            // targetPosition.y = transform.position.y;
-            // // Set the target's y position to be the same as the current object's y position
-            // Rotate towards the target position
-            // // //transform.LookAt(targetPosition);
-            // // Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
-            // // //direction.y = 0f; // Set y to zero to only rotate on the y-axis
-            // // Quaternion rotation = Quaternion.LookRotation(direction);
-            // // transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 25.0f * Time.deltaTime);
-        }
+        //     }
+        //     // Vector3 targetPosition = upwardClimbing.GetWallPosition();
+        //     // targetPosition.y = transform.position.y;
+        //     // // Set the target's y position to be the same as the current object's y position
+        //     // Rotate towards the target position
+        //     // // //transform.LookAt(targetPosition);
+        //     // // Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+        //     // // //direction.y = 0f; // Set y to zero to only rotate on the y-axis
+        //     // // Quaternion rotation = Quaternion.LookRotation(direction);
+        //     // // transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 25.0f * Time.deltaTime);
+        // }
 
         if(transform.eulerAngles.y >= 315 || transform.eulerAngles.y < 45f)
         {
@@ -196,9 +168,6 @@ public class ClimbingScript : MonoBehaviour
             lookDirection[3] = true;
         }
 
-        isJumping = true;
-        LerpFunction();
-
         if(!upwardClimbing.GetCanClimb())
         {
             startClimb = false;
@@ -207,6 +176,7 @@ public class ClimbingScript : MonoBehaviour
         if(upwardClimbing.GetCanClimb() && startClimb)
         {
             moveController.SetIsClimbing(true);
+            LerpFunction();
         }
         if(!startClimb)
         {
@@ -273,16 +243,35 @@ public class ClimbingScript : MonoBehaviour
             lookRotation = Quaternion.identity;
             Debug.Log("this happend cals face");
         }
-        playerLerpStart = centreMass.position;
+        if(upwardClimbing.GetMovingDownwards() || upwardClimbing.GetMovingDirecionally())
+        {
+            Vector3 newCentrePos = Vector3.zero;
+            newCentrePos = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+            playerLerpStart = newCentrePos;
+        }
+        else
+        {
+            playerLerpStart = transform.position;
+        }
         endLerpPoint = upwardClimbing.GetNewMiddleSpot();
         if(lookDirection[0] || lookDirection[2])
         {
             endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
+             if(upwardClimbing.GetMovingDownwards() || upwardClimbing.GetMovingDirecionally())
+             {
+                  endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -1.5f, endLerpPoint.z + climbOffset);
+                  Debug.Log("lavida");
+             }
             //Debug.Log(" looking forward or back");
         }
         if(lookDirection[1] || lookDirection[3])
         {
             endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y -0.4f, endLerpPoint.z);
+             if(upwardClimbing.GetMovingDownwards() || upwardClimbing.GetMovingDirecionally())
+             {
+                  endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -1.5f, endLerpPoint.z + climbOffset);
+                  Debug.Log("loca");
+             }
             //Debug.Log(" looking left or right");
         }
        
@@ -303,7 +292,7 @@ public class ClimbingScript : MonoBehaviour
                 }
             }
             
-            playerPos.position = Vector3.Lerp(playerLerpStart, endLerpPoint, interpolateAmount);
+            transform.position = Vector3.Lerp(playerLerpStart, endLerpPoint, interpolateAmount);
           
             if(interpolateAmount >= 1.0f)
             {
@@ -319,31 +308,73 @@ public class ClimbingScript : MonoBehaviour
 		
 		
 		//transform.rotation = Quaternion.Euler()
-		 Vector3 rotationTarget = upwardClimbing.GetWallPosition();
-        rotationTarget.y = transform.localPosition.y;
-        Vector3 targetDir = rotationTarget - transform.localPosition;
-        float angle = Vector3.Angle(transform.forward, targetDir);
-
-        if(angle < -25 || angle > 25)
-        {
-            doRotate = true;
-            slerpPercent = 0.0f;
-            startedRotation = false;
-            direction = Vector3.zero;
-            lookRotation = Quaternion.identity;
-            Debug.Log("this happend 2 cals face");
-        }
-        playerLerpStart = centreMass.position;
+		
+        playerLerpStart = transform.position;
         endLerpPoint = _newEndPoint;
+
         if(lookDirection[0] || lookDirection[2])
         {
             endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y, endLerpPoint.z + climbOffset);
             //Debug.Log(" looking forward or back");
+            if(upwardClimbing.GetMovingDownwards())
+            {
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                Debug.Log("lavida 1");
+            }
+            else if(upwardClimbing.GetMovingDirecionally())
+            {
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
+                Debug.Log("lavida 2");
+            }
+            else 
+            {
+                Vector3 rotationTarget = upwardClimbing.GetWallPosition();
+                rotationTarget.y = transform.localPosition.y;
+                Vector3 targetDir = rotationTarget - transform.localPosition;
+                float angle = Vector3.Angle(transform.forward, targetDir);
+
+                if(angle < -25 || angle > 25)
+                {
+                    doRotate = true;
+                    slerpPercent = 0.0f;
+                    startedRotation = false;
+                    direction = Vector3.zero;
+                    lookRotation = Quaternion.identity;
+                    Debug.Log("this happend 2 cals face");
+                }
+            }
         }
         if(lookDirection[1] || lookDirection[3])
         {
             endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y, endLerpPoint.z);
             //Debug.Log(" looking left or right");
+           if(upwardClimbing.GetMovingDownwards())
+            {
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                Debug.Log("loca 1");
+            }
+            else if(upwardClimbing.GetMovingDirecionally())
+            {
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
+                Debug.Log("loca 2");
+            }
+            else
+            {
+                Vector3 rotationTarget = upwardClimbing.GetWallPosition();
+                rotationTarget.y = transform.localPosition.y;
+                Vector3 targetDir = rotationTarget - transform.localPosition;
+                float angle = Vector3.Angle(transform.forward, targetDir);
+
+                if(angle < -25 || angle > 25)
+                {
+                    doRotate = true;
+                    slerpPercent = 0.0f;
+                    startedRotation = false;
+                    direction = Vector3.zero;
+                    lookRotation = Quaternion.identity;
+                    Debug.Log("this happend 2 cals face");
+                }
+            }
         }
         //endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
         interpolateAmount = 0.0f;
