@@ -72,7 +72,7 @@ public class Insect : MonoBehaviour
 
                 if(!visitedPOI)
                     ChangeState(ButterflyState.VisitingPOI);
-                else
+                else if (pointOfInterest != null)
                 {
                     forgetPOITimer += Time.deltaTime;
                     if(forgetPOITimer > poiMemory)
@@ -122,15 +122,15 @@ public class Insect : MonoBehaviour
                     if (!visitedPOI)
                         rb.AddForce((pointOfInterest.transform.position - transform.position).normalized * dirForceMult);
 
+                    switchFlightTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
+                    flightTimer = 0f;
+
                     if (Vector3.Distance(pointOfInterest.transform.position, transform.position) < minVisitedDistance)
                     {
                         poiCounter++;
                         //visitedPOI = true;
                         print("visited poi! + " + poiCounter);            
                     }
-
-                    switchFlightTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
-                    flightTimer = 0f;
 
                     if(poiCounter > poiCountAmount)
                     {
@@ -193,7 +193,7 @@ public class Insect : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.None;
         col.enabled = false;
         transform.parent = c.transform;
-        //transform.position += c.contacts[0].normal * -0.03f;
+        transform.position += c.contacts[0].normal * -0.05f;
         rotHelper.rotation = Quaternion.LookRotation(c.contacts[0].point - transform.position, Vector3.up);
         rotHelper.Rotate(new Vector3(0, 0, Random.Range(-180f, 180f)));
         anim.SetBool("grounded", true);
