@@ -11,7 +11,7 @@ public class ClimbingScript : MonoBehaviour
     InputAction stopClimb;
     InputAction movement;
     Rigidbody rb;
-    private MovementController movementController;
+
     [SerializeField] private NIThirdPersonController moveController;
     [SerializeField] private UpwardClimbing upwardClimbing;
     [SerializeField] private DownwardClimbing downwardClimbing;
@@ -51,14 +51,14 @@ public class ClimbingScript : MonoBehaviour
     Quaternion lookRotation = Quaternion.identity;
     Vector3 rotationDirection = Vector3.zero;
     Quaternion slerpStart = Quaternion.identity;
-    float slerpSpeed = 15.0f;
+    float slerpSpeed = 25.0f;
     bool doRotate = false;
     bool startedRotation = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        movementController = GetComponent<MovementController>();
+       
     }
     private void OnEnable()
     {
@@ -72,6 +72,10 @@ public class ClimbingScript : MonoBehaviour
         movement = playercontrols.Player.Move;
         movement.Enable();
 
+        climb = playercontrols.Player.DoClimb;
+        climb.Enable();
+        climb.started += DoClimbing;
+
         stopClimb = playercontrols.Player.Drop;
         stopClimb.Enable();
         stopClimb.started += StopClimb;
@@ -80,6 +84,7 @@ public class ClimbingScript : MonoBehaviour
     private void OnDisable()
     {
         playercontrols.Disable();
+        climb.Disable();
         jump.Disable();
         stopClimb.Disable();
     }
@@ -142,6 +147,7 @@ public class ClimbingScript : MonoBehaviour
                 slerpPercent = 0f;
                 direction = Vector3.zero;
                 lookRotation = Quaternion.identity;
+           
             }
             // Vector3 targetPosition = upwardClimbing.GetWallPosition();
             // targetPosition.y = transform.position.y;
@@ -205,7 +211,6 @@ public class ClimbingScript : MonoBehaviour
         if(!startClimb)
         {
             rb.useGravity = true;
-            movementController.enabled = true;
         }
         if(arrived && startClimb )
         {
@@ -220,18 +225,7 @@ public class ClimbingScript : MonoBehaviour
             Debug.Log("jumping");
             rb.AddForce(jumpForce * transform.up * 10.0f, ForceMode.Impulse);
         }
-        if(upwardClimbing.GetCanClimb() && movement.ReadValue<Vector2>().y > 0f)
-        {
-            isConnectedToWall = true;
-            //Debug.Log("starting the climb.");
-            startClimb = true;
-            arrived = false;
-            GetNextClimbSpot();
-            rb.useGravity = false;
-            movementController.enabled = false;
-            upwardClimbing.SetMoveRightArm(true);
-            detach = false;
-        }
+       
     }
     private void StopClimb(InputAction.CallbackContext context)
     {
@@ -247,9 +241,19 @@ public class ClimbingScript : MonoBehaviour
         moveController.SetIsClimbing(false);
         
     }
-    private void Climb(InputAction.CallbackContext context)
+    private void DoClimbing(InputAction.CallbackContext context)
     {
-        
+        if(upwardClimbing.GetCanClimb())
+        {  
+            isConnectedToWall = true;
+            //Debug.Log("starting the climb.");
+            startClimb = true;
+            arrived = false;
+            GetNextClimbSpot();
+            rb.useGravity = false;
+            upwardClimbing.SetMoveRightArm(true);
+            detach = false;
+        }
     }
     
     private void GetNextClimbSpot()
@@ -259,7 +263,7 @@ public class ClimbingScript : MonoBehaviour
         rotationTarget.y = transform.localPosition.y;
         Vector3 targetDir = rotationTarget - transform.localPosition;
         float angle = Vector3.Angle(transform.forward, targetDir);
-        Debug.Log(angle);
+   
         if(angle < -25 || angle > 25)
         {
             doRotate = true;
@@ -315,7 +319,20 @@ public class ClimbingScript : MonoBehaviour
 		
 		
 		//transform.rotation = Quaternion.Euler()
-		
+		 Vector3 rotationTarget = upwardClimbing.GetWallPosition();
+        rotationTarget.y = transform.localPosition.y;
+        Vector3 targetDir = rotationTarget - transform.localPosition;
+        float angle = Vector3.Angle(transform.forward, targetDir);
+
+        if(angle < -25 || angle > 25)
+        {
+            doRotate = true;
+            slerpPercent = 0.0f;
+            startedRotation = false;
+            direction = Vector3.zero;
+            lookRotation = Quaternion.identity;
+            Debug.Log("this happend 2 cals face");
+        }
         playerLerpStart = centreMass.position;
         endLerpPoint = _newEndPoint;
         if(lookDirection[0] || lookDirection[2])

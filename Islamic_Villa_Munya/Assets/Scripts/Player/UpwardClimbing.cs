@@ -86,7 +86,7 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentHandSpotLeft != null && currentHandSpotRight != null)
+        if(currentHandSpotLeft != null && currentHandSpotRight != null && !movingDirecionally)
         {
             wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position);
         }
