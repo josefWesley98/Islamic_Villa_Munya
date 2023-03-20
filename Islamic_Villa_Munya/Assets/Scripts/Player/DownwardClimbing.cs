@@ -8,6 +8,7 @@ public class DownwardClimbing : MonoBehaviour
     [SerializeField] private LayerMask climableLayer;
     [SerializeField] private UpwardClimbing upwardClimbing; 
      [SerializeField] private ClimbingScript climbingScript;
+     [SerializeField] private Vector3 detectionRadius = new Vector3(5f,5f,5f);
     // transforms 
     [SerializeField] private Transform[] grabbablePositionsRightFoot;
     [SerializeField] private Transform[] grabbablePositionsLeftFoot;
@@ -131,7 +132,7 @@ public class DownwardClimbing : MonoBehaviour
     }
     private void FindRightFootClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
@@ -225,7 +226,7 @@ public class DownwardClimbing : MonoBehaviour
     }
     private void FindLeftFootClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
@@ -418,7 +419,7 @@ public class DownwardClimbing : MonoBehaviour
         //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
         if (m_Started)
             //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-            Gizmos.DrawWireCube(transform.position, transform.localScale);
+            Gizmos.DrawWireCube(transform.position, detectionRadius);
     }
     public Transform GetTargetSpotLeftFoot()
     {
@@ -439,5 +440,9 @@ public class DownwardClimbing : MonoBehaviour
     public void SetMovementDirection(Vector2 _moveDirection)
     {
         movementDirection = _moveDirection;
+    }
+    public void SetDetectionRadius(Vector3 _detectionRadius)
+    {
+        detectionRadius = _detectionRadius;
     }
 }
