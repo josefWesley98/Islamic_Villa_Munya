@@ -105,9 +105,11 @@ public class DownwardClimbing : MonoBehaviour
         FindRightFootClimbingPositions();
         FindLeftFootClimbingPositions();
         
-        LerpRightFootToTarget();
-        LerpLeftFootToTarget();
-        
+        if(!climbingScript.GetDetach())
+        {
+            LerpRightFootToTarget();
+            LerpLeftFootToTarget();
+        }
         RiggingWeightLerp();
        
     }

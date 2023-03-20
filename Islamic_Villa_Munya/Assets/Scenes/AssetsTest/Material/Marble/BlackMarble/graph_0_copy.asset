@@ -1,0 +1,283 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eed5864476f84ce4b85454db09ca4eaa, type: 3}
+  m_Name: graph_0_copy
+  m_EditorClassIdentifier: 
+  AssetPath: Assets/Scenes/AssetsTest/Material/Marble/SMarbleStone_M_01.sbsar
+  OutputPath: Assets/Scenes/AssetsTest/Material/Marble/SMarbleStone_M_01_graph_0_copy
+  RawData: {fileID: -244192453324840774, guid: 3bedb955a7cf3624285ff00ee7cfb344, type: 3}
+  Name: graph_0_copy
+  IsRoot: 0
+  FlagedForDelete: 0
+  GUID: 9c98f468-8676-4df6-aac5-1aa5d1bc6b54
+  Index: 0
+  Input:
+  - rid: 3437322218429480960
+  - rid: 3437322218429480961
+  - rid: 3437322218429480962
+  - rid: 3437322218429480963
+  - rid: 3437322218429480964
+  - rid: 3437322218429480965
+  - rid: 3437322218429480966
+  - rid: 3437322218429480967
+  Output:
+  - Index: 0
+    VirtualOutputIndex: 4
+    Description:
+      Identifier: basecolor
+      Label: basecolor
+      Index: 0
+      Type: 8
+      Channel: baseColor
+    OutputTexture: {fileID: 2800000, guid: 53facf774c2c2df48a7ee2e4234e1055, type: 3}
+    sRGB: 1
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _BaseMap
+  - Index: 1
+    VirtualOutputIndex: 5
+    Description:
+      Identifier: normal
+      Label: normal
+      Index: 1
+      Type: 8
+      Channel: normal
+    OutputTexture: {fileID: 2800000, guid: adccafe27055d474b8b6d02ad121852d, type: 3}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 0
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _BumpMap
+  - Index: 2
+    VirtualOutputIndex: 6
+    Description:
+      Identifier: roughness
+      Label: roughness
+      Index: 2
+      Type: 8
+      Channel: roughness
+    OutputTexture: {fileID: 0}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: 
+    InvertAssignedAlpha: 0
+    Flags: 0
+    MaterialTextureTarget: _RoughnessMap
+  - Index: 3
+    VirtualOutputIndex: 7
+    Description:
+      Identifier: metallic
+      Label: metallic
+      Index: 3
+      Type: 8
+      Channel: metallic
+    OutputTexture: {fileID: 2800000, guid: bf90d82fcdcf78d4382ef1107d94f165, type: 3}
+    sRGB: 0
+    IsVirtual: 0
+    IsAlphaAssignable: 1
+    AlphaChannel: roughness
+    InvertAssignedAlpha: 1
+    Flags: 0
+    MaterialTextureTarget: _MetallicGlossMap
+  HasPhysicalSize: 0
+  PhysicalSize: {x: 0, y: 0, z: 0}
+  EnablePhysicalSize: 0
+  Thumbnail: 
+  HasThumbnail: 0
+  CurrentStatePreset: " <sbspreset pkgurl=\"pkg://SMarble_M\" label=\"\" >\n  <presetinput
+    identifier=\"$outputsize\" uid=\"1965927838\" type=\"8\" value=\"11,11\" />\n 
+    <presetinput identifier=\"HSLluminosity\" uid=\"407931500\" type=\"0\" value=\"0.271\"
+    />\n  <presetinput identifier=\"HSLMetalsaturation\" uid=\"407931437\" type=\"0\"
+    value=\"0.53\" />\n  <presetinput identifier=\"HSLMetalluminosity\" uid=\"407931435\"
+    type=\"0\" value=\"0.4\" />\n </sbspreset>\n"
+  IsRuntimeOnly: 0
+  GenerateAllOutputs: 0
+  GenerateAllMipmaps: 1
+  OutputMaterial: {fileID: 2100000, guid: af3e074627fbb4f45a0b065d514fa7c6, type: 2}
+  DefaultPreset: " <sbspreset pkgurl=\"pkg://SMarble_M\" label=\"\" >\n  <presetinput
+    identifier=\"$outputsize\" uid=\"1965927838\" type=\"8\" value=\"10,10\" />\n 
+    <presetinput identifier=\"HSLluminosity\" uid=\"407931500\" type=\"0\" value=\"0.6\"
+    />\n  <presetinput identifier=\"HSLMetalluminosity\" uid=\"407931435\" type=\"0\"
+    value=\"0.54\" />\n </sbspreset>\n"
+  MaterialShader: Universal Render Pipeline/Lit
+  RenderTextures: 0
+  OutputRemaped: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3437322218429480960
+      type: {class: SubstanceInputInt2, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 0
+        Description:
+          Identifier: $outputsize
+          Label: $outputsize
+          GuiGroup: 
+          GuiDescription: 
+          Type: 5
+          WidgetType: 0
+        Data: {x: 11, y: 11}
+        NumericalDescription:
+          DefaultValue: {x: 8, y: 8}
+          MinValue: {x: 0, y: 0}
+          MaxValue: {x: 1, y: 1}
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480961
+      type: {class: SubstanceInputInt, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 1
+        Description:
+          Identifier: $randomseed
+          Label: $randomseed
+          GuiGroup: 
+          GuiDescription: 
+          Type: 4
+          WidgetType: 0
+        Data: 0
+        NumericalDescription:
+          DefaultValue: 0
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0.01
+          SliderClamp: 0
+          LabelFalse: 
+          LabelTrue: 
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480962
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 2
+        Description:
+          Identifier: HSLhue
+          Label: HSLhue
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.5
+        NumericalDescription:
+          DefaultValue: 0.5
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480963
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 3
+        Description:
+          Identifier: HSLsaturation
+          Label: HSLsaturation
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.48
+        NumericalDescription:
+          DefaultValue: 0.48
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480964
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 4
+        Description:
+          Identifier: HSLluminosity
+          Label: HSLluminosity
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.271
+        NumericalDescription:
+          DefaultValue: 0.5
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480965
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 5
+        Description:
+          Identifier: HSLMetalhue
+          Label: HSLMetalhue
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.5
+        NumericalDescription:
+          DefaultValue: 0.5
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480966
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 6
+        Description:
+          Identifier: HSLMetalsaturation
+          Label: HSLMetalsaturation
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.53
+        NumericalDescription:
+          DefaultValue: 0.5
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []
+    - rid: 3437322218429480967
+      type: {class: SubstanceInputFloat, ns: Adobe.Substance.Input, asm: Adobe.Substance}
+      data:
+        Index: 7
+        Description:
+          Identifier: HSLMetalluminosity
+          Label: HSLMetalluminosity
+          GuiGroup: HSL
+          GuiDescription: 
+          Type: 0
+          WidgetType: 1
+        Data: 0.4
+        NumericalDescription:
+          DefaultValue: 0.39
+          MinValue: 0
+          MaxValue: 1
+          SliderStep: 0
+          SliderClamp: 0
+          EnumValueCount: 0
+          EnumValues: []

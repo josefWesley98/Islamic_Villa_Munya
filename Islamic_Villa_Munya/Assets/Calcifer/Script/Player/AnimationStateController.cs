@@ -408,7 +408,7 @@ public class AnimationStateController : MonoBehaviour
             }
         }
 
-
+        //Pass in hash values, cheaper to use for updating the animator values
         animator.SetFloat(velZ_hash, velocityZ);
         animator.SetFloat(velX_hash, velocityX);
         animator.SetFloat(rb_velX_hash, rb_vel.x);

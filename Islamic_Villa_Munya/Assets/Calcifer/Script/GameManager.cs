@@ -11,10 +11,25 @@ public class GameManager : MonoBehaviour
     static protected bool has_key = false;
     static protected bool hub_travel = false;
 
+    Transform PLAYER;
+
+    private void Start()
+    {
+        PLAYER = GameObject.FindGameObjectWithTag("Player").transform;
+        if (PLAYER != null)
+            print("Found " + PLAYER);
+        else
+            Debug.LogError("Player not found!");
+    }
+    private void Update()
+    {
+        print("AAAAAAAA");
+    }
     //Setters
     public static void SetArtefactCollected(bool val)
     {
         player_artefact = val;
+        print("ARTEFACT");
     }
 
     public static void SetHasKey(bool val)

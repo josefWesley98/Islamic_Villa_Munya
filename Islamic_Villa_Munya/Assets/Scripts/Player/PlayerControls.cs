@@ -89,6 +89,51 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5fcb5a3-ceb4-4da9-9d2c-a5ad5228b0d7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HideCursor"",
+                    ""type"": ""Button"",
+                    ""id"": ""6d25f2b5-7c46-4894-bbeb-943c0e704356"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowCursor"",
+                    ""type"": ""Button"",
+                    ""id"": ""610fe380-eac4-4f75-b435-1f0c562c20e8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleRun"",
+                    ""type"": ""Button"",
+                    ""id"": ""62eaaa8f-3e1c-4d26-97d3-fb738eaf9305"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Push/Pull"",
+                    ""type"": ""Button"",
+                    ""id"": ""23c3fa1e-4663-43c8-afaa-b056f6595853"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -337,7 +382,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d7ba962e-68cd-401f-b72c-b1f07a6fbfd9"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -353,6 +398,61 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44bcec39-26a5-4b89-881d-f2a65fe31f1e"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1e7d505-cd57-47a6-9c64-8201622e2b27"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HideCursor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cb88146-c854-4d0d-bad0-74385031256f"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowCursor"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41a53ad6-6815-4a09-bcb1-3ba80a6f9153"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleRun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""899e574e-6228-4889-99ea-a4643ebbf57b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Push/Pull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -947,6 +1047,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_DoClimb = m_Player.FindAction("DoClimb", throwIfNotFound: true);
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+        m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_HideCursor = m_Player.FindAction("HideCursor", throwIfNotFound: true);
+        m_Player_ShowCursor = m_Player.FindAction("ShowCursor", throwIfNotFound: true);
+        m_Player_ToggleRun = m_Player.FindAction("ToggleRun", throwIfNotFound: true);
+        m_Player_PushPull = m_Player.FindAction("Push/Pull", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1025,6 +1130,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_DoClimb;
     private readonly InputAction m_Player_Drop;
+    private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_HideCursor;
+    private readonly InputAction m_Player_ShowCursor;
+    private readonly InputAction m_Player_ToggleRun;
+    private readonly InputAction m_Player_PushPull;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1036,6 +1146,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @DoClimb => m_Wrapper.m_Player_DoClimb;
         public InputAction @Drop => m_Wrapper.m_Player_Drop;
+        public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @HideCursor => m_Wrapper.m_Player_HideCursor;
+        public InputAction @ShowCursor => m_Wrapper.m_Player_ShowCursor;
+        public InputAction @ToggleRun => m_Wrapper.m_Player_ToggleRun;
+        public InputAction @PushPull => m_Wrapper.m_Player_PushPull;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1066,6 +1181,21 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Drop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
                 @Drop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
                 @Drop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDrop;
+                @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @HideCursor.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHideCursor;
+                @HideCursor.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHideCursor;
+                @HideCursor.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHideCursor;
+                @ShowCursor.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShowCursor;
+                @ShowCursor.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShowCursor;
+                @ShowCursor.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShowCursor;
+                @ToggleRun.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
+                @ToggleRun.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
+                @ToggleRun.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleRun;
+                @PushPull.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
+                @PushPull.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
+                @PushPull.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1091,6 +1221,21 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Drop.started += instance.OnDrop;
                 @Drop.performed += instance.OnDrop;
                 @Drop.canceled += instance.OnDrop;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @HideCursor.started += instance.OnHideCursor;
+                @HideCursor.performed += instance.OnHideCursor;
+                @HideCursor.canceled += instance.OnHideCursor;
+                @ShowCursor.started += instance.OnShowCursor;
+                @ShowCursor.performed += instance.OnShowCursor;
+                @ShowCursor.canceled += instance.OnShowCursor;
+                @ToggleRun.started += instance.OnToggleRun;
+                @ToggleRun.performed += instance.OnToggleRun;
+                @ToggleRun.canceled += instance.OnToggleRun;
+                @PushPull.started += instance.OnPushPull;
+                @PushPull.performed += instance.OnPushPull;
+                @PushPull.canceled += instance.OnPushPull;
             }
         }
     }
@@ -1254,6 +1399,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDoClimb(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnHideCursor(InputAction.CallbackContext context);
+        void OnShowCursor(InputAction.CallbackContext context);
+        void OnToggleRun(InputAction.CallbackContext context);
+        void OnPushPull(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
