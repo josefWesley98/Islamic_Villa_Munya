@@ -246,9 +246,10 @@ public class NIThirdPersonController : MonoBehaviour
 
     private void OnCollisionStay(Collision other)
     {
+        Debug.Log("Entered collisionstay");
         if (other.gameObject.GetComponent<PushOrPull>() != null)
         {
-            Debug.Log("CUuuuuuunt");
+            Debug.Log("Pushing or pulling (Player)");
             //Call the game object function to set it's transform as that of the child of the player
             //If player pressing this then do this
             other.gameObject.GetComponent<PushOrPull>().Push(pushing, gameObject);
