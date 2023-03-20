@@ -29,7 +29,7 @@ public class ThirdPersonCam : MonoBehaviour
         //Rotate the player
         if(p.GetIsClimbing())
         {
-           ground_rot_speed = 0;
+           //ground_rot_speed = 0;
         }
         else
         {

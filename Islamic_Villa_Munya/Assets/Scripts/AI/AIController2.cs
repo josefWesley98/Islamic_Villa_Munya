@@ -355,7 +355,6 @@ public class AIController2 : MonoBehaviour
             canDoSocialising = false;
             actionTimer = 0.0f;
             findNewJob = true;
-            doSocialAudio = false; 
         }
 
         if(arrivedAtDestination && currentJob == "Walking" && currentLocation != "null" && isWalking)
