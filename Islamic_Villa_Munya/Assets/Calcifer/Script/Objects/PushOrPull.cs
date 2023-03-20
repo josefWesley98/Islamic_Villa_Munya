@@ -5,22 +5,10 @@ using UnityEngine;
 /*Cal's script starts here*/
 public class PushOrPull : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     //Setter for the transform to be a child if the player is pushing or not
     public void Push(bool pop, GameObject obj)
     {
-        Debug.Log("In the object");
         if(pop)
         {
             transform.parent = obj.transform;
@@ -28,6 +16,7 @@ public class PushOrPull : MonoBehaviour
         else if(!pop)
         {
             transform.parent = null;
+            transform.eulerAngles = new Vector3(0f,0f,0f);
         }
     }
 }
