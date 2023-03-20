@@ -20,7 +20,7 @@ public class ThirdPersonCam : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //Rotate orientation of camera
         Vector3 view_dir = player.position - new Vector3(transform.position.x, player.position.y, transform.position.z);
