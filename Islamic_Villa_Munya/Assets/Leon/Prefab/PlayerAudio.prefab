@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3028005538756620389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3028005538756620395}
+  - component: {fileID: 3028005538756620388}
+  m_Layer: 0
+  m_Name: PlayerAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3028005538756620395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028005538756620389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 36.23042, y: 16.97993, z: -1.7479959}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3028005538756620388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028005538756620389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137d78c9c3c301b40bca9575e7611fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stepTileClips:
+  - {fileID: 8300000, guid: 8c7941f2147c8f045b4c659fe2f15ecf, type: 3}
+  - {fileID: 8300000, guid: fe3d696eb95cf8742871ae1bb20ad067, type: 3}
+  - {fileID: 8300000, guid: d8569de2ba8674640ac539b926e3669b, type: 3}
+  - {fileID: 8300000, guid: 639055fae5d85fe48961c3981a7da88b, type: 3}
+  stepTimeVolume: 0.25
+  stepCarpetClips:
+  - {fileID: 8300000, guid: e6fcf3c1b6f3b4341afe28fac1e0a180, type: 3}
+  - {fileID: 8300000, guid: 41089b8e4ebfd04448f4e3bb10d1f9b9, type: 3}
+  - {fileID: 8300000, guid: ad2bf0d0e7195264cbd069dcee4b079f, type: 3}
+  footstepTimeWalk: 0.48
+  footstepTimeRun: 0.35
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  carpetMaterials:
+  - carpetNew_graph_0_material (Instance)
