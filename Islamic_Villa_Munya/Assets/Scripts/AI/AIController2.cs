@@ -56,7 +56,7 @@ public class AIController2 : MonoBehaviour
     [Header("Movement Speed")]
     [SerializeField] float maxSpeed = 1.5f;
     [SerializeField] float minSpeed = 2.5f;
-
+    private bool soundFix = false;
     bool arrivedAtDestination = false;
     bool hasSocialPartner = false;
     private Vector3 destination =  new Vector3(1111,111,111);
@@ -355,7 +355,8 @@ public class AIController2 : MonoBehaviour
             canDoSocialising = false;
             actionTimer = 0.0f;
             findNewJob = true;
-            doSocialAudio = false; 
+            //doSocialAudio = false; 
+            soundFix = false;
         }
 
         if(arrivedAtDestination && currentJob == "Walking" && currentLocation != "null" && isWalking)
@@ -439,7 +440,7 @@ public class AIController2 : MonoBehaviour
         if(currentJob == "Socialising")
         {
 
-            if(!hasSocialPartner && arrivedAtDestination && !partnerHasArrived)
+            if(!hasSocialPartner && arrivedAtDestination && !partnerHasArrived && !soundFix)
             {
                 
                 bool check = manager.CheckIfHasSocialPartner(id, currentLocation, currentWaypointPos);
@@ -474,11 +475,13 @@ public class AIController2 : MonoBehaviour
                 actionTimer += Time.deltaTime;
                 doSocialAnim = true;
                 // do audio.
-                if(doSocialAudio && doAudio)
+                if(doSocialAudio && doAudio && !soundFix)
                 {
                     int rand = Random.Range(0,2);
-                    spawnAudioPrefabs.spawnAudioPrefab(id, rand, true);
+                    spawnAudioPrefabs.spawnAudioPrefab(id, rand);
                     doSocialAudio = false;
+                    soundFix = true;
+                    Debug.Log("calling this...");
                 }
 
                 if(actionTimer >= doSocialisingFor)
@@ -791,6 +794,7 @@ public class AIController2 : MonoBehaviour
             doSocialisingFor = ActionRandomTimer();
             socialisingCd = ActionCdRandomTimer();
             //doSocialAudio = true;
+            soundFix = false;
             if(socialDestination != Vector3.zero)
             {
                 hasSocialPartner = true;
