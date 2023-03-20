@@ -10,6 +10,8 @@ public class PlayerAudio : MonoBehaviour
     public AudioClip[] stepTileClips;
     List<AudioSource> stepTileSources = new List<AudioSource>();
 
+    public float stepTimeVolume = 0.25f;
+
     public AudioClip[] stepCarpetClips;
     List<AudioSource> stepCarpetSources = new List<AudioSource>();
 
@@ -47,6 +49,7 @@ public class PlayerAudio : MonoBehaviour
             AudioSource a = transform.AddComponent<AudioSource>();
             a.clip = stepTileClips[i];
             a.spatialBlend = 1f;
+            a.volume = stepTimeVolume;
             stepTileSources.Add(a);
         }
 
