@@ -1362,6 +1362,7 @@ public class NPCManager : MonoBehaviour
         bool partnerArrived = false;
         int socialPosID = 0;
         int partnerId = 0;
+        
         if(area == A1)
         {
             for(int i = 0; i < socialAreasA1.Length ;i++)
@@ -1372,16 +1373,23 @@ public class NPCManager : MonoBehaviour
                     partnerId = AI_ID_A1_Social[socialPosID];
                     if(AI_ID_A1_Social[socialPosID] == -1)
                     {
-                        Debug.Log("this is the problem");
-                    }
-                    if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
-                    {
-                        partnerArrived = true;
-                        AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
+                        Debug.Log("this is the problem and we sent the person to do something else.");
+                        AI[id].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[currentPosID] = -1;
+                        socialAreasA1Occupied[currentPosID] = false;
+                        partnerArrived = false;
                     }
                     else
                     {
-                        partnerArrived = false;
+                        if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
+                        {
+                            partnerArrived = true;
+                            AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
+                        }
+                        else
+                        {
+                            partnerArrived = false;
+                        }
                     }
                     return partnerArrived;
                 }
@@ -1390,18 +1398,25 @@ public class NPCManager : MonoBehaviour
                     socialPosID = oddNumbers[i] - 1;
                     if(AI_ID_A1_Social[socialPosID] == -1)
                     {
-                        Debug.Log("this is the problem");
-                    }
-                    partnerId = AI_ID_A1_Social[socialPosID];
-
-                    if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
-                    {
-                        partnerArrived = true;
-                        AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
+                        Debug.Log("this is the problem and we sent the person to do something else.");
+                        AI[id].GetComponent<AIController2>().SetSocialPartnerLeftEarly(true);
+                        AI_ID_A1_Social[currentPosID] = -1;
+                        socialAreasA1Occupied[currentPosID] = false;
+                        partnerArrived = false;
                     }
                     else
                     {
-                        partnerArrived = false;
+                        partnerId = AI_ID_A1_Social[socialPosID];
+
+                        if(AI[partnerId].GetComponent<AIController2>().GetDistToDestination() <= 0.1f)
+                        {
+                            partnerArrived = true;
+                            AI[partnerId].GetComponent<AIController2>().SetSocialAudio(true);
+                        }
+                        else
+                        {
+                            partnerArrived = false;
+                        }
                     }
                     return partnerArrived;
                 }
@@ -1637,7 +1652,7 @@ public class NPCManager : MonoBehaviour
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
                             AI[rand].GetComponent<AIController2>().SetSocialDestination(socialDestination);
-
+                            Debug.Log("Find social position correctly...");
                             return true;
                         }
 
@@ -1677,7 +1692,7 @@ public class NPCManager : MonoBehaviour
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
                             AI[rand].GetComponent<AIController2>().SetSocialDestination(socialDestination);
-
+                            Debug.Log("Find social position correctly...");
                             return true;
                         }
                     }

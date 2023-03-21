@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,30 +20,37 @@ public class ThirdPersonCam : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //Rotate orientation of camera
         Vector3 view_dir = player.position - new Vector3(transform.position.x, player.position.y, transform.position.z);
         orientation.forward = view_dir.normalized;
-
-        ////Rotate the player
-        //if(p.GetIsClimbing())
-        //{
-        //    ground_rot_speed = 0;
-        //}
-        //else
-        //{
-        //    ground_rot_speed = 15;
-        //}
-
-        ground_rot_speed = 15;
-
+            
+        //Rotate the player
+        if(p.GetIsClimbing() || p.GetPushOrPull())
+        {
+           ground_rot_speed = 0;
+        }
+        else if (!p.GetIsClimbing() || !p.GetPushOrPull())
+        {
+           ground_rot_speed = 15;
+        }
+        
         Vector2 look_at = p.GetPlayerInput();
-            Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
+        Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
 
-            player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
+        player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
     }
 
+    public void SetRotation(float rot)
+    {
+        ground_rot_speed = rot;
+    }
+
+    public void ResetRotation()
+    {
+        ground_rot_speed = 15f;
+    }
 }
 
 /*Cal's code ends here*/

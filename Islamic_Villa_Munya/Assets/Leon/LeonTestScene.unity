@@ -1576,6 +1576,7 @@ MonoBehaviour:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 1665213723}
   interactMinDistance: 1
+  lockRB: {fileID: 0}
 --- !u!1 &126848169
 GameObject:
   m_ObjectHideFlags: 0
@@ -9135,7 +9136,7 @@ GameObject:
   - component: {fileID: 567680070}
   - component: {fileID: 567680069}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Dust Motes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14463,11 +14464,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f5e967d856c40e4b9b1b263ea370f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverRadius: 4
   changeTargetTimeMin: 1
   changeTargetTimeMax: 4
-  moveSpeedMult: 0.1
-  rotationSpeed: 0
+  forceMult: 100
 --- !u!1 &585634251
 GameObject:
   m_ObjectHideFlags: 0
@@ -31361,17 +31360,17 @@ PrefabInstance:
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.011299954
+      value: 0.011299955
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0000000018705342
+      value: -2.6589365e-16
       objectReference: {fileID: 0}
     - target: {fileID: 4926470091400729800, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -2.11383e-11
+      value: 3.4565814e-18
       objectReference: {fileID: 0}
     - target: {fileID: 4926470092135892556, guid: 4942f171471dd29409d5227031e21dec,
         type: 3}
