@@ -13,6 +13,7 @@ public class PlayerInteract : MonoBehaviour
     InteractalbeObject interactableObj;
     AnimationStateController ASC;
     MeshRenderer objRenderer;
+    SkinnedMeshRenderer objRenderer2;
     GameObject displayObject;
     GameObject holder;
     Transform LookAt;
@@ -66,7 +67,14 @@ public class PlayerInteract : MonoBehaviour
         {
             //LookAt = other.GetComponent<InteractalbeObject>().GetLookAt();
             interactableObj = other.GetComponent<InteractalbeObject>();
-            objRenderer = other.GetComponent<MeshRenderer>();
+            if(other.GetComponent<MeshRenderer>() != null)
+            {
+                objRenderer = other.GetComponent<MeshRenderer>();
+            }
+            if(other.GetComponent<SkinnedMeshRenderer>() != null)
+            {
+                objRenderer2 = other.GetComponent<SkinnedMeshRenderer>();
+            }
             scale = other.GetComponent<InteractalbeObject>().GetScale();
             rotationForSpawn =  other.GetComponent<InteractalbeObject>().GetRotation();
             positionOffset = other.GetComponent<InteractalbeObject>().GetPositionOffset();
@@ -82,12 +90,28 @@ public class PlayerInteract : MonoBehaviour
     {
         if(other.GetComponent<InteractalbeObject>())
         {
-            ASC.enabled = true;
-            //controller.HideCursor();
-            objRenderer.enabled = true;
+            isInspecting = false;
+
+            if(objRenderer != null)
+            {
+                objRenderer.enabled = true;
+            }
+
+            if(objRenderer2 != null)
+            {
+                objRenderer2.enabled = true;
+            }
+            firstPersonCamera.Priority = 5;
+
             isTouching = false;
             canInspect = false;
-            Debug.Log("is exiting");
+            isInspecting = false;
+
+            inspect.gameObject.SetActive(false);
+            if(holder != null)
+            {
+                Destroy(holder);
+            }
         }
     }
 
@@ -106,40 +130,42 @@ public class PlayerInteract : MonoBehaviour
         if(!canInspect)
         {
             isInspecting = false;
-            ASC.enabled = true;
+            //ASC.enabled = true;
             //controller.HideCursor();
         }
 
         if(isInspecting)
         {
             controller.ShowCursor();
-            objRenderer.enabled = false;
-            ASC.enabled = false;
+            if(objRenderer != null && objRenderer.enabled != false)
+            {
+                objRenderer.enabled = false;
+            }
+            if(objRenderer2 != null && objRenderer2.enabled != false)
+            {
+                objRenderer2.enabled = false;
+            }
+            //ASC.enabled = false;
             cameraPos.position = new Vector3(transform.position.x,transform.position.y + 1.15f, transform.position.z);
-            
-            
-           
-            //cameraPos.localRotation = Quaternion.Euler(cameraPos.localRotation.x, cameraPos.localRotation.y,cameraPos.localRotation.z);
             firstPersonCamera.Priority = 15;
-            //closeButton.SetActive(true);
+
             infoObject.SetActive(true);
             info.text = interactableObj.GetArtifactInfo();
+            
             if(!artifactGenerated)
             {
-                Ray ray = cam.ViewportPointToRay(new Vector3(0.5f,0.5f,0f));
-                RaycastHit hit;
-                if(Physics.Raycast(ray, out hit)){
-                    //destination = hit.point;
-                   // destination = ray.GetPoint(distFromCam);
-                }
-                else
-                {
-                    //destination = ray.GetPoint(distFromCam);
-                }
+                
                 Quaternion rotation = Quaternion.identity;
                 destination = new Vector3(destination.x + positionOffset.x,destination.y + positionOffset.y,destination.z + positionOffset.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
-                inspectObject.GetComponent<MeshRenderer>().enabled = true;
+                if(inspectObject.GetComponent<MeshRenderer>() != null)
+                {
+                    inspectObject.GetComponent<MeshRenderer>().enabled = true;
+                }
+                if(inspectObject.GetComponent<SkinnedMeshRenderer>() != null)
+                {
+                    inspectObject.GetComponent<SkinnedMeshRenderer>().enabled = true;
+                }
                 inspectObject.transform.localScale = scale;
                 inspectObject.transform.eulerAngles = rotationForSpawn;
                 holder = inspectObject;
@@ -174,10 +200,15 @@ public class PlayerInteract : MonoBehaviour
     }
     public void ButtonCloseInspection()
     {
-        //controller.HideCursor();
         isInspecting = false;
-        objRenderer.enabled = true;
-        ASC.enabled = true;
+        if(objRenderer != null)
+        {
+            objRenderer.enabled = true;
+        }
+        if(objRenderer2 != null)
+        {
+            objRenderer2.enabled = true;
+        }
         if(holder != null)
         {
             Destroy(holder);
