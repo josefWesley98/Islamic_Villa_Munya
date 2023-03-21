@@ -27,22 +27,30 @@ public class ThirdPersonCam : MonoBehaviour
         orientation.forward = view_dir.normalized;
             
         //Rotate the player
-        if(p.GetIsClimbing())
+        if(p.GetIsClimbing() || p.GetPushOrPull())
         {
-           //ground_rot_speed = 0;
+           ground_rot_speed = 0;
         }
-        else
+        else if (!p.GetIsClimbing() || !p.GetPushOrPull())
         {
            ground_rot_speed = 15;
         }
-
-
+        
         Vector2 look_at = p.GetPlayerInput();
-            Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
+        Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
 
-            player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
+        player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
     }
 
+    public void SetRotation(float rot)
+    {
+        ground_rot_speed = rot;
+    }
+
+    public void ResetRotation()
+    {
+        ground_rot_speed = 15f;
+    }
 }
 
 /*Cal's code ends here*/

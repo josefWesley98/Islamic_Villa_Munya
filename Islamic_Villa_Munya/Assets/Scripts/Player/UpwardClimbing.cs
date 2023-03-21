@@ -6,6 +6,7 @@ public class UpwardClimbing : MonoBehaviour
 {
     [SerializeField] private LayerMask climableLayer;
     [SerializeField] private DownwardClimbing downwardClimbing;
+    [SerializeField] private Vector3 detectionRadius = new Vector3(5, 5, 5);
     // 0 = up. 1 = down. 2 = left. 3 = right. 4 = up left. 5 = up right. 6 = down left. 7 = down right.
     [SerializeField] private Transform[] rightGrabPointReference;
     private int chosenReference = 0;
@@ -81,14 +82,14 @@ public class UpwardClimbing : MonoBehaviour
         //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
         if (m_Started)
             //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-            Gizmos.DrawWireCube(transform.position, transform.localScale);
+            Gizmos.DrawWireCube(transform.position, detectionRadius);
     }
     // Update is called once per frame
     void Update()
     {
-        if(currentHandSpotLeft != null && currentHandSpotRight != null && !movingDirecionally)
+        if(currentHandSpotLeft != null && currentHandSpotRight != null)
         {
-            wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position);
+            wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.localPosition, currentHandSpotRight.transform.localPosition);
         }
 
         for(int i = 0; i < 4; i++)
@@ -148,7 +149,7 @@ public class UpwardClimbing : MonoBehaviour
     }
     private void FindRightHandClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
@@ -233,6 +234,7 @@ public class UpwardClimbing : MonoBehaviour
             if(chosenReference == 2)
             {
                  middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
+                 Debug.Log("moving left");
                  
             }
             else if(chosenReference == 3)
@@ -266,7 +268,7 @@ public class UpwardClimbing : MonoBehaviour
     }
     private void FindLeftHandClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, transform.localScale, transform.rotation, climableLayer);
+        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
@@ -535,5 +537,9 @@ public class UpwardClimbing : MonoBehaviour
     public bool GetMovingDownwards()
     {
         return movingDown;
+    }
+    public void SetDetectionRadius(Vector3 _detectionRadius)
+    {
+        detectionRadius = _detectionRadius;
     }
 }
