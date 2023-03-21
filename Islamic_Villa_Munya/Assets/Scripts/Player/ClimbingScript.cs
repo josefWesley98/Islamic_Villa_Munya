@@ -214,32 +214,32 @@ public class ClimbingScript : MonoBehaviour
         
         if(lookDirection[0] || lookDirection[2])
         {
-            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y, endLerpPoint.z + climbOffset);
+            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y-0.3f, endLerpPoint.z + climbOffset);
             //Debug.Log(" looking forward or back");
             if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
                 
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.15f, endLerpPoint.z + climbOffset);
                
             }
             //Debug.Log(" looking forward or back");
         }
         if(lookDirection[1] || lookDirection[3])
         {
-             endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y, endLerpPoint.z);
+             endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y-0.3f, endLerpPoint.z);
             //Debug.Log(" looking left or right");
            if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
             
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.1f, endLerpPoint.z + climbOffset);
 
             }
             //Debug.Log(" looking left or right");
@@ -281,11 +281,11 @@ public class ClimbingScript : MonoBehaviour
 
         if(lookDirection[0] || lookDirection[2])
         {
-            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y-0.4f, endLerpPoint.z + climbOffset);
+            endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y-0.3f, endLerpPoint.z + climbOffset);
             //Debug.Log(" looking forward or back");
             if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
@@ -295,11 +295,11 @@ public class ClimbingScript : MonoBehaviour
 
         if(lookDirection[1] || lookDirection[3])
         {
-            endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y-0.6f, endLerpPoint.z);
+            endLerpPoint = new Vector3(endLerpPoint.x + climbOffset, endLerpPoint.y-0.3f, endLerpPoint.z);
             //Debug.Log(" looking left or right");
            if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
             
             }
             if(upwardClimbing.GetMovingDirecionally())
