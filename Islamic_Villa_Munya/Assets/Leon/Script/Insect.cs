@@ -1,66 +1,200 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Insect : MonoBehaviour
 {
-    //public float hoverRadius = 4f;
-    public float changeTargetTimeMin = 1f;
-    public float changeTargetTimeMax = 4f;
-    //public float moveSpeedMult = 1f;
-    float changeTargetTime;
+    public float dirForceMult = 2;
 
-    float time = 0f;
-    Vector3 targetPos = Vector3.zero;
+    public float changeDirTimeMin = 1f;
+    public float changeDirTimeMax = 4f;
+    public float landedTimeMin = 5f;
+    public float landedTimeMax = 12f;
+    public float landCooldownTime = 5f;
+    bool canLand = false;
 
-    Transform insect;
+    float flightTimer = 0f;
+    float switchFlightTime;
+    float stateTimer = 0f;
+    float switchStateTime;
 
-    //public float rotationSpeed;
-    public float forceMult = 100;
-    //values for internal use
-    private Quaternion _lookRotation;
-    private Vector3 _direction;
     Rigidbody rb;
+    Collider col;
+    Animator anim;
+
+    GameObject lastObjectLandedOn;
+
+    public LayerMask landLayers;
+
+    public Collider pointOfInterest;
+    bool visitedPOI = false;
+    float minVisitedDistance = 1f;
+    int poiCounter = 0;
+    public int poiCountAmount = 10;
+    float forgetPOITimer = 0f;
+    public float poiMemoryMax = 20f;
+    float poiMemory;
+    Transform rotHelper;
+    float rotSpeed = 0.004f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //insect = transform.GetChild(0);
+        col = GetComponent<Collider>();
+        anim = transform.GetChild(0).GetComponent<Animator>();
+        rotHelper = transform.Find("RotHelper");
+        rotHelper.parent = null;
+        rotHelper.gameObject.hideFlags = HideFlags.HideInHierarchy;
+
+        if (pointOfInterest == null)
+            visitedPOI = true;
+
+        poiMemory = Random.Range(poiMemoryMax / 2, poiMemoryMax);
+        print(poiMemory);
+        TakeOff();
     }
 
-    // Update is called once per frame
-    void Update()
+    enum ButterflyState
     {
-        time += Time.deltaTime;
+        Flying,
+        Landed,
+        VisitingPOI,
+    }
 
-        if(time > changeTargetTime)
+    ButterflyState state = ButterflyState.Flying;
+
+    void FixedUpdate()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotHelper.rotation, Time.time * rotSpeed);
+
+        switch (state)
         {
-            rb.AddForce(Random.onUnitSphere * forceMult);
-            rb.AddTorque(Vector3.up * Random.Range(-0.1f, 0.1f));
-            //time = 0f;
+            case ButterflyState.Flying:
 
-            //targetPos = transform.position + Random.insideUnitSphere * hoverRadius;
+                if(!visitedPOI)
+                    ChangeState(ButterflyState.VisitingPOI);
+                else if (pointOfInterest != null)
+                {
+                    forgetPOITimer += Time.deltaTime;
+                    if(forgetPOITimer > poiMemory)
+                        visitedPOI = false;
+                    //print("reset timer : " + forgetPOITimer);
+                }
 
-            changeTargetTime = Random.Range(changeTargetTimeMin, changeTargetTimeMax);
+                stateTimer += Time.deltaTime;
+
+                if (stateTimer > landCooldownTime)
+                    canLand = true;
+
+                flightTimer += Time.deltaTime;
+
+                if (flightTimer > switchFlightTime)
+                {
+                    rb.AddForce(Random.onUnitSphere * dirForceMult);
+                    switchFlightTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
+                    flightTimer = 0f;
+                }
+
+                break;
+            case ButterflyState.Landed:
+
+                stateTimer += Time.deltaTime;
+
+                if (stateTimer > switchStateTime)
+                {
+                    TakeOff();
+                    ChangeState(ButterflyState.Flying);
+                }
+
+                break;
+            case ButterflyState.VisitingPOI:
+
+                stateTimer += Time.deltaTime;
+
+                if (stateTimer > landCooldownTime)
+                    canLand = true;
+
+                flightTimer += Time.deltaTime;
+
+                if (flightTimer > switchFlightTime)
+                {
+                    rb.AddForce(Random.onUnitSphere * dirForceMult);
+
+                    if (!visitedPOI)
+                        rb.AddForce((pointOfInterest.transform.position - transform.position).normalized * dirForceMult);
+
+                    switchFlightTime = Random.Range(changeDirTimeMin, changeDirTimeMax);
+                    flightTimer = 0f;
+
+                    if (Vector3.Distance(pointOfInterest.transform.position, transform.position) < minVisitedDistance)
+                    {
+                        poiCounter++;
+                        //visitedPOI = true;
+                        //print("visited poi! + " + poiCounter);            
+                    }
+
+                    if(poiCounter > poiCountAmount)
+                    {
+                        poiCounter = 0;
+                        visitedPOI = true;
+                        ChangeState(ButterflyState.Flying);
+                    }
+                }
+
+                break;
         }
-        rb.velocity *= 0.999f;
-        rb.angularVelocity *= 0.99f;
-        //insect.transform.position =  Vector3.Lerp(insect.transform.position, targetPos, Time.deltaTime * moveSpeedMult);
-
-
-        //find the vector pointing from our position to the target
-        //_direction = (targetPos - insect.transform.position).normalized;
-
-        //create the rotation we need to be in to look at the target
-        //_lookRotation = Quaternion.LookRotation(_direction);
-
-        //rotate us over time according to speed until we are in the required rotation
-        //insect.transform.rotation = Quaternion.Slerp(insect.transform.rotation, _lookRotation, Time.deltaTime * rotationSpeed);
     }
 
-    private void OnDrawGizmosSelected()
+    void ChangeState(ButterflyState _state, float _minTimeInState = 0, float _maxTimeInState = 0)
     {
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawWireSphere(transform.position, hoverRadius);
+        stateTimer = 0;
+        switchStateTime = Random.Range(_minTimeInState, _maxTimeInState);
+        state = _state;
+    }
+
+    private void OnCollisionEnter(Collision c)
+    {
+        //if we cant land on this layer or the previous landing was on this object, return
+        if (!IsInLayerMask(c.gameObject, landLayers) || lastObjectLandedOn == c.gameObject || !canLand)
+            return;
+
+        ChangeState(ButterflyState.Landed, landedTimeMin, landedTimeMax);
+        Land(c);
+    }
+
+    void Land(Collision c)
+    {
+        canLand = false;
+        lastObjectLandedOn = c.gameObject;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.None;
+        col.enabled = false;
+        transform.parent = c.transform;
+        transform.position += c.contacts[0].normal * -0.05f;
+        rotHelper.rotation = Quaternion.LookRotation(c.contacts[0].point - transform.position, Vector3.up);
+        rotHelper.Rotate(new Vector3(0, 0, Random.Range(-180f, 180f)));
+        anim.SetBool("grounded", true);
+        anim.speed = Random.Range(0.1f, 1.5f);
+        switchStateTime = Random.Range(landedTimeMin, landedTimeMax);
+    }
+
+    void TakeOff()
+    {
+        transform.parent = null;
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        col.enabled = true;
+        rotHelper.rotation = Quaternion.identity;
+        rotHelper.Rotate(new Vector3(50, Random.Range(-180f, 180f), 0));
+        anim.speed = 1;
+        anim.SetBool("grounded", false);
+    }
+
+    public bool IsInLayerMask(GameObject obj, LayerMask layerMask)
+    {
+        return ((layerMask.value & (1 << obj.layer)) > 0);
     }
 }
