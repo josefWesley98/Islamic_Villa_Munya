@@ -46,11 +46,11 @@ public class Door : MonoBehaviour
     public UnityEvent doorReachOpen, doorReachClose;
 
     public Transform temporaryPlayerReferenceDeleteLaterOk;
-    public float interactMinDistance = 1f;
+    public float interactMinDistance = 3f;
     public Rigidbody lockRB;
     void Start()
     {
-        //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
+        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).transform;
         doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
@@ -65,6 +65,10 @@ public class Door : MonoBehaviour
 
     void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
+        //}
         //run only in edit mode
         if (!Application.isPlaying)
         {
