@@ -19,9 +19,11 @@ public class PlayerInteract : MonoBehaviour
     Vector3 destination;
     Vector3 scale;
     Vector3 rotationForSpawn;
+    Vector3 positionOffset;
     bool artifactGenerated = false;
     [SerializeField] NIThirdPersonController controller;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
+    [SerializeField] Transform cameraPos;
     [SerializeField] TMPro.TMP_Text inspect;
     [SerializeField] TMPro.TMP_Text info;
     [SerializeField] GameObject infoObject;
@@ -31,7 +33,6 @@ public class PlayerInteract : MonoBehaviour
     private bool isTouching = false;
     public bool isInspecting = false;
     private bool canInspect = false;
-    private float yOffset = 0;
 
     private void Awake() => playercontrols = new PlayerControls();
 
@@ -63,12 +64,12 @@ public class PlayerInteract : MonoBehaviour
     {
         if(other.GetComponent<InteractalbeObject>())
         {
-            LookAt = other.GetComponent<InteractalbeObject>().GetLookAt();
+            //LookAt = other.GetComponent<InteractalbeObject>().GetLookAt();
             interactableObj = other.GetComponent<InteractalbeObject>();
             objRenderer = other.GetComponent<MeshRenderer>();
             scale = other.GetComponent<InteractalbeObject>().GetScale();
             rotationForSpawn =  other.GetComponent<InteractalbeObject>().GetRotation();
-            yOffset = other.GetComponent<InteractalbeObject>().GetYOffset();
+            positionOffset = other.GetComponent<InteractalbeObject>().GetPositionOffset();
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
             inspect.gameObject.SetActive(true);
@@ -114,6 +115,11 @@ public class PlayerInteract : MonoBehaviour
             controller.ShowCursor();
             objRenderer.enabled = false;
             ASC.enabled = false;
+            cameraPos.position = new Vector3(transform.position.x,transform.position.y + 1.15f, transform.position.z);
+            
+            
+           
+            //cameraPos.localRotation = Quaternion.Euler(cameraPos.localRotation.x, cameraPos.localRotation.y,cameraPos.localRotation.z);
             firstPersonCamera.Priority = 15;
             //closeButton.SetActive(true);
             infoObject.SetActive(true);
@@ -131,15 +137,21 @@ public class PlayerInteract : MonoBehaviour
                     //destination = ray.GetPoint(distFromCam);
                 }
                 Quaternion rotation = Quaternion.identity;
-                destination = new Vector3(destination.x ,destination.y + yOffset,destination.z);
+                destination = new Vector3(destination.x + positionOffset.x,destination.y + positionOffset.y,destination.z + positionOffset.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
                 inspectObject.GetComponent<MeshRenderer>().enabled = true;
                 inspectObject.transform.localScale = scale;
                 inspectObject.transform.eulerAngles = rotationForSpawn;
                 holder = inspectObject;
-                artifactGenerated = true;
-                firstPersonCamera.LookAt = LookAt;
+                artifactGenerated = true;  
+                Vector3 direction =  destination - transform.position;
+                direction.y = 0;
+                // Calculate the target rotation using Quaternion.LookRotation
+                Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+                cameraPos.localRotation = targetRotation;
             }
+              
+                
         }
         else
         {

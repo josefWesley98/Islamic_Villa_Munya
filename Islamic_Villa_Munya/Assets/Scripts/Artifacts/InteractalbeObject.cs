@@ -14,7 +14,7 @@ public class InteractalbeObject : MonoBehaviour
     [SerializeField] private string artifactInfoHard = "Hard";
     [SerializeField] private Vector3 scale = new Vector3(0.35f,0.35f,0.35f);
     [SerializeField] private Vector3 rotation = new Vector3(0,0,0);
-    [SerializeField] private float yOffset = 0;
+    [SerializeField] private Vector3 positinOffset = new Vector3(0,0,0);
     [SerializeField] private GameObject LookAt;
     // Start is called before the first frame update
     void Start()
@@ -57,8 +57,9 @@ public class InteractalbeObject : MonoBehaviour
     {
         return LookAt.transform;
     }
-    public float GetYOffset()
+    public Vector3 GetPositionOffset()
     {
-        return yOffset;
+        return positinOffset;
     }
+
 }

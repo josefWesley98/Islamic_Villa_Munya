@@ -21365,7 +21365,7 @@ Transform:
   - {fileID: 5411004961863073994}
   - {fileID: 85030332068156361}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0.197, y: -90.358, z: 0.481}
 --- !u!1 &676913635502505763
 GameObject:
@@ -98340,9 +98340,10 @@ GameObject:
   - component: {fileID: 8156912261476892061}
   - component: {fileID: 5088214260586426936}
   - component: {fileID: 7023364309254424306}
+  - component: {fileID: 1963364229897306523}
   m_Layer: 0
   m_Name: brass_vase_04_2k
-  m_TagString: Untagged
+  m_TagString: InteractObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98412,6 +98413,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1963364229897306523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8825081442463377191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: Thors mead cup
+  artifactInfoEasy: Easy
+  artifactInfoMedium: Medium
+  artifactInfoHard: Hard
+  scale: {x: 0.35, y: 0.35, z: 0.35}
+  rotation: {x: 0, y: 0, z: 0}
+  yOffset: 0.1
+  LookAt: {fileID: 8825081442463377191}
 --- !u!1 &8826067583476318295
 GameObject:
   m_ObjectHideFlags: 0
