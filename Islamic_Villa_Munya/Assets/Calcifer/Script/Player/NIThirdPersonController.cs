@@ -178,7 +178,6 @@ public class NIThirdPersonController : MonoBehaviour
                 {
                    is_pushable = true;
                    SetPushingCollider();
-                   Debug.Log(is_pushable);
                 }
                 else if (!push)
                 {
@@ -186,7 +185,6 @@ public class NIThirdPersonController : MonoBehaviour
                    //ResetCapsuleCollider();
                    ResetPushCollider();
                    //rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                   Debug.Log(is_pushable);
                 }
             }
             else
@@ -518,17 +516,23 @@ public class NIThirdPersonController : MonoBehaviour
     //Hide cursor function
     public void HideCursor()
     {
-        //Hides cursor while playing
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+       // if(!GameManager.GetPauseCursor())
+        //{
+            //Hides cursor while playing
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        //}
     }
 
     //Show the cursor
     public void ShowCursor()
     {
-        //Shows cursor while playing
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        // if(GameManager.GetPauseCursor())
+        // {
+            //Shows cursor while playing
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        //}
     }
 
     //Function for pushing or pulling object

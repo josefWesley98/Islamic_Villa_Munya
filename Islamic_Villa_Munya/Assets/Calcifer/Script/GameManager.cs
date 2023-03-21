@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     static protected bool player_artefact = false;
     static protected bool has_key = false;
     static protected bool hub_travel = false;
+    static protected bool pause_cursor = false;
 
     Transform PLAYER;
 
@@ -42,6 +43,10 @@ public class GameManager : MonoBehaviour
         hub_travel = val;
     }
 
+    public static void SetPauseCursor(bool val)
+    {
+        pause_cursor = val;
+    }
     //Getters
     public static bool GetArtefactCollected()
     {
@@ -56,6 +61,11 @@ public class GameManager : MonoBehaviour
     public static bool GetHUBTravel()
     {
         return hub_travel;
+    }
+
+    public static bool GetPauseCursor()
+    {
+        return pause_cursor;
     }
 }
 

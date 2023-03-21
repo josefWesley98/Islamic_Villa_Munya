@@ -16,6 +16,7 @@ public class _PauseMenu : MonoBehaviour
     private void Start()
     {
         StartCoroutine(ControlsOff());
+        GameManager.SetPauseCursor(true);
     }
     public void Pause()
     {
@@ -54,10 +55,5 @@ public class _PauseMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         ControlMenu.SetActive(false);
-    }
-
-    public bool getCursor()
-    {
-        return CursorUni;
     }
 }
