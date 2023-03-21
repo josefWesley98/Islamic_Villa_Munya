@@ -275,47 +275,6 @@ public class ClimbingScript : MonoBehaviour
     }
     public void SetNewMovement(Vector3 _newEndPoint)
 	{
-    	
-		// do check for if you are rotated to the wall.
-		// Vector3 rotationTarget = upwardClimbing.GetWallPosition();
-        // rotationTarget.y = 0;
-        // Vector3 targetDir = rotationTarget - transform.localPosition;
-
-        // float angle = Vector3.Angle(transform.forward, targetDir);
-
-        // if(angle < -25 || angle > 25)
-        // {
-        //     doRotate = true;
-        //     slerpPercent = 0.0f;
-        //     startedRotation = false;
-        //     direction = Vector3.zero;
-        //     lookRotation = Quaternion.identity;
-        //     Debug.Log("I am MAking this True.");
-        // }
-        // else
-        // {
-        //     doRotate = false;
-        //     Debug.Log("I am making this false.");
-        // }
-        
-        
-        // if (angle < -25f || angle > 25f)
-        // {
-        //     doRotate = true;
-        //     slerpPercent = 0.0f;
-        //     startedRotation = false;
-        //     direction = Vector3.zero;
-        //     lookRotation = Quaternion.identity;
-        //     Debug.Log("I am Making this True.");
-        // }
-        // else
-        // {
-        //     doRotate = false;
-        //     Debug.Log("I am Making this False.");
-        // }
-		//transform.rotation = Quaternion.Euler()
-		  // Get the direction vector from the first object to the second object
-     
 
         playerLerpStart = transform.position;
         endLerpPoint = _newEndPoint;
@@ -326,7 +285,7 @@ public class ClimbingScript : MonoBehaviour
             //Debug.Log(" looking forward or back");
             if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
@@ -340,7 +299,7 @@ public class ClimbingScript : MonoBehaviour
             //Debug.Log(" looking left or right");
            if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.8f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
             
             }
             if(upwardClimbing.GetMovingDirecionally())
