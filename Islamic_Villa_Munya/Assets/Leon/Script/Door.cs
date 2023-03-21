@@ -46,7 +46,7 @@ public class Door : MonoBehaviour
     public UnityEvent doorReachOpen, doorReachClose;
 
     public Transform temporaryPlayerReferenceDeleteLaterOk;
-    public float interactMinDistance = 3f;
+    float interactMinDistance = 3f;
     public Rigidbody lockRB;
     void Start()
     {
