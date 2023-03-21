@@ -191,6 +191,7 @@ public class NIThirdPersonController : MonoBehaviour
                     if(!force_stop_crouch)
                     {
                         ResetCapsuleCollider();
+                        Debug.Log("First freeze");
                     }
                 }
             }
@@ -330,8 +331,9 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
+
         }
-        else if(grounded && !is_jumping)
+        else if(grounded)
         {
             //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
             rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
@@ -365,6 +367,11 @@ public class NIThirdPersonController : MonoBehaviour
     //Function for jumping
     private void Jump()
     {
+        if(!is_crouching)
+        {
+            rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+        }
+
         if(grounded && !is_crouching && allow_jump && !pushing)
         {
             is_jumping = true;
@@ -380,14 +387,14 @@ public class NIThirdPersonController : MonoBehaviour
                 StartCoroutine(DisableInput(disabled_input_delay));
             }
 
-            // if((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
-            // {
-            //     //Apply the delay before allowing the player to jump
-            //     is_stand_jump_ready = false;
+            if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
+            {
+                //Apply the delay before allowing the player to jump
+                is_stand_jump_ready = false;
 
-            //     Invoke("DelayedJump", stand_jump_delay);
-            // }
-            
+                Invoke("DelayedJump", stand_jump_delay);
+            }
+
             //Run jump
             else if(rb.velocity.magnitude > 0.1f && !is_wall)
             {
@@ -458,7 +465,11 @@ public class NIThirdPersonController : MonoBehaviour
         }
         
         //Reset capsule properties after landing has finished
-        ResetCapsuleCollider();
+        if(hard_landing)
+        {
+            ResetCapsuleCollider();
+            Debug.Log("Second Freeze");
+        }
         input_disabled = false;
         allow_jump = true;
     }
@@ -490,7 +501,7 @@ public class NIThirdPersonController : MonoBehaviour
             //We want to lock the player position axes here
             rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         }
-        else
+        else if(!ready_to_push)
         {
             rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
@@ -537,10 +548,16 @@ public class NIThirdPersonController : MonoBehaviour
 
     private void ResetCapsuleCollider()
     {
+
         is_crouching = false;
         capsule.height = capsule_height;
         capsule.center = new Vector3(0f, capsule_centre, 0f);
         capsule.radius = capsule_radius;
+
+        Debug.Log("Deciding to freeze!");
+        
+        //Use bit mask to stop the player pinging into the air when moving the centre of gravity
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
     }
 
     private void HardLandCapsuleCollider()
