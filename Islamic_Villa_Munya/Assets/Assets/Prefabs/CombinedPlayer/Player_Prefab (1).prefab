@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &282037915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 282037916}
+  m_Layer: 0
+  m_Name: PushCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &282037916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282037915}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3624897577631975427}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3624897576890271516
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,6 +2105,7 @@ Transform:
   m_Children:
   - {fileID: 3624897577003464865}
   - {fileID: 3624897578252071815}
+  - {fileID: 282037916}
   m_Father: {fileID: 3624897577661667848}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2208,7 +2240,7 @@ Animator:
   m_GameObject: {fileID: 3624897577661667851}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: de863433ce58eb14bb994a1a8ac92ef5, type: 3}
-  m_Controller: {fileID: 9100000, guid: aa796e65ff1009c40944cfa1d60be05e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 831a4a37db5d0184f85026602b5de059, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2346,10 +2378,12 @@ MonoBehaviour:
   rb: {fileID: 6086605500300729382}
   capsule: {fileID: 6086605500300729378}
   main_cam_ref: {fileID: 0}
+  hand_hold: {fileID: 0}
   orientation: {fileID: 3624897578252071815}
   feet_pos: {fileID: 3624897577003464865}
   head_pos: {fileID: 3624897577306082700}
   wall_pos: {fileID: 3624897577421484015}
+  push_pos: {fileID: 282037916}
   is_ground:
     serializedVersion: 2
     m_Bits: 72
@@ -2359,6 +2393,9 @@ MonoBehaviour:
   is_a_wall:
     serializedVersion: 2
     m_Bits: 512
+  is_a_pushable:
+    serializedVersion: 2
+    m_Bits: 2048
   ground_drag: 5
   walk_speed: 60
   run_speed: 120
@@ -2423,6 +2460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   firstPersonCamera: {fileID: 0}
+  cameraPos: {fileID: 0}
   inspect: {fileID: 0}
   info: {fileID: 0}
   infoObject: {fileID: 0}
@@ -6069,7 +6107,7 @@ Transform:
   - {fileID: 3624897577661667848}
   - {fileID: 3624897577421484015}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3624897578911155793
 GameObject:

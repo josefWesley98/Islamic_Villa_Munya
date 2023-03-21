@@ -174,19 +174,19 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 grounded = true;
 
-                if (push)
-                {
-                    is_pushable = true;
-                    SetPushingCollider();
-                    Debug.Log(is_pushable);
-                }
-                else if (!push)
-                {
-                    is_pushable = false;
-                    ResetCapsuleCollider();
-                    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                    Debug.Log(is_pushable);
-                }
+                //if (push)
+                //{
+                //    is_pushable = true;
+                //    SetPushingCollider();
+                //    Debug.Log(is_pushable);
+                //}
+                //else if (!push)
+                //{
+                //    is_pushable = false;
+                //    ResetCapsuleCollider();
+                //    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                //    Debug.Log(is_pushable);
+                //}
             }
             else
             {
