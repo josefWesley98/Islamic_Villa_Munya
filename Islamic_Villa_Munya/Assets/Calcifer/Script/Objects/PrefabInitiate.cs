@@ -8,13 +8,14 @@ public class PrefabInitiate : MonoBehaviour
     private bool instantiate = false;
 
     public GameObject artefact;
-
+    public GameObject invisHint;
     // Update is called once per frame
     void Update()
     {
         if(GameManager.GetArtefactCollected())
         {
             artefact.SetActive(true);
+            invisHint.SetActive(false);
             //Instantiate the object at desired location with rotation
 
             //Set the instantiation to false

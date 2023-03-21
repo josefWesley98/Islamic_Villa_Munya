@@ -34,6 +34,7 @@ public class PlayerInteract : MonoBehaviour
     private bool isTouching = false;
     public bool isInspecting = false;
     private bool canInspect = false;
+    GameObject phObject;
 
     private void Awake() => playercontrols = new PlayerControls();
 
@@ -112,6 +113,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 Destroy(holder);
             }
+            phObject = null;
         }
     }
 
@@ -154,18 +156,10 @@ public class PlayerInteract : MonoBehaviour
             
             if(!artifactGenerated)
             {
-                
+                 
                 Quaternion rotation = Quaternion.identity;
                 destination = new Vector3(destination.x + positionOffset.x,destination.y + positionOffset.y,destination.z + positionOffset.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
-                if(inspectObject.GetComponent<MeshRenderer>() != null)
-                {
-                    inspectObject.GetComponent<MeshRenderer>().enabled = true;
-                }
-                if(inspectObject.GetComponent<SkinnedMeshRenderer>() != null)
-                {
-                    inspectObject.GetComponent<SkinnedMeshRenderer>().enabled = true;
-                }
                 inspectObject.transform.localScale = scale;
                 inspectObject.transform.eulerAngles = rotationForSpawn;
                 holder = inspectObject;
@@ -175,9 +169,22 @@ public class PlayerInteract : MonoBehaviour
                 // Calculate the target rotation using Quaternion.LookRotation
                 Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
                 cameraPos.localRotation = targetRotation;
+                phObject = inspectObject;
             }
-              
-                
+            if(phObject.GetComponent<MeshRenderer>() != null)
+            {
+                if(!phObject.GetComponent<MeshRenderer>().enabled)
+                {
+                    phObject.GetComponent<MeshRenderer>().enabled = true;
+                }
+            }
+            if(phObject.GetComponent<SkinnedMeshRenderer>() != null)
+            {
+                if(!phObject.GetComponent<SkinnedMeshRenderer>().enabled)
+                {
+                    phObject.GetComponent<SkinnedMeshRenderer>().enabled = true;
+                }
+            }       
         }
         else
         {
