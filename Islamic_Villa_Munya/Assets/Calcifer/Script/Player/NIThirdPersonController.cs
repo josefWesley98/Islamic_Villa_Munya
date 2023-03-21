@@ -174,19 +174,20 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 grounded = true;
 
-                //if (push)
-                //{
-                //    is_pushable = true;
-                //    SetPushingCollider();
-                //    Debug.Log(is_pushable);
-                //}
-                //else if (!push)
-                //{
-                //    is_pushable = false;
-                //    ResetCapsuleCollider();
-                //    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                //    Debug.Log(is_pushable);
-                //}
+                if (push)
+                {
+                   is_pushable = true;
+                   SetPushingCollider();
+                   Debug.Log(is_pushable);
+                }
+                else if (!push)
+                {
+                   is_pushable = false;
+                   //ResetCapsuleCollider();
+                   ResetPushCollider();
+                   //rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                   Debug.Log(is_pushable);
+                }
             }
             else
             {
@@ -603,6 +604,13 @@ public class NIThirdPersonController : MonoBehaviour
         
         //Use bit mask to stop the player pinging into the air when moving the centre of gravity
         rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+    }
+
+    private void ResetPushCollider()
+    {
+        capsule.height = capsule_height;
+        capsule.center = new Vector3(0f, capsule_centre, 0f);
+        capsule.radius = capsule_radius;
     }
 
     private void HardLandCapsuleCollider()
