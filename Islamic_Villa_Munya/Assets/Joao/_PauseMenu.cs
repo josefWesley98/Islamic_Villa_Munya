@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class _PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject ControlMenu;
     [SerializeField]  private AudioMixer mixer;
+    private bool CursorUni = true;
 
+    private void Start()
+    {
+        StartCoroutine(ControlsOff());
+    }
     public void Pause()
     {
         pauseMenu.SetActive(true);
@@ -35,10 +43,21 @@ public class _PauseMenu : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        if(Input.GetKeyDown(KeyCode.Escape)) 
         {
             Pause();
-            Cursor.visible = true;
+           //Cursor.visible = true;
         }
+    }
+
+    public IEnumerator ControlsOff()
+    {
+        yield return new WaitForSeconds(5f);
+        ControlMenu.SetActive(false);
+    }
+
+    public bool getCursor()
+    {
+        return CursorUni;
     }
 }
