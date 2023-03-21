@@ -28,15 +28,15 @@ public class Insect : MonoBehaviour
     public LayerMask landLayers;
 
     public Collider pointOfInterest;
-    bool visitedPOI = false;
+    bool visitedPOI = true;
     float minVisitedDistance = 1f;
     int poiCounter = 0;
     public int poiCountAmount = 10;
     float forgetPOITimer = 0f;
-    public float poiMemory = 10f;
-
+    public float poiMemoryMax = 20f;
+    float poiMemory;
     Transform rotHelper;
-    float rotSpeed = 0.002f;
+    float rotSpeed = 0.004f;
 
     void Start()
     {
@@ -49,6 +49,8 @@ public class Insect : MonoBehaviour
 
         if (pointOfInterest == null)
             visitedPOI = true;
+
+        poiMemory = Random.Range(poiMemoryMax / 2, poiMemoryMax);
 
         TakeOff();
     }
@@ -141,22 +143,7 @@ public class Insect : MonoBehaviour
                 }
 
                 break;
-
-                //rb.AddTorque(Vector3.up * Random.Range(-0.01f, 0.01f));
         }
-
-        //if (visitedPOIAlready)
-        //{
-        //    forgetPOITimer += Time.deltaTime;
-        //    if (forgetPOITimer > memoryPOI)
-        //    {
-        //        forgetPOITimer = 0;
-        //        visitedPOIAlready = false;
-        //    }
-        //}
-
-        //transform.Rotate(new Vector3(0, 0, 1));
-        //transform.rotation = Quaternion.LookRotation(pointOfInterest.transform.position - transform.position, Vector3.up);
     }
 
     void ChangeState(ButterflyState _state, float _minTimeInState = 0, float _maxTimeInState = 0)
@@ -178,13 +165,6 @@ public class Insect : MonoBehaviour
 
     void Land(Collision c)
     {
-        //if (c.collider == pointOfInterest)
-        //{
-        //    if (visitedPOIAlready)
-        //        return;
-        //    else
-        //        visitedPOIAlready = true;
-        //}
         canLand = false;
         lastObjectLandedOn = c.gameObject;
         rb.velocity = Vector3.zero;
@@ -197,6 +177,7 @@ public class Insect : MonoBehaviour
         rotHelper.rotation = Quaternion.LookRotation(c.contacts[0].point - transform.position, Vector3.up);
         rotHelper.Rotate(new Vector3(0, 0, Random.Range(-180f, 180f)));
         anim.SetBool("grounded", true);
+        anim.speed = Random.Range(0.1f, 1.5f);
         switchStateTime = Random.Range(landedTimeMin, landedTimeMax);
     }
 
@@ -208,6 +189,7 @@ public class Insect : MonoBehaviour
         col.enabled = true;
         rotHelper.rotation = Quaternion.identity;
         rotHelper.Rotate(new Vector3(50, Random.Range(-180f, 180f), 0));
+        anim.speed = 1;
         anim.SetBool("grounded", false);
     }
 

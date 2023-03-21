@@ -175,7 +175,7 @@ Transform:
   m_GameObject: {fileID: 1755655630267655337}
   m_LocalRotation: {x: -0.7071069, y: 0.7071067, z: -0.00012251733, w: 0.00012454389}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.03}
+  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1169069237434420398}
@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 3223793138454786454}
   - component: {fileID: 6700045575214096299}
   - component: {fileID: 891223790930886540}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: ButterflyPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +455,7 @@ Transform:
   - {fileID: 4656323390176398398}
   - {fileID: 5912975649106200235}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3223793138454786454
 MonoBehaviour:
@@ -480,7 +480,7 @@ MonoBehaviour:
     m_Bits: 577
   pointOfInterest: {fileID: 0}
   poiCountAmount: 100
-  poiMemory: 30
+  poiMemory: 20
 --- !u!54 &6700045575214096299
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -508,7 +508,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.08
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5355037159814916714
 GameObject:
