@@ -13,6 +13,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private CapsuleCollider capsule;
     [SerializeField] private PlayerControls controls;
     [SerializeField] private ThirdPersonCam main_cam_ref;
+    [SerializeField] private Transform hand_hold;
     private GameObject pop_obj;
     Keyboard kb;
     InputAction hide_cursor;
@@ -27,6 +28,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private Transform feet_pos;
     [SerializeField] private Transform head_pos;
     [SerializeField] private Transform wall_pos;
+    [SerializeField] private Transform push_pos;
 
     private Vector3 input;
     private Vector3 move_dir;
@@ -35,10 +37,13 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private LayerMask is_ground;
     [SerializeField] private LayerMask is_ceiling;
     [SerializeField] private LayerMask is_a_wall;
+    [SerializeField] private LayerMask is_a_pushable;
 
     private bool grounded;
     private bool is_roof;
     private bool is_wall;
+    private bool is_pushable;
+    private bool push;
     private bool is_running = false;
     private bool is_crouching = false;
     private bool is_jumping = false;
@@ -50,6 +55,7 @@ public class NIThirdPersonController : MonoBehaviour
     private bool allow_jump = true;
     private bool artefact_collected;
     private bool pushing = false;
+    private bool currently_pushing = false;
     private bool ready_to_push = false;
 
     [Header("Movement")]
@@ -133,9 +139,9 @@ public class NIThirdPersonController : MonoBehaviour
         }
 
         //Use input actions to call necessary functions for player functionality
+
         hide_cursor.started += _ => HideCursor();
         show_cursor.started += _ => ShowCursor();
-
     }
 
     private void OnDisable() 
@@ -161,12 +167,26 @@ public class NIThirdPersonController : MonoBehaviour
             bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
             bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
-
+            push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
 
             //If the player is on the floor then set grounded to true and allow for movement and jumping
-            if(floor)
+            if (floor)
             {
                 grounded = true;
+
+                if (push)
+                {
+                    is_pushable = true;
+                    SetPushingCollider();
+                    Debug.Log(is_pushable);
+                }
+                else if (!push)
+                {
+                    is_pushable = false;
+                    ResetCapsuleCollider();
+                    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                    Debug.Log(is_pushable);
+                }
             }
             else
             {
@@ -275,12 +295,32 @@ public class NIThirdPersonController : MonoBehaviour
     {
         ready_to_push = false;
 
-        if (other.gameObject.GetComponent<PushOrPull>() != null)
+        if (other.gameObject.GetComponent<PushOrPull>() != null && push)
         {
             ready_to_push = true;
             //Call the game object function to set it's transform as that of the child of the player
+            Vector3 direction = other.transform.position - transform.position;
+
+            // Set the y component to 0 to ensure only rotation around the y-axis
+            direction.y = 0;
+
+            // Calculate the target rotation using Quaternion.LookRotation
+            Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+            transform.localRotation = targetRotation;
+
             pop_obj = other.gameObject;
             pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
+            currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
+
+            /*Joe's Code*/
+            //Change the collider properties if the player is PoPing
+            if(currently_pushing)
+            {
+
+                /*Joe's Code ends*/
+
+                SetPushingCollider();
+            }
         }
     }
 
@@ -546,6 +586,13 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
+    private void SetPushingCollider()
+    {
+        capsule.height = 1f;
+        capsule.center = new Vector3(0f, 0.3f, 0.3f);
+        capsule.radius = 0.3f;
+    }
+
     private void ResetCapsuleCollider()
     {
 
@@ -553,8 +600,6 @@ public class NIThirdPersonController : MonoBehaviour
         capsule.height = capsule_height;
         capsule.center = new Vector3(0f, capsule_centre, 0f);
         capsule.radius = capsule_radius;
-
-        Debug.Log("Deciding to freeze!");
         
         //Use bit mask to stop the player pinging into the air when moving the centre of gravity
         rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
@@ -611,7 +656,7 @@ public class NIThirdPersonController : MonoBehaviour
 
     public bool GetPushOrPull()
     {
-        return pushing;
+        return currently_pushing;
     }
 
     public bool GetRunning()
@@ -623,10 +668,7 @@ public class NIThirdPersonController : MonoBehaviour
     {
         return allow_jump;
     }
-    public void SetIsClimbing(bool change)
-    {
-        isClimbing = change;
-    }
+
     public bool GetIsClimbing()
     {
         return isClimbing;
@@ -637,10 +679,19 @@ public class NIThirdPersonController : MonoBehaviour
         return artefact_collected;
     }
 
+    public Transform GetHold()
+    {
+        return hand_hold;
+    }
+
     //Setters
     public void SetArtefactCollected(bool val)
     {
         artefact_collected = val;
+    }
+    public void SetIsClimbing(bool change)
+    {
+        isClimbing = change;
     }
 }
 

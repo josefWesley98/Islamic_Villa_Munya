@@ -21,6 +21,7 @@ public class AnimationStateController : MonoBehaviour
     private int crouch_layer_index;
     private int jump_layer_index;
     private int movementLayerIndex;
+    private int pushing_layer_index;
     private float crouch_weight = 10f;
     private float weight = 0f;
     private float stand_jump_time = 0f;
@@ -65,6 +66,7 @@ public class AnimationStateController : MonoBehaviour
         crouch_layer_index = animator.GetLayerIndex("Crouching");
         jump_layer_index = animator.GetLayerIndex("Jumping");
         movementLayerIndex = animator.GetLayerIndex("Movement");
+        pushing_layer_index = animator.GetLayerIndex("Pushing");
 
         //Get the animation times for specific animations
         UpdateAnimTimes();
@@ -267,12 +269,31 @@ public class AnimationStateController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //Variables - Player Control
-        //Get key input using newer input system
+        bool forward_pressed = kb.wKey.isPressed;
+        bool left_pressed = kb.aKey.isPressed;
+        bool right_pressed = kb.dKey.isPressed;
+        bool run_pressed = kb.leftShiftKey.isPressed;
+        bool backward_pressed = kb.sKey.isPressed;
+        bool crouch_pressed = controller_ref.GetCrouching();
+        bool jump_pressed = kb.spaceKey.isPressed;
 
+        bool is_grounded = controller_ref.GetGrounded();
+        rb_vel = controller_ref.GetRBVelocity(rb_vel);
 
-        //animator.SetBool("IsClimbing", controller_ref.GetIsClimbing());
-        if(controller_ref.GetIsClimbing())
+        if(controller_ref.GetPushOrPull())
+        {
+            animator.SetLayerWeight(movementLayerIndex, 0.0f);
+            animator.SetLayerWeight(pushing_layer_index, 1f);
+            animator.SetLayerWeight(crouch_layer_index, 1f);
+        }
+        else
+        {
+            animator.SetLayerWeight(pushing_layer_index, 0f);
+            animator.SetLayerWeight(crouch_layer_index, 0f);
+            animator.SetLayerWeight(movementLayerIndex, 1f);
+        }
+
+        if (controller_ref.GetIsClimbing())
         {
             animator.SetLayerWeight(climbLayerIndex, 1.0f);
             animator.SetLayerWeight(movementLayerIndex, 0.0f);
@@ -285,17 +306,6 @@ public class AnimationStateController : MonoBehaviour
             animator.SetLayerWeight(movementLayerIndex, 1.0f);
         }
 
-        bool forward_pressed = kb.wKey.isPressed;
-        bool left_pressed = kb.aKey.isPressed;
-        bool right_pressed = kb.dKey.isPressed;
-        bool run_pressed = kb.leftShiftKey.isPressed;
-        bool backward_pressed = kb.sKey.isPressed;
-        bool crouch_pressed = controller_ref.GetCrouching();
-        bool jump_pressed = kb.spaceKey.isPressed;
-
-        bool is_grounded = controller_ref.GetGrounded();
-        rb_vel = controller_ref.GetRBVelocity(rb_vel);
-
         //Set current max_vel
         float current_max_vel = run_pressed ? max_run_vel : max_walk_vel;
 
@@ -304,31 +314,34 @@ public class AnimationStateController : MonoBehaviour
         LockOrResetVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
 
         //When the player presses crouch, set the layer weight to 1        
-        if(crouch_pressed)
+        if(!controller_ref.GetPushOrPull())
         {
-            //Increment the weight of the crouch
-            if(weight >= -0.5)
+            if (crouch_pressed)
             {
-                weight += Time.deltaTime * crouch_weight;
+                //Increment the weight of the crouch
+                if (weight >= -0.5)
+                {
+                    weight += Time.deltaTime * crouch_weight;
+                }
+                animator.SetLayerWeight(crouch_layer_index, weight);
             }
-            animator.SetLayerWeight(crouch_layer_index, weight);
+
+            //Return the layer weight to 0 when the player releases the crouch button
+            if (!crouch_pressed)
+            {
+                //Decrement the weight of the crouch
+                if (weight > 0f)
+                {
+                    weight -= Time.deltaTime * crouch_weight;
+                }
+                animator.SetLayerWeight(crouch_layer_index, weight);
+            }
         }
 
-        //Return the layer weight to 0 when the player releases the crouch button
-        if(!crouch_pressed)
-        {
-            //Decrement the weight of the crouch
-            if(weight > 0f)
-            {
-                weight -= Time.deltaTime * crouch_weight;
-            }
-            animator.SetLayerWeight(crouch_layer_index, weight);
-        }
-        
-        if(rb_vel.y > 0f)
+        if (rb_vel.y > 0f)
         {
             //If the player is able to jump then play the animations relevant to the velocity of the player
-            if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+            if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
             {
                 animator.SetBool("IsJumping", true);
                 run_jump = true;
@@ -346,7 +359,7 @@ public class AnimationStateController : MonoBehaviour
         }
         
         //Rigidody velocity will not be above the threshold
-        if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)))
+        if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
         {
             if(!currently_jumping)
             {
@@ -373,22 +386,6 @@ public class AnimationStateController : MonoBehaviour
                 run_jump = false;
             }
         }
-        
-        // if (stand_jump)
-        // {
-        //     run_jump = false;
-
-        //     Debug.Log("Stnading jump");
-        //     j_timer_stand -= Time.deltaTime;
-        //     if(j_timer_stand <= 0)
-        //     {
-        //         animator.SetBool("IsJumping", false);
-        //         stand_jump = false;
-        //         currently_jumping = false;
-        //     }
-
-        // }
-
 
         //Is the player falling? Play animation if they are
         if(!stand_jump && !run_jump && !is_grounded)
