@@ -28,7 +28,7 @@ public class Insect : MonoBehaviour
     public LayerMask landLayers;
 
     public Collider pointOfInterest;
-    bool visitedPOI = true;
+    bool visitedPOI = false;
     float minVisitedDistance = 1f;
     int poiCounter = 0;
     public int poiCountAmount = 10;
@@ -51,7 +51,7 @@ public class Insect : MonoBehaviour
             visitedPOI = true;
 
         poiMemory = Random.Range(poiMemoryMax / 2, poiMemoryMax);
-
+        print(poiMemory);
         TakeOff();
     }
 
@@ -79,7 +79,7 @@ public class Insect : MonoBehaviour
                     forgetPOITimer += Time.deltaTime;
                     if(forgetPOITimer > poiMemory)
                         visitedPOI = false;
-                    print("reset timer : " + forgetPOITimer);
+                    //print("reset timer : " + forgetPOITimer);
                 }
 
                 stateTimer += Time.deltaTime;
@@ -131,7 +131,7 @@ public class Insect : MonoBehaviour
                     {
                         poiCounter++;
                         //visitedPOI = true;
-                        print("visited poi! + " + poiCounter);            
+                        //print("visited poi! + " + poiCounter);            
                     }
 
                     if(poiCounter > poiCountAmount)
