@@ -19,8 +19,8 @@ public class PickedUp : MonoBehaviour
                 is_picked = true;
 
                 //Set the player collected bool to true
-                //GameManager.SetArtefactCollected(false);
-                
+                GameManager.SetArtefactCollected(true);
+                GameManager.SetHUBTravel(true);
                 //Destroy the game object when picked up
                 Destroy(gameObject);
             }
