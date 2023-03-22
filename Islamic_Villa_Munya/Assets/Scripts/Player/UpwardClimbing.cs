@@ -233,7 +233,7 @@ public class UpwardClimbing : MonoBehaviour
 
             if(chosenReference == 2)
             {
-                 middlePoint = GetMiddlePoint(targetSpotLeftHand.position, downwardClimbing.GetCurrentSpotLeftFoot());
+                 middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
                  Debug.Log("moving left");
                  
             }
