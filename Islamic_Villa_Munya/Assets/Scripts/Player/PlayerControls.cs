@@ -134,6 +134,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""12b3e919-b0d7-4557-b6b1-ca5fd40ebfe9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -453,6 +462,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Push/Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c0658ec-db5c-4219-939e-e89ab08dea4a"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1052,6 +1072,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_ShowCursor = m_Player.FindAction("ShowCursor", throwIfNotFound: true);
         m_Player_ToggleRun = m_Player.FindAction("ToggleRun", throwIfNotFound: true);
         m_Player_PushPull = m_Player.FindAction("Push/Pull", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1135,6 +1156,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShowCursor;
     private readonly InputAction m_Player_ToggleRun;
     private readonly InputAction m_Player_PushPull;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1151,6 +1173,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ShowCursor => m_Wrapper.m_Player_ShowCursor;
         public InputAction @ToggleRun => m_Wrapper.m_Player_ToggleRun;
         public InputAction @PushPull => m_Wrapper.m_Player_PushPull;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1196,6 +1219,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PushPull.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
                 @PushPull.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
                 @PushPull.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushPull;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1236,6 +1262,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PushPull.started += instance.OnPushPull;
                 @PushPull.performed += instance.OnPushPull;
                 @PushPull.canceled += instance.OnPushPull;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -1404,6 +1433,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnShowCursor(InputAction.CallbackContext context);
         void OnToggleRun(InputAction.CallbackContext context);
         void OnPushPull(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
