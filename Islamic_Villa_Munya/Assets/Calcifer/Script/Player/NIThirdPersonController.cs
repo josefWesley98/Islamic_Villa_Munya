@@ -209,7 +209,7 @@ public class NIThirdPersonController : MonoBehaviour
                     bool force_stop_crouch = kb.leftCtrlKey.isPressed;
                     if(!force_stop_crouch)
                     {
-                        ResetCapsuleCollider();
+                        //ResetCapsuleCollider();
                         Debug.Log("First freeze");
                     }
                 }
@@ -270,7 +270,7 @@ public class NIThirdPersonController : MonoBehaviour
                 float disable_input = animator_ref.GetHardLandAnimTime();
                 StartCoroutine(DisableInput(disable_input));
 
-                HardLandCapsuleCollider();
+                //HardLandCapsuleCollider();
             }
         }
         else
@@ -360,7 +360,7 @@ public class NIThirdPersonController : MonoBehaviour
             }
 
             //If the player is running
-            if (is_running && !is_crouching && !pushing)
+            if (is_running && !is_crouching)
             {
                 rb.AddForce(move_dir.normalized * run_speed * 10, ForceMode.Force);
             }
@@ -506,7 +506,7 @@ public class NIThirdPersonController : MonoBehaviour
         //Reset capsule properties after landing has finished
         if(hard_landing)
         {
-            ResetCapsuleCollider();
+            //ResetCapsuleCollider();
             Debug.Log("Second Freeze");
         }
         input_disabled = false;
@@ -577,16 +577,16 @@ public class NIThirdPersonController : MonoBehaviour
             if(crouch.started)
             {
                 is_crouching = true;
-                capsule.height = capsule_height / 2;
-                capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
-                capsule.radius = capsule_radius * 2;
+                //capsule.height = capsule_height / 2;
+                //capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+                //capsule.radius = capsule_radius * 2;
             }
             if(crouch.canceled && !is_roof)
             {
                 is_crouching = false;
-                capsule.height = capsule_height;
-                capsule.center = new Vector3(0f, capsule_centre, 0f);
-                capsule.radius = capsule_radius;
+                //capsule.height = capsule_height;
+                //capsule.center = new Vector3(0f, capsule_centre, 0f);
+                //capsule.radius = capsule_radius;
             }
         }
     }
