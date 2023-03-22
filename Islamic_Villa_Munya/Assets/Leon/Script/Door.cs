@@ -50,7 +50,7 @@ public class Door : MonoBehaviour
     public Rigidbody lockRB;
     void Start()
     {
-        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).transform;
+        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
         doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
