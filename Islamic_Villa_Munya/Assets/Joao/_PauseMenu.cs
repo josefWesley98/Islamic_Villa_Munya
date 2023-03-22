@@ -24,7 +24,7 @@ public class _PauseMenu : MonoBehaviour
         GameManager.SetPauseCursor(CursorUni);
         Cursor.visible = false;
         controls = new PlayerControls();
-        DontDestroyOnLoad(this.gameObject);
+        
     }
 
     private void OnEnable()
