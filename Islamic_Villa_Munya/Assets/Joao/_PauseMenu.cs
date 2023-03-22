@@ -12,7 +12,8 @@ public class _PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject ControlMenu;
-    [SerializeField]  private AudioMixer mixer;
+    [SerializeField] private AudioMixer Mixer;
+    [SerializeField] private AudioSource AudioSource;
 
     [SerializeField] private PlayerControls controls;
     InputAction pause;
@@ -69,7 +70,7 @@ public class _PauseMenu : MonoBehaviour
 
     public void SetLevel (float sliderValue)
     {
-        mixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
+        Mixer.SetFloat("Volume", Mathf.Log10(sliderValue) * 20);
     }
     private void Update()
     {

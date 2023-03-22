@@ -8,7 +8,8 @@ public class MainMenu : MonoBehaviour
 {
     //[SerializeField] SpawnAudioPrefabs SpawnAudio;
     // Get AudioManager for audio spawning
-    [SerializeField] private AudioMixer mixer;
+    [SerializeField] private AudioMixer Mixer;
+    [SerializeField] private AudioSource AudioSource;
 
 
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
@@ -28,6 +29,6 @@ public class MainMenu : MonoBehaviour
 
     public void SetLevel(float sliderValue)
     {
-        mixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
+        Mixer.SetFloat("Volume", Mathf.Log10(sliderValue) * 20);
     }
 }
