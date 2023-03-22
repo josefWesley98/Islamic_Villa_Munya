@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     // Get AudioManager for audio spawning
     [SerializeField] private AudioMixer mixer;
 
+
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
     {
         SceneManager.LoadScene("IraklisScene");  

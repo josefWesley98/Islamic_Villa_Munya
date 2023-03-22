@@ -440,7 +440,7 @@ public class AIController2 : MonoBehaviour
         if(currentJob == "Socialising")
         {
 
-            if(!hasSocialPartner && arrivedAtDestination && !partnerHasArrived && !soundFix)
+            if(!hasSocialPartner && arrivedAtDestination && !partnerHasArrived /*&& !soundFix*/)
             {
                 
                 bool check = manager.CheckIfHasSocialPartner(id, currentLocation, currentWaypointPos);
@@ -475,7 +475,7 @@ public class AIController2 : MonoBehaviour
                 actionTimer += Time.deltaTime;
                 doSocialAnim = true;
                 // do audio.
-                if(doSocialAudio && doAudio && !soundFix)
+                if(doSocialAudio && doAudio /*&& !soundFix*/)
                 {
                     int rand = Random.Range(0,2);
                     spawnAudioPrefabs.spawnAudioPrefab(id, rand);
