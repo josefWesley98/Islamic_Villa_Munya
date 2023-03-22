@@ -12,6 +12,7 @@ public class _PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject ControlMenu;
+    [SerializeField] GameObject ControlMenu2;
     [SerializeField] private AudioMixer Mixer;
     [SerializeField] private AudioSource AudioSource;
 
@@ -105,7 +106,8 @@ public class _PauseMenu : MonoBehaviour
 
     public IEnumerator ControlsOff()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(6f);
         ControlMenu.SetActive(false);
+        ControlMenu2.SetActive(false);
     }
 }
