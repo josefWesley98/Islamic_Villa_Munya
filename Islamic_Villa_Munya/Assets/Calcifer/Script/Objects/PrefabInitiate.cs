@@ -15,7 +15,7 @@ public class PrefabInitiate : MonoBehaviour
         if(GameManager.GetArtefactCollected())
         {
             artefact.SetActive(true);
-            invisHint.SetActive(false);
+            Destroy(invisHint);
             //Instantiate the object at desired location with rotation
 
             //Set the instantiation to false
