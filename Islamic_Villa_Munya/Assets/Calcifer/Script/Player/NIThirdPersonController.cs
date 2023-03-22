@@ -372,7 +372,7 @@ public class NIThirdPersonController : MonoBehaviour
             }
 
         }
-        else if(grounded)
+        else if(grounded && !currently_pushing)
         {
             //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
             rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
@@ -516,23 +516,23 @@ public class NIThirdPersonController : MonoBehaviour
     //Hide cursor function
     public void HideCursor()
     {
-       // if(!GameManager.GetPauseCursor())
-        //{
+        if (!GameManager.GetPauseCursor())
+        {
             //Hides cursor while playing
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        //}
+        }
     }
 
     //Show the cursor
     public void ShowCursor()
     {
-        // if(GameManager.GetPauseCursor())
-        // {
+        if (GameManager.GetPauseCursor())
+        {
             //Shows cursor while playing
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-        //}
+        }
     }
 
     //Function for pushing or pulling object
