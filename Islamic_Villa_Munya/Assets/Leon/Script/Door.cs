@@ -65,10 +65,16 @@ public class Door : MonoBehaviour
 
     void Update()
     {
+        //failsafe
+        if (unlockNextPress && temporaryPlayerReferenceDeleteLaterOk == null)
+        {
+            Destroy(gameObject);
+        }
+
         if (Input.GetKeyDown(KeyCode.F))
         {
         }
-        print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
+        //print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
         //run only in edit mode
         if (!Application.isPlaying)
         {
