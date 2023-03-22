@@ -577,7 +577,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 0}
-  interactMinDistance: 1
   lockRB: {fileID: 0}
 --- !u!95 &51524870
 Animator:
@@ -1583,7 +1582,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 0}
-  interactMinDistance: 1
   lockRB: {fileID: 0}
 --- !u!1 &126848169
 GameObject:
@@ -14392,9 +14390,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f5e967d856c40e4b9b1b263ea370f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeTargetTimeMin: 1
-  changeTargetTimeMax: 4
-  forceMult: 100
+  dirForceMult: 2
+  changeDirTimeMin: 1
+  changeDirTimeMax: 4
+  landedTimeMin: 5
+  landedTimeMax: 12
+  landCooldownTime: 5
+  landLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  pointOfInterest: {fileID: 0}
+  poiCountAmount: 10
+  poiMemoryMax: 20
 --- !u!1 &585634251
 GameObject:
   m_ObjectHideFlags: 0
@@ -17673,7 +17680,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 0}
-  interactMinDistance: 1
   lockRB: {fileID: 0}
 --- !u!95 &793532978
 Animator:
@@ -23699,7 +23705,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 0}
-  interactMinDistance: 1
   lockRB: {fileID: 0}
 --- !u!1 &1110091837
 GameObject:
@@ -44963,3 +44968,21 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 591339339}
   m_SourcePrefab: {fileID: 100100000, guid: 380466530f66ff2438320e8815605e49, type: 3}
+--- !u!1 &8109706170101700776 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2312924108551504400, guid: 380466530f66ff2438320e8815605e49,
+    type: 3}
+  m_PrefabInstance: {fileID: 8109706170101700775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8109706170101700777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8109706170101700776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831e8888ffcf009499b69f310d539ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
