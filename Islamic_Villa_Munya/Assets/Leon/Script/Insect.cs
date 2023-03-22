@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Insect : MonoBehaviour
 {
@@ -37,8 +38,30 @@ public class Insect : MonoBehaviour
     float poiMemory;
     Transform rotHelper;
     float rotSpeed = 0.004f;
+    bool setUpComplete = false;
+    Rigidbody playerRB;
 
     void Start()
+    {
+
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Invoke(nameof(SetUp), 1f);
+    }
+
+    private void SetUp()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
@@ -51,8 +74,9 @@ public class Insect : MonoBehaviour
             visitedPOI = true;
 
         poiMemory = Random.Range(poiMemoryMax / 2, poiMemoryMax);
-        print(poiMemory);
+        //print(poiMemory);
         TakeOff();
+        setUpComplete = true;
     }
 
     enum ButterflyState
@@ -66,6 +90,9 @@ public class Insect : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!setUpComplete)
+            return;
+
         transform.rotation = Quaternion.Slerp(transform.rotation, rotHelper.rotation, Time.time * rotSpeed);
 
         switch (state)
@@ -100,6 +127,14 @@ public class Insect : MonoBehaviour
             case ButterflyState.Landed:
 
                 stateTimer += Time.deltaTime;
+
+                if(playerRB != null)
+                {
+                    //print(playerRB.velocity.magnitude);
+
+                    if (playerRB.velocity.magnitude > 2)
+                        stateTimer = 999f;
+                }
 
                 if (stateTimer > switchStateTime)
                 {
@@ -156,10 +191,16 @@ public class Insect : MonoBehaviour
     private void OnCollisionEnter(Collision c)
     {
         //if we cant land on this layer or the previous landing was on this object, return
+        if (c.gameObject.tag == "Player")
+            playerRB = c.gameObject.GetComponent<Rigidbody>();
+        else
+            playerRB = null;
+
         if (!IsInLayerMask(c.gameObject, landLayers) || lastObjectLandedOn == c.gameObject || !canLand)
             return;
 
         ChangeState(ButterflyState.Landed, landedTimeMin, landedTimeMax);
+
         Land(c);
     }
 
