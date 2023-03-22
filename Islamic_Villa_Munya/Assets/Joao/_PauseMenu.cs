@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
@@ -11,7 +13,33 @@ public class _PauseMenu : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject ControlMenu;
     [SerializeField]  private AudioMixer mixer;
-    private bool CursorUni = true;
+
+    [SerializeField] private PlayerControls controls;
+    InputAction pause;
+    private bool CursorUni = false;
+
+    private void Awake()
+    {
+        //Assign the new input controller
+        GameManager.SetPauseCursor(CursorUni);
+        Cursor.visible = false;
+        controls = new PlayerControls();
+    }
+
+    private void OnEnable()
+    {
+        //Initialise the controls and assign to input actions
+        controls.Enable();
+
+        pause = controls.Player.Pause;
+
+        pause.performed += _ => SetCursor(_);
+    }
+
+    private void OnDisable()
+    {
+        pause.Disable();
+    }
 
     private void Start()
     {
@@ -44,11 +72,33 @@ public class _PauseMenu : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) 
+        if(CursorUni)
         {
-            Pause();
-           //Cursor.visible = true;
+            if(pause.triggered)
+            {
+                CursorUni = false;
+                GameManager.SetPauseCursor(CursorUni);
+                Debug.Log(CursorUni);
+                Resume();
+            }
         }
+        else
+        {
+            if(pause.triggered)
+            {
+                CursorUni = true;
+                GameManager.SetPauseCursor(CursorUni);
+                Debug.Log(CursorUni);
+                Pause();
+            }
+        }
+    }
+
+    //Set the cursor here for gamemanager so the player can access it
+    private void SetCursor(InputAction.CallbackContext cursor)
+    {
+        //Placeholder
+        Debug.Log("Boo!");
     }
 
     public IEnumerator ControlsOff()
