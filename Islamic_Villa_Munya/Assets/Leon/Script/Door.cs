@@ -50,14 +50,14 @@ public class Door : MonoBehaviour
     public Rigidbody lockRB;
     void Start()
     {
-        temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform;
+        //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1);
         doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
         //on game start, make a hinge for this door object
         if (Application.isPlaying)
         {
-            Invoke(nameof(CreateDoorParent), 3f);
+            Invoke(nameof(CreateDoorParent), 20f);
             //print("ok");
             //CreateDoorParent();
         }
@@ -65,10 +65,10 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.F))
-        //{
-        //    print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
-        //}
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+        }
+        print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
         //run only in edit mode
         if (!Application.isPlaying)
         {
