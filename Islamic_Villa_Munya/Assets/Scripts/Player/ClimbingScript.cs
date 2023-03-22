@@ -239,7 +239,7 @@ public class ClimbingScript : MonoBehaviour
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.1f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.2f, endLerpPoint.z + climbOffset);
 
             }
             //Debug.Log(" looking left or right");
@@ -289,7 +289,7 @@ public class ClimbingScript : MonoBehaviour
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.1f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.2f, endLerpPoint.z + climbOffset);
             }
         }
 
@@ -304,7 +304,7 @@ public class ClimbingScript : MonoBehaviour
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.1f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.2f, endLerpPoint.z + climbOffset);
             }
         }
         //endLerpPoint.position = new Vector3(endLerpPoint.position.x - 0.15f , endLerpPoint.position.y , endLerpPoint.position.z);
