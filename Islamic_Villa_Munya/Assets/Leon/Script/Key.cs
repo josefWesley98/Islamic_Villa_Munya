@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Key : MonoBehaviour
@@ -5,10 +6,15 @@ public class Key : MonoBehaviour
     public Door doorToUnlock;
     float startY;
     bool triggered = false;
-
+    public AudioClip pickupAudio;
+    AudioSource pickupAudioSource;
     private void Start()
     {
         startY = transform.position.y;
+
+        pickupAudioSource = transform.AddComponent<AudioSource>();
+        pickupAudioSource.clip = pickupAudio;
+        pickupAudioSource.spatialBlend = 1f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +28,8 @@ public class Key : MonoBehaviour
         transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
         transform.GetChild(1).transform.GetComponent<ParticleSystem>().Play();
         triggered = true;
+        pickupAudioSource.Play();
+
         Destroy(gameObject, 2f);
     }
 

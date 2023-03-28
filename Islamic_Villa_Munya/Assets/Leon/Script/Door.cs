@@ -33,6 +33,7 @@ public class Door : MonoBehaviour
     public bool locked = false;
     public bool unlockNextPress = false;
 
+
     Vector3 doorToHingeVector = Vector3.forward;
     GameObject hinge, hingeOpenTarget, hingeClosedTarget;
     Vector3 hingePos;
@@ -48,6 +49,8 @@ public class Door : MonoBehaviour
     public Transform temporaryPlayerReferenceDeleteLaterOk;
     float interactMinDistance = 3f;
     public Rigidbody lockRB;
+    public AudioClip unlockAudio;
+    AudioSource unlockAudioSource;
     void Start()
     {
         //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1);
@@ -90,6 +93,7 @@ public class Door : MonoBehaviour
                 {
                     print("toggling open");
                     //play unlock sound
+                    unlockAudioSource.Play();
                     lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
                     lockRB.transform.parent = null;
                     lockRB.isKinematic = false;
@@ -218,6 +222,10 @@ public class Door : MonoBehaviour
         hingeOpenTarget.hideFlags = HideFlags.HideInHierarchy;
 
         transform.parent = hinge.transform;
+
+        unlockAudioSource = transform.AddComponent<AudioSource>();
+        unlockAudioSource.clip = unlockAudio;
+        unlockAudioSource.spatialBlend = 1f;
     }
 
     //editor helpers

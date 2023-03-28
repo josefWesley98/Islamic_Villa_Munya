@@ -9,11 +9,12 @@ public class PlayerAudio : MonoBehaviour
 {
     public AudioClip[] stepTileClips;
     List<AudioSource> stepTileSources = new List<AudioSource>();
+    public float stepTileVolume = 0.25f;
 
-    public float stepTimeVolume = 0.25f;
 
     public AudioClip[] stepCarpetClips;
     List<AudioSource> stepCarpetSources = new List<AudioSource>();
+    public float stepCarpetVolume = 0.25f;
 
     GameObject player;
     NIThirdPersonController pController;
@@ -35,7 +36,7 @@ public class PlayerAudio : MonoBehaviour
     bool onTile = true;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
         transform.parent = player.transform;
         transform.position = player.transform.position;
 
@@ -49,7 +50,7 @@ public class PlayerAudio : MonoBehaviour
             AudioSource a = transform.AddComponent<AudioSource>();
             a.clip = stepTileClips[i];
             a.spatialBlend = 1f;
-            a.volume = stepTimeVolume;
+            a.volume = stepTileVolume;
             stepTileSources.Add(a);
         }
 
@@ -58,6 +59,7 @@ public class PlayerAudio : MonoBehaviour
             AudioSource a = transform.AddComponent<AudioSource>();
             a.clip = stepCarpetClips[i];
             a.spatialBlend = 1f;
+            a.volume = stepCarpetVolume;
             stepCarpetSources.Add(a);
         }
 
