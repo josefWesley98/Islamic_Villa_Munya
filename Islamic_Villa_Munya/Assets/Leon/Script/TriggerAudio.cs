@@ -11,7 +11,8 @@ public class TriggerAudio : MonoBehaviour
     public AudioClip[] sounds;
     List<AudioSource> sources = new List<AudioSource>();
     public float volume = 0.25f;
-
+    public bool onceOnly = false;
+    bool canPlay = true;
 
     void Start()
     {
@@ -74,8 +75,23 @@ public class TriggerAudio : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!canPlay)
+            return;
         int rng = Random.Range(0, sources.Count());
         sources[rng].pitch = (Random.Range(0.8f, 1.2f));
         sources[rng].Play();
+        if (onceOnly)
+            canPlay = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!canPlay)
+            return;
+        int rng = Random.Range(0, sources.Count());
+        sources[rng].pitch = (Random.Range(0.8f, 1.2f));
+        sources[rng].Play();
+        if (onceOnly)
+            canPlay = false;
     }
 }

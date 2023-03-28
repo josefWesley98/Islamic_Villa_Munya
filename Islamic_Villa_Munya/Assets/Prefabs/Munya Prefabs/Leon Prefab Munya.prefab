@@ -11166,6 +11166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorToUnlock: {fileID: 2068447103}
+  pickupAudio: {fileID: 0}
 --- !u!1 &815662960
 GameObject:
   m_ObjectHideFlags: 0
@@ -11445,6 +11446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorToUnlock: {fileID: 2068447103}
+  pickupAudio: {fileID: 8300000, guid: b6fa376de97acee4f994824afeed596a, type: 3}
 --- !u!1 &1013035778
 GameObject:
   m_ObjectHideFlags: 0
@@ -13509,6 +13511,7 @@ MonoBehaviour:
       m_Calls: []
   temporaryPlayerReferenceDeleteLaterOk: {fileID: 0}
   lockRB: {fileID: 1318626191}
+  unlockAudio: {fileID: 8300000, guid: ffe501a074c00664bb1028073132c8d7, type: 3}
 --- !u!1 &2145568335
 GameObject:
   m_ObjectHideFlags: 0
@@ -28236,7 +28239,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3781
+  m_VersionIndex: 3790
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34051,7 +34054,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3633
+  m_VersionIndex: 3642
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -39928,7 +39931,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3670
+  m_VersionIndex: 3679
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -41771,6 +41774,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1368061016302227357, guid: 1eacb537dc3e9a04ea9912ff195e2694, type: 3}
+--- !u!114 &379016951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3928146863231857360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d450e7869f867f45af77a5cca7be840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - {fileID: 8300000, guid: 9ebdc8176d014de4d92f47cc05ba893c, type: 3}
+  - {fileID: 8300000, guid: 5eb5e1681c5f4d94898727b5f78948fa, type: 3}
+  volume: 0.25
+  onceOnly: 0
 --- !u!1001 &710222696747840468
 PrefabInstance:
   m_ObjectHideFlags: 0
