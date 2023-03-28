@@ -57,7 +57,7 @@ public class Door : MonoBehaviour
         //on game start, make a hinge for this door object
         if (Application.isPlaying)
         {
-            Invoke(nameof(CreateDoorParent), 20f);
+            Invoke(nameof(CreateDoorParent), 10f);
             //print("ok");
             //CreateDoorParent();
         }
@@ -85,17 +85,21 @@ public class Door : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F) && Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos) < interactMinDistance)//TEMPORARY
             {
+                print("in range");
                 if (unlockNextPress && locked)
                 {
-                    locked = false;
+                    print("toggling open");
                     //play unlock sound
                     lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
                     lockRB.transform.parent = null;
                     lockRB.isKinematic = false;
+                    lockRB.AddForce(lockRB.transform.right * 2.5f);
 
-                    return;
+                    ToggleOpen();
+                    locked = false;
+                    unlockNextPress = false;
+                    //return;
                 }
-                ToggleOpen();
             }
 
             //if (locked)
@@ -142,8 +146,8 @@ public class Door : MonoBehaviour
                     break;
             }
 
-            if (locked)
-                doorState = DoorState.Closing;
+            //if (locked)
+            //    doorState = DoorState.Closing;
             //print(Vector3.Angle(hinge.transform.forward, hingeOpenTarget.transform.forward));
 
             if (puppetDoor != null)
