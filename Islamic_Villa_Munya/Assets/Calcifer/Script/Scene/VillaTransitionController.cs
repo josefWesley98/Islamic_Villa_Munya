@@ -11,13 +11,16 @@ public class VillaTransitionController : MonoBehaviour
 {
     public string villa_scene_name;
     private bool is_loading = false;
+    [SerializeField] private GameObject load_screen;
 
     private void OnTriggerEnter(Collider other)
     {
         if(!is_loading && other.tag == "Player" && !GameManager.GetHaveKey() && !GameManager.GetArtefactCollected())
         {
             StartCoroutine(LoadVillaScene());
+            load_screen.SetActive(true);
         }
+      
     }
 
     private IEnumerator LoadVillaScene()
