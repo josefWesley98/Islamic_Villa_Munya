@@ -6,6 +6,8 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class Door : MonoBehaviour
 {
+    public bool TEMPDELAYDOORSETUP = true;
+
     public enum DoorState
     {
         Opening,
@@ -32,7 +34,7 @@ public class Door : MonoBehaviour
     //public bool open = false;
     public bool locked = false;
     public bool unlockNextPress = false;
-
+    public bool canCloseDoor = true;
 
     Vector3 doorToHingeVector = Vector3.forward;
     GameObject hinge, hingeOpenTarget, hingeClosedTarget;
@@ -60,7 +62,10 @@ public class Door : MonoBehaviour
         //on game start, make a hinge for this door object
         if (Application.isPlaying)
         {
-            Invoke(nameof(CreateDoorParent), 10f);
+            if (TEMPDELAYDOORSETUP)
+                Invoke(nameof(CreateDoorParent), 10f);
+            else
+                CreateDoorParent();
             //print("ok");
             //CreateDoorParent();
         }
@@ -277,7 +282,7 @@ public class Door : MonoBehaviour
     {
         if(doorState == DoorState.Closed)
             doorState = DoorState.Opening;
-        if (doorState == DoorState.Open)
+        if (doorState == DoorState.Open && canCloseDoor)
             doorState = DoorState.Closing;
         //open = !open;
         //return open;
