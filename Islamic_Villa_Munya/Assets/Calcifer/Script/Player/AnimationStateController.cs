@@ -38,9 +38,9 @@ public class AnimationStateController : MonoBehaviour
     private bool input_disabled = false;
 
     private float time_since_fallen = 0f;
-    private float hard_landing_threshold = 0.4f;
+    private float hard_landing_threshold = 0.8f;
 
-    private float falling_delay_time = 0.3f;
+    private float falling_delay_time = 0.4f;
     private bool currently_jumping = false;
     private int climbLayerIndex;
     AnimatorClipInfo[] info;
@@ -73,6 +73,7 @@ public class AnimationStateController : MonoBehaviour
     }
 
     //Handles acceleration and deceleration
+    #region Velocity Functions
     void ChangeVel(bool forward_pressed, bool backward_pressed, bool left_pressed, bool right_pressed, bool run_pressed, bool crouch_pressed, float current_max_vel)
     {
         //2D Blend trees example begins here
@@ -236,7 +237,7 @@ public class AnimationStateController : MonoBehaviour
             velocityX = current_max_vel;
         }
     }
-
+    #endregion
     //Function to get the anim times for certain animations to play through to completion without interruption
     void UpdateAnimTimes()
     {
@@ -338,60 +339,79 @@ public class AnimationStateController : MonoBehaviour
             }
         }
 
-        if (rb_vel.y > 0f)
+        //If the player is able to jump then play the animations relevant to the velocity of the player
+        if (!crouch_pressed && jump_pressed && !controller_ref.GetPushOrPull())
         {
-            //If the player is able to jump then play the animations relevant to the velocity of the player
-            if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
-            {
-                animator.SetBool("IsJumping", true);
-                run_jump = true;
-                stand_jump = false;
+            animator.SetBool("IsJumping", true);
+            run_jump = true;
+            stand_jump = false;
 
-                j_timer_run = run_jump_time - 0.5f;
-
-            }
+            j_timer_run = run_jump_time - 0.5f;
 
         }
-        else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+        else if (run_jump && is_grounded)
         {
             animator.SetBool("IsJumping", false);
             run_jump = false;
         }
+
+        #region OG Jumping Anim Code
+        //if (rb_vel.y > 0f)
+        //{
+        //    //If the player is able to jump then play the animations relevant to the velocity of the player
+        //    if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
+        //    {
+        //        animator.SetBool("IsJumping", true);
+        //        run_jump = true;
+        //        stand_jump = false;
+
+        //        j_timer_run = run_jump_time - 0.5f;
+
+        //    }
+
+        //}
+        //else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+        //{
+        //    animator.SetBool("IsJumping", false);
+        //    run_jump = false;
+        //}
         
-        //Rigidody velocity will not be above the threshold
-        if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
-        {
-            if(!currently_jumping)
-            {
-                currently_jumping = true;
-                animator.SetBool("IsJumping", true);
+        ////Rigidody velocity will not be above the threshold
+        //if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
+        //{
+        //    if(!currently_jumping)
+        //    {
+        //        currently_jumping = true;
+        //        animator.SetBool("IsJumping", true);
 
-                stand_jump = true;
-                run_jump = false;
+        //        stand_jump = true;
+        //        run_jump = false;
 
-                j_timer_stand = stand_jump_time - 0.3f;
-                StartCoroutine(StandJumpTimer());
-            }
+        //        j_timer_stand = stand_jump_time - 0.3f;
+        //        StartCoroutine(StandJumpTimer());
+        //    }
 
-        }
+        //}
+        #endregion
 
-        if (run_jump)
-        {
-            stand_jump = false;
+        //if (run_jump)
+        //{
+            //stand_jump = false;
 
-            j_timer_run -= Time.deltaTime;
-            if(j_timer_run <= 0)
-            {
-                animator.SetBool("IsJumping", false);
-                run_jump = false;
-            }
-        }
+            //j_timer_run -= Time.deltaTime;
+            //if(j_timer_run <= 0)
+            //{
+             //   animator.SetBool("IsJumping", false);
+             //   run_jump = false;
+           // }
+        //}
 
         //Is the player falling? Play animation if they are
         if(!stand_jump && !run_jump && !is_grounded)
         {
             StartCoroutine(DelayFallingAnim());
             time_since_fallen += Time.deltaTime;
+            Debug.Log("Call me baby");
         }
         else
         {
@@ -427,12 +447,12 @@ public class AnimationStateController : MonoBehaviour
 
     IEnumerator DelayFallingAnim()
     {
-        yield return new WaitForSeconds(falling_delay_time);
+        yield return new WaitForSeconds(falling_delay_time * Time.deltaTime);
 
-        if(!controller_ref.GetGrounded())
-        {
+        //if(!controller_ref.GetGrounded())
+        //{
             animator.SetBool("IsFalling", true);
-        }
+        //}
     }
 
     IEnumerator HardLandAnimation()

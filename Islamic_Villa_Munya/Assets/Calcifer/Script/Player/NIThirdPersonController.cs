@@ -155,8 +155,10 @@ public class NIThirdPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
-        if(!isClimbing)
+        PlayerInput();
+        Debug.Log("Getttttting input no matter what");
+
+        if (!isClimbing)
         {
             //Function to hide cursor when playing
             HideCursor();
@@ -233,7 +235,6 @@ public class NIThirdPersonController : MonoBehaviour
                 ControlPlayerVel();
 
                 //Prevent moving in the air by preventing player input updates during a jump
-                PlayerInput();
                 rb.drag = ground_drag;
                 //is_stand_jump_ready = true;
                 
@@ -326,19 +327,19 @@ public class NIThirdPersonController : MonoBehaviour
     private void FixedUpdate()
     {
         //Call player movement
-        if(!input_disabled)
-        {
+        //if(!input_disabled)
+        //{
             PlayerMovement();
-        }
+        //}
     }
 
     private void PlayerInput()
     {
-        if(grounded && !input_disabled)
-        {
+        //if(grounded && !input_disabled)
+        //{
             //Newer input system reading input values from the player
             move_input = movement.ReadValue<Vector2>();
-        }
+        //}
     }
 
     private void PlayerMovement()
@@ -370,8 +371,8 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
-
         }
+
         //else if(grounded && !currently_pushing)
         //{
         //    //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
@@ -411,49 +412,111 @@ public class NIThirdPersonController : MonoBehaviour
             rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
 
+        #region original_jump
+        //if (grounded &&!is_crouching && allow_jump)
+        //{
+        //    is_jumping = true;
+        //    bool apply_delay = false;
+
+        //    //If the player magnitude is < 0.1, then apply delay for standing jump
+        //    if(rb.velocity.magnitude < 0.1f)
+        //    {
+        //        //Get delay duration for disabling input to be that of the stand animation duration
+        //        disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
+
+        //        apply_delay = true;
+        //        StartCoroutine(DisableInput(disabled_input_delay));
+        //    }
+
+        //    if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
+        //    {
+        //        //Apply the delay before allowing the player to jump
+        //        is_stand_jump_ready = false;
+
+        //        Invoke("DelayedJump", stand_jump_delay);
+        //    }
+
+        //    //Run jump
+        //    else if(rb.velocity.magnitude > 0.1f && !is_wall)
+        //    {
+        //        //Get delay from the animator
+        //        run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
+
+        //        //Reset the player y-velocity to 0 so they player jumps to the same height every time
+        //        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        //        //Apply the force once using impulse
+        //        rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
+
+        //        allow_jump = false;
+        //        StartCoroutine(DelayRunJump(run_jump_delay));
+        //    }
+
+        //    Invoke("NoRotationDelay", 1f);
+        //}
+        #endregion
+
+        //if (!is_crouching && allow_jump)
+        //{
+        //    is_jumping = true;
+        //    bool apply_delay = false;
+
+        //    //If the player magnitude is < 0.1, then apply delay for standing jump
+        //    if (rb.velocity.magnitude < 0.1f)
+        //    {
+        //        //Get delay duration for disabling input to be that of the stand animation duration
+        //        disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
+
+        //        apply_delay = true;
+        //        //StartCoroutine(DisableInput(disabled_input_delay));
+        //    }
+
+        //    if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
+        //    {
+        //        //Apply the delay before allowing the player to jump
+        //        is_stand_jump_ready = false;
+
+        //        //Invoke("DelayedJump", stand_jump_delay);
+        //        rb.AddForce(0f, stand_jump_force, 0f, ForceMode.Impulse);
+        //        //rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
+        //    }
+
+        //    //Run jump
+        //    else if (rb.velocity.magnitude > 0.1f && !is_wall)
+        //    {
+        //        //Get delay from the animator
+        //        run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
+
+        //        //Reset the player y-velocity to 0 so they player jumps to the same height every time
+        //        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        //        //Apply the force once using impulse
+        //        //rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
+        //        rb.AddForce(0f, moving_jump_force, 0f, ForceMode.Impulse);
+        //        allow_jump = false;
+        //        StartCoroutine(DelayRunJump(run_jump_delay));
+        //    }
+
+        //Invoke("NoRotationDelay", 1f);
+        //}
+
         if(grounded && !is_crouching && allow_jump)
         {
-            is_jumping = true;
-            bool apply_delay = false;
+            //Get delay from the animator
+            run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
 
-            //If the player magnitude is < 0.1, then apply delay for standing jump
-            if(rb.velocity.magnitude < 0.1f)
-            {
-                //Get delay duration for disabling input to be that of the stand animation duration
-                disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
+            //Reset the player y-velocity to 0 so they player jumps to the same height every time
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-                apply_delay = true;
-                StartCoroutine(DisableInput(disabled_input_delay));
-            }
-
-            if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
-            {
-                //Apply the delay before allowing the player to jump
-                is_stand_jump_ready = false;
-
-                Invoke("DelayedJump", stand_jump_delay);
-            }
-
-            //Run jump
-            else if(rb.velocity.magnitude > 0.1f && !is_wall)
-            {
-                //Get delay from the animator
-                run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
-
-                //Reset the player y-velocity to 0 so they player jumps to the same height every time
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                
-                //Apply the force once using impulse
-                rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
-
-                allow_jump = false;
-                StartCoroutine(DelayRunJump(run_jump_delay));
-            }
-
-            Invoke("NoRotationDelay", 1f);
+            //Apply the force once using impulse
+            //rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
+            rb.AddForce(0f, moving_jump_force, 0f, ForceMode.Impulse);
+            allow_jump = false;
+            StartCoroutine(DelayRunJump(run_jump_delay));
         }
     }
 
+    //Prevents the player jumping immediately again after landing
     private IEnumerator DelayRunJump(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -471,7 +534,7 @@ public class NIThirdPersonController : MonoBehaviour
 
     private IEnumerator DisableInput(float duration)
     {
-        input_disabled = true;
+        //input_disabled = true;
         allow_jump = false;
 
         if (hard_landing)
@@ -509,7 +572,7 @@ public class NIThirdPersonController : MonoBehaviour
             //ResetCapsuleCollider();
             Debug.Log("Second Freeze");
         }
-        input_disabled = false;
+        //input_disabled = false;
         allow_jump = true;
     }
 
@@ -572,16 +635,36 @@ public class NIThirdPersonController : MonoBehaviour
     //Function for determining whether the player wants to crouch or not
     private void ToggleCrouch(InputAction.CallbackContext crouch)
     {
-        if(grounded && !input_disabled)
+        #region ToggleCrouchOG
+        //if (grounded && !input_disabled)
+        //{
+        //    if(crouch.started)
+        //    {
+        //        is_crouching = true;
+        //        //capsule.height = capsule_height / 2;
+        //        //capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
+        //        //capsule.radius = capsule_radius * 2;
+        //    }
+        //    if(crouch.canceled && !is_roof)
+        //    {
+        //        is_crouching = false;
+        //        //capsule.height = capsule_height;
+        //        //capsule.center = new Vector3(0f, capsule_centre, 0f);
+        //        //capsule.radius = capsule_radius;
+        //    }
+        //}
+        #endregion
+
+        if (grounded)
         {
-            if(crouch.started)
+            if (crouch.started)
             {
                 is_crouching = true;
                 //capsule.height = capsule_height / 2;
                 //capsule.center = new Vector3(0f, capsule_centre / 2, 0f);
                 //capsule.radius = capsule_radius * 2;
             }
-            if(crouch.canceled && !is_roof)
+            if (crouch.canceled && !is_roof)
             {
                 is_crouching = false;
                 //capsule.height = capsule_height;
