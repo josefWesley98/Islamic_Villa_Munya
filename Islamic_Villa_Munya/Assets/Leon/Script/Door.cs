@@ -74,9 +74,6 @@ public class Door : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-        }
         //print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
         //run only in edit mode
         if (!Application.isPlaying)
@@ -94,15 +91,23 @@ public class Door : MonoBehaviour
                     print("toggling open");
                     //play unlock sound
                     unlockAudioSource.Play();
-                    lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
-                    lockRB.transform.parent = null;
-                    lockRB.isKinematic = false;
-                    lockRB.AddForce(lockRB.transform.right * 2.5f);
+                    if(lockRB != null)
+                    {
+                        lockRB.transform.GetChild(0).transform.GetComponent<ParticleSystem>().Play();
+                        lockRB.transform.parent = null;
+                        lockRB.isKinematic = false;
+                        lockRB.AddForce(lockRB.transform.right * 2.5f);
+                    }
+
 
                     ToggleOpen();
                     locked = false;
                     unlockNextPress = false;
                     //return;
+                }
+                if (!locked)
+                {
+                    ToggleOpen();
                 }
             }
 
