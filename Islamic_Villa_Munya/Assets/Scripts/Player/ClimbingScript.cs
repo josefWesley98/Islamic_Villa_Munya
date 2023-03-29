@@ -41,6 +41,7 @@ public class ClimbingScript : MonoBehaviour
     private bool startWallRot = true;
     private Vector3 direction = Vector3.zero;
     private Vector3 target = Vector3.zero;
+    private Quaternion targetRotation;
     //private Quaternion slerpStart = Quaternion.identity;
     //private Quaternion lookRotation = Quaternion.identity;
     private void Awake() => playercontrols = new PlayerControls();
@@ -80,70 +81,122 @@ public class ClimbingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(startClimb)
+        if(startClimb && lookDirection[0])
         {
-            Vector3 direction = upwardClimbing.GetWallPosition() - transform.localPosition;
-        
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
             // Set the y component to 0 to ensure only rotation around the y-axis
             direction.y = 0;
+
+            if(lookDirection[0])
+            {
+                targetRotation = Quaternion.LookRotation(direction.normalized);
+            }
             
             // Calculate the target rotation using Quaternion.LookRotation
-            Quaternion targetRotation = Quaternion.LookRotation(-direction.normalized);
 
             if(startClimb && transform.localRotation != targetRotation)
             {
                 transform.localRotation = targetRotation;
                 Debug.Log("rotating.");
             }
-            else if(startClimb && transform.localRotation == targetRotation)
+            
+        }
+        if(startClimb && lookDirection[1])
+        {
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            // Set the y component to 0 to ensure only rotation around the y-axis
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
+
+            if(startClimb && transform.localRotation != targetRotation)
             {
-                Debug.Log("is not rotating.");
+                transform.localRotation = targetRotation;
+                Debug.Log("rotating.");
+            }
+        }
+        if(startClimb && lookDirection[2])
+        {
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            // Set the y component to 0 to ensure only rotation around the y-axis
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
+
+            if(startClimb && transform.localRotation != targetRotation)
+            {
+                transform.localRotation = targetRotation;
+                Debug.Log("rotating.");
+            }
+        }
+        if(startClimb && lookDirection[3])
+        {
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            // Set the y component to 0 to ensure only rotation around the y-axis
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
+
+            if(startClimb && transform.localRotation != targetRotation)
+            {
+                transform.localRotation = targetRotation;
+                Debug.Log("rotating.");
             }
         }
 
         // forward
         if(transform.eulerAngles.y >= 315 || transform.eulerAngles.y < 45f)
         {
-            lookDirection[0] = true;
-            lookDirection[1] = false;
-            lookDirection[2] = false;
-            lookDirection[3] = false;
-            climbOffset = -0.2f;
-            upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
-            downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+            if(!startClimb)
+            {
+                climbOffset = -0.165f;
+                lookDirection[0] = true;
+                lookDirection[1] = false;
+                lookDirection[2] = false;
+                lookDirection[3] = false;
+                upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+                downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+            }
         }
         // right
         if(transform.eulerAngles.y >= 45f && transform.eulerAngles.y < 135f )
         {
-            climbOffset = -0.2f;
-            lookDirection[0] = false;
-            lookDirection[1] = true;
-            lookDirection[2] = false;
-            lookDirection[3] = false;
-            upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
-            downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+            if(!startClimb)
+            {
+                climbOffset = -0.165f;
+                lookDirection[0] = false;
+                lookDirection[1] = true;
+                lookDirection[2] = false;
+                lookDirection[3] = false;
+                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+            }
         }
         // backwards
         if(transform.eulerAngles.y >= 135f && transform.eulerAngles.y < 225f )
         {
-            climbOffset = 0.2f;
-            lookDirection[0] = false;
-            lookDirection[1] = false;
-            lookDirection[2] = true;
-            lookDirection[3] = false;
-            upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
-            downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+            if(!startClimb)
+            {
+                climbOffset = 0.165f;
+                lookDirection[0] = false;
+                lookDirection[1] = false;
+                lookDirection[2] = true;
+                lookDirection[3] = false;
+                upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+                downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+            }
+
         }
         // left
         if(transform.eulerAngles.y >= 225 && transform.eulerAngles.y < 315)
         {
-            climbOffset = 0.2f;
-            lookDirection[0] = false;
-            lookDirection[1] = false;
-            lookDirection[2] = false;
-            lookDirection[3] = true;
-            upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
-            downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+            if(!startClimb)
+            {
+                climbOffset = 0.165f;
+                lookDirection[0] = false;
+                lookDirection[1] = false;
+                lookDirection[2] = false;
+                lookDirection[3] = true;
+                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+            }
         }
         
         if(!upwardClimbing.GetCanClimb())

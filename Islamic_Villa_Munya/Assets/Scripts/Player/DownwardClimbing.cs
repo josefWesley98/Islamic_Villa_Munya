@@ -431,11 +431,25 @@ public class DownwardClimbing : MonoBehaviour
     }
     public Vector3 GetCurrentSpotLeftFoot()
     {
-        return currentFootSpotLeft.transform.position;
+        if(currentFootSpotRight != null)
+        {
+            return currentFootSpotLeft.transform.position;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
     public Vector3 GetCurrentSpotRightFoot()
     {
-        return currentFootSpotRight.transform.position;
+        if(currentFootSpotRight != null)
+        {
+            return currentFootSpotRight.transform.position;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
     public void SetMovementDirection(Vector2 _moveDirection)
     {

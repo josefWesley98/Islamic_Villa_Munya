@@ -32,6 +32,8 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private Transform leftArmPos;
     private float interpolateAmountLeftArm = 0.0f;
     private bool movingDirecionally = false;
+    private bool left = false;
+    private bool right = false;
     //rigging end.
     [SerializeField] private Transform[] grabbablePositionsRightHand;
     [SerializeField] private Transform[] grabbablePositionsLeftHand;
@@ -87,9 +89,24 @@ public class UpwardClimbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentHandSpotLeft != null && currentHandSpotRight != null)
+        // if(currentHandSpotLeft != null && currentHandSpotRight != null && !left && !right)
+        // {
+        //     wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position);
+        //     Debug.Log("moving up and down.");
+        // }
+        // if(currentHandSpotLeft != null & downwardClimbing.GetCurrentSpotLeftFoot() != Vector3.zero && left && !right)
+        // {
+        //     wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, downwardClimbing.GetCurrentSpotLeftFoot());
+        //     Debug.Log("moving left");
+        // }
+        // if(currentHandSpotRight != null & downwardClimbing.GetCurrentSpotRightFoot() != Vector3.zero && right && !left)
+        // {
+        //     wallPosition = GetMiddlePoint(currentHandSpotRight.transform.position, downwardClimbing.GetCurrentSpotRightFoot());
+        //     Debug.Log("moving right");
+        // }
+        if(currentHandSpotLeft != null && currentHandSpotRight != null && downwardClimbing.GetCurrentSpotLeftFoot() != Vector3.zero && downwardClimbing.GetCurrentSpotRightFoot() != Vector3.zero)
         {
-            wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.localPosition, currentHandSpotRight.transform.localPosition);
+            wallPosition = GetMiddlePointForRotate(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position, downwardClimbing.GetCurrentSpotLeftFoot(), downwardClimbing.GetCurrentSpotRightFoot());
         }
 
         for(int i = 0; i < 4; i++)
@@ -204,13 +221,17 @@ public class UpwardClimbing : MonoBehaviour
                 }
             }     
             movingDirecionally = false;
+            left = false;
+            right = false;
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
+                right = true;
                 chosenReference = 3;  
                 movingDirecionally = true;  
             }
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
+                left = true;
                 chosenReference = 2;
                 movingDirecionally = true;
             }
@@ -324,14 +345,18 @@ public class UpwardClimbing : MonoBehaviour
                 }
             }     
             movingDirecionally = false;
+            left = false;
+            right = false;
             if(movementDirection.x < 0 && movementDirection.y == 0)
             {
+                left = true;
                 chosenReference = 2;
                 movingDirecionally = true;
                
             }
             if(movementDirection.x > 0 && movementDirection.y == 0)
             {
+                right = true;
                 chosenReference = 3;
                 movingDirecionally = true;
             }
@@ -409,8 +434,17 @@ public class UpwardClimbing : MonoBehaviour
             // float newZ = Mathf.Lerp(rightRigAimPosition.position.z, spotZ, interpolateAmountRightArm);
             
             //rightRigAimPosition.position = new Vector3(newX, newY, newZ);
+            Vector3 LHandPos = Vector3.zero;
 
-            Vector3 LHandPos =  new Vector3(currentHandSpotRight.transform.position.x, currentHandSpotRight.transform.position.y, currentHandSpotRight.transform.position.z);
+            if(climbingScript.GetLookDirection(0) || climbingScript.GetLookDirection(2))
+            {//z
+                LHandPos =  new Vector3(currentHandSpotRight.transform.position.x, currentHandSpotRight.transform.position.y, currentHandSpotRight.transform.position.z + 0.15f);
+            }   
+            if(climbingScript.GetLookDirection(1) || climbingScript.GetLookDirection(3))
+            {//x
+                LHandPos =  new Vector3(currentHandSpotRight.transform.position.x + 0.15f, currentHandSpotRight.transform.position.y, currentHandSpotRight.transform.position.z);
+            }
+            
             if(movingDirecionally)
             {
                  interpolateAmountRightArm += Time.deltaTime * 1.5f;
@@ -437,8 +471,9 @@ public class UpwardClimbing : MonoBehaviour
                 interpolateAmountRightArm = 0.0f;
             }
         }
-        else if(!movingRightHand && currentHandSpotRight != null)
+        if(!movingRightHand && currentHandSpotRight != null && rightRigAimPosition.position != currentHandSpotRight.transform.position)
         {
+            //rightRigAimPosition.position = Vector3.Lerp(rightRigAimPosition.position, currentHandSpotRight.transform.position, interpolateAmountRightArm);
             rightRigAimPosition.position = currentHandSpotRight.transform.position;
         }
 
@@ -460,8 +495,16 @@ public class UpwardClimbing : MonoBehaviour
             {
                 interpolateAmountLeftArm  += Time.deltaTime * 1.25f;
             }
-            Vector3 RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z);
-            
+            Vector3 RHandPos = Vector3.zero;
+
+            if(climbingScript.GetLookDirection(0) || climbingScript.GetLookDirection(2))
+            {//z
+                RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z + 0.15f);
+            }   
+            if(climbingScript.GetLookDirection(1) || climbingScript.GetLookDirection(3))
+            {//x
+                RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x + 0.15f, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z);
+            }
             leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, RHandPos, interpolateAmountLeftArm);
 
             // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
@@ -487,8 +530,9 @@ public class UpwardClimbing : MonoBehaviour
                
             }
         }
-        else if(!movingLeftHand && currentHandSpotLeft != null)
+        if(!movingLeftHand && currentHandSpotLeft != null && leftRigAimPosition.position != currentHandSpotLeft.transform.position)
         {
+            //leftRigAimPosition.position = Vector3.Lerp(leftRigAimPosition.position, currentHandSpotLeft.transform.position, Time.deltaTime * 2.0f);
             leftRigAimPosition.position = currentHandSpotLeft.transform.position;
         }
     }
@@ -497,6 +541,15 @@ public class UpwardClimbing : MonoBehaviour
         float x = (leftHandPos.x + rightHandPos.x) / 2;
         float y = (leftHandPos.y + rightHandPos.y) / 2;
         float z = (leftHandPos.z + rightHandPos.z) / 2;
+        Vector3 newPos = new Vector3(x,y,z);
+
+        return newPos;
+    }
+    private Vector3 GetMiddlePointForRotate(Vector3 leftHandPos, Vector3 rightHandPos, Vector3 leftFootPos, Vector3 rightFootPos)
+    {
+        float x = (leftHandPos.x + rightHandPos.x + leftFootPos.x + rightFootPos.x) / 4;
+        float y = (leftHandPos.y + rightHandPos.y + leftFootPos.y + rightFootPos.y) / 4;
+        float z = (leftHandPos.z + rightHandPos.z + leftFootPos.z + rightFootPos.z) / 4;
         Vector3 newPos = new Vector3(x,y,z);
 
         return newPos;
