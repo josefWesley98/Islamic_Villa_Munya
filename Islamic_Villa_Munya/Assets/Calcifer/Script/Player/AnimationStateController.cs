@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 /*Cal's code starts here*/
 public class AnimationStateController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    private Animator animator;
     public NIThirdPersonController controller_ref;
     float velocityZ = 0f;
     float velocityX = 0f;
@@ -38,9 +38,9 @@ public class AnimationStateController : MonoBehaviour
     private bool input_disabled = false;
 
     private float time_since_fallen = 0f;
-    private float hard_landing_threshold = 0.8f;
+    private float hard_landing_threshold = 0.6f;
 
-    private float falling_delay_time = 0.4f;
+    private float falling_delay_time = 0.2f;
     private bool currently_jumping = false;
     private int climbLayerIndex;
     AnimatorClipInfo[] info;
@@ -53,7 +53,7 @@ public class AnimationStateController : MonoBehaviour
         //User input from keyboard
         kb = InputSystem.GetDevice<Keyboard>();
 
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
 
         //Use hash so it is less expensive for changing these float variables in the animator controller
         velZ_hash = Animator.StringToHash("VelocityZ");
@@ -339,25 +339,9 @@ public class AnimationStateController : MonoBehaviour
             }
         }
 
-        //If the player is able to jump then play the animations relevant to the velocity of the player
-        if (!crouch_pressed && jump_pressed && !controller_ref.GetPushOrPull())
-        {
-            animator.SetBool("IsJumping", true);
-            run_jump = true;
-            stand_jump = false;
-
-            j_timer_run = run_jump_time - 0.5f;
-
-        }
-        else if (run_jump && is_grounded)
-        {
-            animator.SetBool("IsJumping", false);
-            run_jump = false;
-        }
-
         #region OG Jumping Anim Code
-        //if (rb_vel.y > 0f)
-        //{
+        // if (rb_vel.y > 0f)
+        // {
         //    //If the player is able to jump then play the animations relevant to the velocity of the player
         //    if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
         //    {
@@ -369,16 +353,16 @@ public class AnimationStateController : MonoBehaviour
 
         //    }
 
-        //}
-        //else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
-        //{
+        // }
+        // else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+        // {
         //    animator.SetBool("IsJumping", false);
         //    run_jump = false;
-        //}
+        // }
         
-        ////Rigidody velocity will not be above the threshold
-        //if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
-        //{
+        // //Rigidody velocity will not be above the threshold
+        // if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
+        // {
         //    if(!currently_jumping)
         //    {
         //        currently_jumping = true;
@@ -390,39 +374,60 @@ public class AnimationStateController : MonoBehaviour
         //        j_timer_stand = stand_jump_time - 0.3f;
         //        StartCoroutine(StandJumpTimer());
         //    }
+        // }
 
-        //}
+        // if (run_jump)
+        // {
+        //     stand_jump = false;
+
+        //     j_timer_run -= Time.deltaTime;
+        //     if(j_timer_run <= 0)
+        //     {
+        //         animator.SetBool("IsJumping", false);
+        //         run_jump = false;
+        //     }
+        // }
         #endregion
 
-        //if (run_jump)
-        //{
-            //stand_jump = false;
+        if(animator.GetBool("IsJumping"))
+        {   
+            if(run_jump)
+            {
+                j_timer_run = run_jump_time - 0.5f;
+                run_jump = false;
+            }
+            
+            j_timer_run -= Time.deltaTime;
+            
+            if(j_timer_run <= 0)
+            {
+                animator.SetBool("IsJumping", false);
+                run_jump = false;
 
-            //j_timer_run -= Time.deltaTime;
-            //if(j_timer_run <= 0)
-            //{
-             //   animator.SetBool("IsJumping", false);
-             //   run_jump = false;
-           // }
-        //}
+                //We want the player to stop being able to jump further than what is realistic so after the animation ends, prevent further input from the player until they hit the ground
+            }
+        }
 
         //Is the player falling? Play animation if they are
-        if(!stand_jump && !run_jump && !is_grounded)
+        if(!animator.GetBool("IsJumping") && !is_grounded)
         {
-            StartCoroutine(DelayFallingAnim());
+            // StartCoroutine(DelayFallingAnim());
             time_since_fallen += Time.deltaTime;
-            Debug.Log("Call me baby");
+            animator.SetBool("IsFalling", true);
         }
-        else
+        else if(!animator.GetBool("IsJumping") && is_grounded)
         {
             //Set the falling animation to stop playing
             animator.SetBool("IsFalling", false);
 
             if(time_since_fallen > hard_landing_threshold)
             {
+                hard_land = true;
+                controller_ref.SetInput(true);
                 StartCoroutine(HardLandAnimation());
-                time_since_fallen = 0f;
             }
+
+            time_since_fallen = 0f;
         }
 
         //Pass in hash values, cheaper to use for updating the animator values
@@ -448,19 +453,17 @@ public class AnimationStateController : MonoBehaviour
     IEnumerator DelayFallingAnim()
     {
         yield return new WaitForSeconds(falling_delay_time * Time.deltaTime);
-
-        //if(!controller_ref.GetGrounded())
-        //{
-            animator.SetBool("IsFalling", true);
-        //}
+        animator.SetBool("IsFalling", true);
     }
 
     IEnumerator HardLandAnimation()
     {
-        StartCoroutine(DisableInput(hard_land_time));
+        //StartCoroutine(DisableInput(hard_land_time));        
         animator.SetBool("HardLand", true);
-        yield return new WaitForSeconds(hard_land_time - 0.3f);
+        yield return new WaitForSeconds((hard_land_time / 1.5f) - 0.4f);
         animator.SetBool("HardLand", false);
+        
+        controller_ref.SetInput(false);
     }
 
     private IEnumerator DisableInput(float duration)
@@ -492,6 +495,11 @@ public class AnimationStateController : MonoBehaviour
     public void SetHardLanding(bool land)
     {
         hard_land = land;
+    }
+
+    public void SetJump(bool val)
+    {
+        run_jump = val;
     }
 
     public float GetHardLandAnimTime()

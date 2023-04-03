@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class NIThirdPersonController : MonoBehaviour
 {
     [SerializeField] private AnimationStateController animator_ref;
+    private Animator animator;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider capsule;
     [SerializeField] private PlayerControls controls;
@@ -76,13 +77,14 @@ public class NIThirdPersonController : MonoBehaviour
     private float run_jump_delay;
     private float disabled_input_delay;
     private int score = 0;
-
+    float prev_capsule_height;
 
     void Awake() 
     {
         //Assign the new input controller
         controls = new PlayerControls();
         kb = InputSystem.GetDevice<Keyboard>();
+        animator = GetComponent<Animator>();
     }
     private void Start()
     {
@@ -92,6 +94,8 @@ public class NIThirdPersonController : MonoBehaviour
         capsule.height = capsule_height;
         capsule.radius = capsule_radius;
         capsule.center = new Vector3(0f, capsule_centre, 0f);
+
+        prev_capsule_height = capsule_height;
 
         //Freeze the rotation of the player indefinitely.
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -123,8 +127,8 @@ public class NIThirdPersonController : MonoBehaviour
             crouching = controls.Player.Crouch;
             crouching.Enable();
 
-            //push_or_pull = controls.Player.PushPull;
-           // push_or_pull.Enable();
+            push_or_pull = controls.Player.PushPull;
+            push_or_pull.Enable();
 
             jumping.started += _ => Jump();
 
@@ -134,8 +138,8 @@ public class NIThirdPersonController : MonoBehaviour
             crouching.started += _ => ToggleCrouch(_);
             crouching.canceled += _ => ToggleCrouch(_);
 
-            //push_or_pull.performed += _ => PushOrPull(_);
-            //push_or_pull.canceled += _ => PushOrPull(_);
+            push_or_pull.performed += _ => PushOrPull(_);
+            push_or_pull.canceled += _ => PushOrPull(_);
         }
 
         //Use input actions to call necessary functions for player functionality
@@ -155,44 +159,67 @@ public class NIThirdPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        PlayerInput();
-        Debug.Log("Getttttting input no matter what");
 
         if (!isClimbing)
         {
+            PlayerInput();
+            
             //Function to hide cursor when playing
             HideCursor();
 
             hard_landing = animator_ref.GetHardLanding();
 
             //Check to see if the player is on the ground
-            bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
+            //bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
             bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
             //push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
 
-            //If the player is on the floor then set grounded to true and allow for movement and jumping
-            if (floor)
+            //Check for the ground state
+            RaycastHit ground_hit;
+            if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.25f))
             {
                 grounded = true;
-
-                //if (push)
-                //{
-                //   is_pushable = true;
-                //   SetPushingCollider();
-                //}
-                //else if (!push)
-                //{
-                //   is_pushable = false;
-                //   //ResetCapsuleCollider();
-                //   ResetPushCollider();
-                //   //rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                //}
             }
             else
             {
                 grounded = false;
             }
+
+            //Check if the object in front of the player is pushable
+            RaycastHit pushable_hit;
+            if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            {
+                Debug.Log("Hitting a pushable");
+                is_pushable = true;
+            }
+            else
+            {
+                is_pushable = false;
+            }
+
+            //If the player is on the floor then set grounded to true and allow for movement and jumping
+            // if (floor)
+            // {
+            //     grounded = true;
+
+            //     //if (push)
+            //     //{
+            //     //   is_pushable = true;
+            //     //   SetPushingCollider();
+            //     //}
+            //     //else if (!push)
+            //     //{
+            //     //   is_pushable = false;
+            //     //   //ResetCapsuleCollider();
+            //     //   ResetPushCollider();
+            //     //   //rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+            //     //}
+            // }
+            // else
+            // {
+            //     grounded = false;
+            // }
 
             //Player will still be on ground but crouched, so allow for movement, but prevent the player from standing again.
             if(roof)
@@ -233,52 +260,62 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 //If the player speed is above the maximum velocity then call this function
                 ControlPlayerVel();
-
                 //Prevent moving in the air by preventing player input updates during a jump
                 rb.drag = ground_drag;
                 //is_stand_jump_ready = true;
                 
+                //If player is no longer jumping, reset the collider
+                capsule.height = prev_capsule_height;
+
                 //Deal with pushing and pulling of objects only on the floor
-                //if(pushing)
-                //{
-                //    if(push_or_pull.triggered)
-                //    {
-                //        pushing = false;
-                //        if(pop_obj != null)
-                //        {
-                //            //Unparent the object from the player when not pushing
-                //            pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    if(push_or_pull.triggered)
-                //    {
-                //        pushing = true;
-                //    }
-                //}
+                if(pushing)
+                {
+                   if(push_or_pull.triggered)
+                   {
+                       pushing = false;
+                       if(pop_obj != null)
+                       {
+                           //Unparent the object from the player when not pushing
+                           pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
+                           Debug.Log("Currently Pushing");
+                       }
+                   }
+                }
+                else
+                {
+                   if(push_or_pull.triggered)
+                   {
+                       pushing = true;
+                   }
+                }
             }
             else
             {
                 rb.drag = 0f;
+                
+                //Want to shrink the capsule collider when the player is in the air
+                float new_height = 0.9f;
+                capsule.height = new_height;
+                
                 //is_stand_jump_ready = false;
             }
 
             //If the player falls and has a hard landing, disable the input
             if(hard_landing)
             {
-                float disable_input = animator_ref.GetHardLandAnimTime();
-                StartCoroutine(DisableInput(disable_input));
+                float disable_input = (animator_ref.GetHardLandAnimTime() / 1.5f) - 0.4f;
+                //StartCoroutine(DisableInput(disable_input));
 
+                capsule.height = prev_capsule_height;
                 //HardLandCapsuleCollider();
+
+                StartCoroutine(NoRotation(disable_input));
             }
         }
         else
         {
             Debug.Log("Cancelled climbing");
         }
-
     }
 
     private void OnCollisionEnter(Collision other) 
@@ -291,55 +328,55 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
-    //private void OnCollisionStay(Collision other)
-    //{
-    //    ready_to_push = false;
+    private void OnCollisionStay(Collision other)
+    {
+       ready_to_push = false;
 
-    //    if (other.gameObject.GetComponent<PushOrPull>() != null && push)
-    //    {
-    //        ready_to_push = true;
-    //        //Call the game object function to set it's transform as that of the child of the player
-    //        Vector3 direction = other.transform.position - transform.position;
+       if (other.gameObject.GetComponent<PushOrPull>() != null && is_pushable)
+       {
+           ready_to_push = true;
+           //Call the game object function to set it's transform as that of the child of the player
+           Vector3 direction = other.transform.position - transform.position;
 
-    //        // Set the y component to 0 to ensure only rotation around the y-axis
-    //        direction.y = 0;
+           // Set the y component to 0 to ensure only rotation around the y-axis
+           direction.y = 0;
 
-    //        // Calculate the target rotation using Quaternion.LookRotation
-    //        Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
-    //        transform.localRotation = targetRotation;
+           // Calculate the target rotation using Quaternion.LookRotation
+           Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+           transform.localRotation = targetRotation;
 
-    //        pop_obj = other.gameObject;
-    //        pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
-    //        currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
+           pop_obj = other.gameObject;
+           pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
+           currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
 
-    //        /*Joe's Code*/
-    //        //Change the collider properties if the player is PoPing
-    //        if(currently_pushing)
-    //        {
+           /*Joe's Code*/
+           //Change the collider properties if the player is PoPing
+           if(currently_pushing)
+           {
 
-    //            /*Joe's Code ends*/
+               /*Joe's Code ends*/
 
-    //            SetPushingCollider();
-    //        }
-    //    }
-    //}
+               //SetPushingCollider();
+           }
+       }
+    }
 
     private void FixedUpdate()
     {
         //Call player movement
-        //if(!input_disabled)
-        //{
+        if(!input_disabled)
+        {
             PlayerMovement();
-        //}
+        }
     }
 
     private void PlayerInput()
     {
-        //if(grounded && !input_disabled)
-        //{
+        if(!input_disabled)
+        {
             //Newer input system reading input values from the player
             move_input = movement.ReadValue<Vector2>();
-        //}
+        }
     }
 
     private void PlayerMovement()
@@ -352,7 +389,7 @@ public class NIThirdPersonController : MonoBehaviour
         Debug.DrawRay(orientation.position, orientation.right * 2, Color.red);
         Debug.DrawRay(rb.position, move_dir, Color.green);
 
-        if (grounded)
+        if (grounded && !input_disabled)
         {
             //If the player is walking
             if (!is_running)
@@ -372,12 +409,15 @@ public class NIThirdPersonController : MonoBehaviour
                 rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
             }
         }
-
-        //else if(grounded && !currently_pushing)
-        //{
-        //    //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
-        //    rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
-        //}
+        else if((!grounded && is_jumping) && !input_disabled)
+        {
+            rb.AddForce(move_dir.normalized * (walk_speed / 2) * 5, ForceMode.Force);
+        }
+        else if(grounded && !currently_pushing)
+        {
+           //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
+           rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
+        }
     }
 
     private void ControlPlayerVel()
@@ -452,56 +492,13 @@ public class NIThirdPersonController : MonoBehaviour
         //        StartCoroutine(DelayRunJump(run_jump_delay));
         //    }
 
-        //    Invoke("NoRotationDelay", 1f);
+            //Invoke("NoRotationDelay", 1f);
         //}
         #endregion
 
-        //if (!is_crouching && allow_jump)
-        //{
-        //    is_jumping = true;
-        //    bool apply_delay = false;
-
-        //    //If the player magnitude is < 0.1, then apply delay for standing jump
-        //    if (rb.velocity.magnitude < 0.1f)
-        //    {
-        //        //Get delay duration for disabling input to be that of the stand animation duration
-        //        disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
-
-        //        apply_delay = true;
-        //        //StartCoroutine(DisableInput(disabled_input_delay));
-        //    }
-
-        //    if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
-        //    {
-        //        //Apply the delay before allowing the player to jump
-        //        is_stand_jump_ready = false;
-
-        //        //Invoke("DelayedJump", stand_jump_delay);
-        //        rb.AddForce(0f, stand_jump_force, 0f, ForceMode.Impulse);
-        //        //rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
-        //    }
-
-        //    //Run jump
-        //    else if (rb.velocity.magnitude > 0.1f && !is_wall)
-        //    {
-        //        //Get delay from the animator
-        //        run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
-
-        //        //Reset the player y-velocity to 0 so they player jumps to the same height every time
-        //        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        //        //Apply the force once using impulse
-        //        //rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
-        //        rb.AddForce(0f, moving_jump_force, 0f, ForceMode.Impulse);
-        //        allow_jump = false;
-        //        StartCoroutine(DelayRunJump(run_jump_delay));
-        //    }
-
-        //Invoke("NoRotationDelay", 1f);
-        //}
-
         if(grounded && !is_crouching && allow_jump)
         {
+            is_jumping = true;
             //Get delay from the animator
             run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
 
@@ -511,9 +508,30 @@ public class NIThirdPersonController : MonoBehaviour
             //Apply the force once using impulse
             //rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
             rb.AddForce(0f, moving_jump_force, 0f, ForceMode.Impulse);
+
+            animator.SetBool("IsJumping", true);
+            animator_ref.SetJump(true);
+
             allow_jump = false;
             StartCoroutine(DelayRunJump(run_jump_delay));
         }
+    }
+
+    private IEnumerator NoRotation(float duration)
+    {
+        rb.velocity = Vector3.zero;
+        input_disabled = true;
+        main_cam_ref.setLockRotation(true);
+        yield return new WaitForSeconds(duration);
+
+        input_disabled = false;
+        main_cam_ref.setLockRotation(false);
+        animator_ref.SetHardLanding(false);
+    }
+
+    public void DisableJump()
+    {
+        allow_jump = false;
     }
 
     //Prevents the player jumping immediately again after landing
@@ -521,6 +539,7 @@ public class NIThirdPersonController : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         allow_jump = true;
+        is_jumping = false;
     }
 
     private void DelayedJump()
@@ -534,7 +553,7 @@ public class NIThirdPersonController : MonoBehaviour
 
     private IEnumerator DisableInput(float duration)
     {
-        //input_disabled = true;
+        input_disabled = true;
         allow_jump = false;
 
         if (hard_landing)
@@ -572,7 +591,7 @@ public class NIThirdPersonController : MonoBehaviour
             //ResetCapsuleCollider();
             Debug.Log("Second Freeze");
         }
-        //input_disabled = false;
+        input_disabled = false;
         allow_jump = true;
     }
 
@@ -599,27 +618,27 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     //Function for pushing or pulling object
-    //private void PushOrPull(InputAction.CallbackContext pop)
-    //{
-    //    //Set the transform of the object to be the child of the player.
-    //    //If the bool is true or false then the player class will call the objects function to set itself as a child
-    //    //object of the player, effectively joining them
-    //    if(ready_to_push && !pushing && !is_crouching && !is_jumping)
-    //    {
-    //        //We want to lock the player position axes here
-    //        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
-    //    }
-    //    else if(!ready_to_push)
-    //    {
-    //        rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-    //    }
-    //}
+    private void PushOrPull(InputAction.CallbackContext pop)
+    {
+       //Set the transform of the object to be the child of the player.
+       //If the bool is true or false then the player class will call the objects function to set itself as a child
+       //object of the player, effectively joining them
+       if(ready_to_push && !pushing && !is_crouching && !is_jumping)
+       {
+           //We want to lock the player position axes here
+           rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+       }
+       else if(!ready_to_push)
+       {
+           rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+       }
+    }
 
     //Function for determining whether the player wants to jump or not
     private void ToggleRunning(InputAction.CallbackContext run)
     {
-        if(grounded)
-        {
+        // if(grounded)
+        // {
             //If the player has pressed the run button in addition to moving
             if(run.started)
             {
@@ -629,7 +648,7 @@ public class NIThirdPersonController : MonoBehaviour
             {
                 is_running = false;
             }
-        }
+        //}
     }
 
     //Function for determining whether the player wants to crouch or not
@@ -787,6 +806,11 @@ public class NIThirdPersonController : MonoBehaviour
     public void SetIsClimbing(bool change)
     {
         isClimbing = change;
+    }
+
+    public void SetInput(bool val)
+    {
+        input_disabled = val;
     }
 }
 

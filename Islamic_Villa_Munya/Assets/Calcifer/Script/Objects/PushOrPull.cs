@@ -10,19 +10,22 @@ public class PushOrPull : MonoBehaviour
     //Setter for the transform to be a child if the player is pushing or not
     public void Push(bool pop, GameObject obj)
     {
+        rb = GetComponent<Rigidbody>();
+        
         if (pop)
         {
             transform.parent = obj.transform;
-            rb = GetComponent<Rigidbody>();
-            Destroy(rb);
-            Debug.Log("Destroy");
+            rb.mass = 0.1f;
+            //Destroy(rb);
+            //Debug.Log("Destroy");
             is_parented = true;
         }
         else if (!pop)
         {
-            Debug.Log("Create");
+            //Debug.Log("Create");
 
-            rb = gameObject.AddComponent<Rigidbody>();
+            //rb = gameObject.AddComponent<Rigidbody>();
+            rb.mass = 10f;
             transform.parent = null;
             //transform.eulerAngles = new Vector3(0f, 0f, 0f);
             is_parented = false;

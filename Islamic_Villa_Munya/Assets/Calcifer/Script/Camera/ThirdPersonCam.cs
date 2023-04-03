@@ -11,6 +11,8 @@ public class ThirdPersonCam : MonoBehaviour
     public Rigidbody rb;
     public NIThirdPersonController p;
 
+    private bool lock_rotation = false;
+
     public float ground_rot_speed;
 
     // Start is called before the first frame update
@@ -29,17 +31,21 @@ public class ThirdPersonCam : MonoBehaviour
         //Rotate the player
         if(p.GetIsClimbing() || p.GetPushOrPull())
         {
-           ground_rot_speed = 0;
+        ground_rot_speed = 0;
         }
         else if (!p.GetIsClimbing() || !p.GetPushOrPull())
         {
-           ground_rot_speed = 15;
+        ground_rot_speed = 15;
         }
         
         Vector2 look_at = p.GetPlayerInput();
-        Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
+        if(!lock_rotation)
+        {
 
-        player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
+            Vector3 input_dir = orientation.forward * look_at.y + orientation.right * look_at.x;
+            player_obj.forward = Vector3.Slerp(player_obj.forward, input_dir.normalized, Time.deltaTime * ground_rot_speed);
+        }
+
     }
 
     public void SetRotation(float rot)
@@ -50,6 +56,11 @@ public class ThirdPersonCam : MonoBehaviour
     public void ResetRotation()
     {
         ground_rot_speed = 15f;
+    }
+
+    public void setLockRotation(bool val)
+    {
+        lock_rotation = val;
     }
 }
 
