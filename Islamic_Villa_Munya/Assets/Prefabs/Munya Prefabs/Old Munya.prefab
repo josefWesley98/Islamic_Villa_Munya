@@ -593,7 +593,8 @@ GameObject:
   - component: {fileID: 2644085177435854477}
   - component: {fileID: 2644085177435854475}
   - component: {fileID: 2644085177435854474}
-  m_Layer: 7
+  - component: {fileID: 144269075}
+  m_Layer: 6
   m_Name: Old Steps and Outside Pool Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,6 +665,20 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2644085177435854476}
+  m_Mesh: {fileID: -6216915869733327347, guid: d88fbc480c955f7488e49a336012ff66, type: 2}
+--- !u!64 &144269075
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644085177435854476}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: -6216915869733327347, guid: d88fbc480c955f7488e49a336012ff66, type: 2}
 --- !u!1 &2644085177522355308
 GameObject:
@@ -766,7 +781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2644085177565716970
 Transform:
   m_ObjectHideFlags: 0
@@ -1376,7 +1391,7 @@ GameObject:
   - component: {fileID: 2644085178451443300}
   - component: {fileID: 2644085178451443298}
   - component: {fileID: 2644085178451443301}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Old Steps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
