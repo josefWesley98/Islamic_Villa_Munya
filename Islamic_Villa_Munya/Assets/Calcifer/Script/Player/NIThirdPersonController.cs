@@ -170,27 +170,31 @@ public class NIThirdPersonController : MonoBehaviour
             hard_landing = animator_ref.GetHardLanding();
 
             //Check to see if the player is on the ground
-            //bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
+            bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
             bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
             //push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
 
+            CheckFloor();
+
             //Check for the ground state
-            RaycastHit ground_hit;
-            if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.25f))
-            {
-                grounded = true;
-            }
-            else
-            {
-                grounded = false;
-            }
+            // RaycastHit ground_hit;
+            // if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
+            // {
+            //     grounded = true;
+            // }
+            // else
+            // {
+            //     grounded = false;
+            // }
+
+            // Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
 
             //Check if the object in front of the player is pushable
             RaycastHit pushable_hit;
             if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
             {
-                Debug.Log("Hitting a pushable");
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
                 is_pushable = true;
             }
             else
@@ -268,25 +272,28 @@ public class NIThirdPersonController : MonoBehaviour
                 capsule.height = prev_capsule_height;
 
                 //Deal with pushing and pulling of objects only on the floor
-                if(pushing)
+                if(is_pushable)
                 {
-                   if(push_or_pull.triggered)
-                   {
-                       pushing = false;
-                       if(pop_obj != null)
-                       {
-                           //Unparent the object from the player when not pushing
-                           pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
-                           Debug.Log("Currently Pushing");
-                       }
-                   }
-                }
-                else
-                {
-                   if(push_or_pull.triggered)
-                   {
-                       pushing = true;
-                   }
+                    if(pushing)
+                    {
+                        if(push_or_pull.triggered)
+                        {
+                            pushing = false;
+                            if(pop_obj != null)
+                            {
+                                //Destroy the joint when player is no longer pushing
+                                currently_pushing = false;
+                                pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(push_or_pull.triggered)
+                        {
+                            pushing = true;
+                        }
+                    }
                 }
             }
             else
@@ -318,6 +325,36 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
+    private void CheckFloor()
+    {
+        float angle = 20f;
+        float ray_length = 0.7f;
+        int num_rays = 8;
+        float angle_interval = 360 / num_rays;
+
+        for(int i = 0; i < num_rays; i++)
+        {
+            float current_angle = angle_interval * i - angle / 2;
+
+            //Calculate the direction to shoot ray
+            Vector3 dir = Quaternion.Euler(0, current_angle, 0) * Vector3.down;
+
+            //Shoot ray from player position
+            if(Physics.Raycast(feet_pos.transform.position, dir, out RaycastHit ground_hit, ray_length))
+            {
+                if(ground_hit.collider.gameObject.tag == "Ground")
+                {
+                    grounded = true;
+                    Debug.DrawRay(feet_pos.transform.position, dir * ground_hit.distance, Color.yellow);
+                }
+            }
+            else
+            {
+                grounded = false;
+            }
+        }
+    }
+
     private void OnCollisionEnter(Collision other) 
     {
         if(other.gameObject.tag == "Pickup")
@@ -328,37 +365,53 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
+    private void OnCollisionExit(Collision other) 
+    {
+        if(other.gameObject.GetComponent<ObjectController>() != null && pushing)
+        {
+                currently_pushing = false;
+                pushing = false;
+                pop_obj = other.gameObject;
+                pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
+                Debug.Log("No longer joined");
+        }
+    }
+
     private void OnCollisionStay(Collision other)
     {
-       ready_to_push = false;
+        if(other.gameObject.GetComponent<ObjectController>() != null && pushing)
+        {
+            currently_pushing = true;
+            pop_obj = other.gameObject;
+            pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
+            Debug.Log("We are one!");
+        }
+    //    ready_to_push = false;
 
-       if (other.gameObject.GetComponent<PushOrPull>() != null && is_pushable)
-       {
-           ready_to_push = true;
-           //Call the game object function to set it's transform as that of the child of the player
-           Vector3 direction = other.transform.position - transform.position;
+    //    if (other.gameObject.GetComponent<PushOrPull>() != null && is_pushable)
+    //    {
+    //         ready_to_push = true;
+    //         //Call the game object function to set it's transform as that of the child of the player
+    //         Vector3 direction = other.transform.position - transform.position;
 
-           // Set the y component to 0 to ensure only rotation around the y-axis
-           direction.y = 0;
+    //         // Set the y component to 0 to ensure only rotation around the y-axis
+    //         direction.y = 0;
 
-           // Calculate the target rotation using Quaternion.LookRotation
-           Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
-           transform.localRotation = targetRotation;
+    //         // Calculate the target rotation using Quaternion.LookRotation
+    //         Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+    //         transform.localRotation = targetRotation;
 
-           pop_obj = other.gameObject;
-           pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
-           currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
+    //         pop_obj = other.gameObject;
+    //         pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
+    //         currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
 
-           /*Joe's Code*/
-           //Change the collider properties if the player is PoPing
-           if(currently_pushing)
-           {
-
-               /*Joe's Code ends*/
-
-               //SetPushingCollider();
-           }
-       }
+    //         //If the player is no longer pushing because of the object position i.e. it is not on the ground
+    //         //then stop the player pushing
+    //         // if(!currently_pushing)
+    //         // {
+    //         //     pushing = false;
+    //         // }
+    //    }
     }
 
     private void FixedUpdate()
@@ -389,7 +442,7 @@ public class NIThirdPersonController : MonoBehaviour
         Debug.DrawRay(orientation.position, orientation.right * 2, Color.red);
         Debug.DrawRay(rb.position, move_dir, Color.green);
 
-        if (grounded && !input_disabled)
+        if (grounded && !input_disabled && !currently_pushing)
         {
             //If the player is walking
             if (!is_running)
@@ -413,7 +466,7 @@ public class NIThirdPersonController : MonoBehaviour
         {
             rb.AddForce(move_dir.normalized * (walk_speed / 2) * 5, ForceMode.Force);
         }
-        else if(grounded && !currently_pushing)
+        else if(grounded && currently_pushing)
         {
            //Player is pushing or pulling (Doesn't work with just if pushing and running for some reason)
            rb.AddForce(move_dir.normalized * walk_speed * 10, ForceMode.Force);
@@ -601,7 +654,7 @@ public class NIThirdPersonController : MonoBehaviour
         if (!GameManager.GetPauseCursor())
         {
             //Hides cursor while playing
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
     }
@@ -612,7 +665,7 @@ public class NIThirdPersonController : MonoBehaviour
         if (GameManager.GetPauseCursor())
         {
             //Shows cursor while playing
-            //Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
     }
@@ -623,15 +676,15 @@ public class NIThirdPersonController : MonoBehaviour
        //Set the transform of the object to be the child of the player.
        //If the bool is true or false then the player class will call the objects function to set itself as a child
        //object of the player, effectively joining them
-       if(ready_to_push && !pushing && !is_crouching && !is_jumping)
-       {
-           //We want to lock the player position axes here
-           rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
-       }
-       else if(!ready_to_push)
-       {
-           rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-       }
+    //    if(pushing)
+    //    {
+    //        //We want to lock the player position axes here
+    //        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+    //    }
+    //    else if(!pushing)
+    //    {
+    //        rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+    //    }
     }
 
     //Function for determining whether the player wants to jump or not

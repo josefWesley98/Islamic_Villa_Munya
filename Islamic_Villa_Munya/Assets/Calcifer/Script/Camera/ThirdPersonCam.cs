@@ -31,11 +31,11 @@ public class ThirdPersonCam : MonoBehaviour
         //Rotate the player
         if(p.GetIsClimbing() || p.GetPushOrPull())
         {
-        ground_rot_speed = 0;
+            ground_rot_speed = 0;
         }
         else if (!p.GetIsClimbing() || !p.GetPushOrPull())
         {
-        ground_rot_speed = 15;
+            ground_rot_speed = 15;
         }
         
         Vector2 look_at = p.GetPlayerInput();
