@@ -289,6 +289,12 @@ public class NIThirdPersonController : MonoBehaviour
                     }
                     else
                     {
+                        // if(pop_obj != null)
+                        // {
+                        //     pushing = false;
+                        //     pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
+                        // }
+
                         if(push_or_pull.triggered)
                         {
                             pushing = true;
@@ -385,6 +391,12 @@ public class NIThirdPersonController : MonoBehaviour
             pop_obj = other.gameObject;
             pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
             Debug.Log("We are one!");
+        }
+        else if(other.gameObject.GetComponent<ObjectController>() != null && !pushing)
+        {
+            currently_pushing = false;
+            pop_obj = other.gameObject;
+            pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
         }
     //    ready_to_push = false;
 
@@ -823,7 +835,7 @@ public class NIThirdPersonController : MonoBehaviour
 
     public bool GetPushOrPull()
     {
-        return currently_pushing;
+        return pushing;
     }
 
     public bool GetRunning()
@@ -864,6 +876,11 @@ public class NIThirdPersonController : MonoBehaviour
     public void SetInput(bool val)
     {
         input_disabled = val;
+    }
+
+    public void setPushing(bool val)
+    {
+        pushing = val;
     }
 }
 
