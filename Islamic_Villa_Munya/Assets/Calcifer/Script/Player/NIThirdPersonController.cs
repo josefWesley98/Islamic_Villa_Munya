@@ -192,7 +192,7 @@ public class NIThirdPersonController : MonoBehaviour
 
             //Check if the object in front of the player is pushable
             RaycastHit pushable_hit;
-            if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
             {
                 Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
                 is_pushable = true;
