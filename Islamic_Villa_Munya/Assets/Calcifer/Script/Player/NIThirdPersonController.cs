@@ -175,20 +175,20 @@ public class NIThirdPersonController : MonoBehaviour
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
             //push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
 
-            //CheckFloor();
+            CheckFloor();
 
             //Check for the ground state
-            RaycastHit ground_hit;
-            if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
-            {
-                grounded = true;
-            }
-            else
-            {
-                grounded = false;
-            }
+            // RaycastHit ground_hit;
+            // if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
+            // {
+            //     grounded = true;
+            // }
+            // else
+            // {
+            //     grounded = false;
+            // }
 
-             Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
+             //Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
 
             //Check if the object in front of the player is pushable
             // RaycastHit pushable_hit;
@@ -333,23 +333,49 @@ public class NIThirdPersonController : MonoBehaviour
 
     private void CheckFloor()
     {   
-        float ray_length = 0.65f;
-        float sphere_radius = 0.3f;
+        RaycastHit ground_hit;
         Vector3 ray_origin = feet_pos.transform.position;
         Vector3 ray_dir = Vector3.down;
-        RaycastHit ground_hit;
+        float ray_length = 0.2f;
+        float ray_down = 0.15f;
 
-        //cast the sphere and check if it hits the ground
-        if(Physics.SphereCast(ray_origin, sphere_radius, ray_dir, out ground_hit, ray_length, LayerMask.GetMask("Ground")))     
+        if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, ray_down))
         {
-            Debug.Log("Hitting ground");
             grounded = true;
-            Debug.DrawLine(ray_origin, ground_hit.point, Color.yellow);
+
+            //Debugging
+            Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+            foreach(Vector3 direction in directions)
+            {
+                if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_ground))
+                {
+                    Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
+                }
+                else
+                {
+                    Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
+                }
+            }
         }
         else
         {
-            Debug.Log("Not hitting ground");
             grounded = false;
+
+             // Check if there are any obstacles in front of or behind the player
+            Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+            foreach(Vector3 direction in directions)
+            {
+                if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_ground))
+                {
+                    Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
+
+                    rb.AddForce(-direction * 0.5f, ForceMode.Impulse);
+                }
+                else
+                {
+                    Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
+                }
+            }
         }
     }
 
