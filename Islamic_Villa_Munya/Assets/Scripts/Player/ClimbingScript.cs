@@ -15,8 +15,8 @@ public class ClimbingScript : MonoBehaviour
     [SerializeField] private NIThirdPersonController moveController;
     [SerializeField] private UpwardClimbing upwardClimbing;
     [SerializeField] private DownwardClimbing downwardClimbing;
-    [SerializeField] private Transform centreMass;
-    [SerializeField] private Transform playerPos;
+    //[SerializeField] private Transform centreMass;
+    //[SerializeField] private Transform playerPos;
     private bool isClimbing = false;
     private bool isJumping = false;
     private Vector3 climbPoint = new Vector3(0,0,0);
