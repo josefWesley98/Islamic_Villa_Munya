@@ -170,37 +170,37 @@ public class NIThirdPersonController : MonoBehaviour
             hard_landing = animator_ref.GetHardLanding();
 
             //Check to see if the player is on the ground
-            bool floor = Physics.CheckSphere(feet_pos.position, 0.2f, is_ground);
+            //bool floor = Physics.CheckSphere(feet_pos.position, 0.3f, is_ground);
             bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
             //push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
 
-            CheckFloor();
+            //CheckFloor();
 
             //Check for the ground state
-            // RaycastHit ground_hit;
-            // if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
-            // {
-            //     grounded = true;
-            // }
-            // else
-            // {
-            //     grounded = false;
-            // }
-
-            // Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
-
-            //Check if the object in front of the player is pushable
-            RaycastHit pushable_hit;
-            if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            RaycastHit ground_hit;
+            if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
-                is_pushable = true;
+                grounded = true;
             }
             else
             {
-                is_pushable = false;
+                grounded = false;
             }
+
+             Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
+
+            //Check if the object in front of the player is pushable
+            // RaycastHit pushable_hit;
+            // if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            // {
+            //     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
+            //     is_pushable = true;
+            // }
+            // else
+            // {
+            //     is_pushable = false;
+            // }
 
             //If the player is on the floor then set grounded to true and allow for movement and jumping
             // if (floor)
@@ -332,32 +332,24 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     private void CheckFloor()
-    {
-        float angle = 20f;
-        float ray_length = 0.7f;
-        int num_rays = 8;
-        float angle_interval = 360 / num_rays;
+    {   
+        float ray_length = 0.65f;
+        float sphere_radius = 0.3f;
+        Vector3 ray_origin = feet_pos.transform.position;
+        Vector3 ray_dir = Vector3.down;
+        RaycastHit ground_hit;
 
-        for(int i = 0; i < num_rays; i++)
+        //cast the sphere and check if it hits the ground
+        if(Physics.SphereCast(ray_origin, sphere_radius, ray_dir, out ground_hit, ray_length, LayerMask.GetMask("Ground")))     
         {
-            float current_angle = angle_interval * i - angle / 2;
-
-            //Calculate the direction to shoot ray
-            Vector3 dir = Quaternion.Euler(0, current_angle, 0) * Vector3.down;
-
-            //Shoot ray from player position
-            if(Physics.Raycast(feet_pos.transform.position, dir, out RaycastHit ground_hit, ray_length))
-            {
-                if(ground_hit.collider.gameObject.tag == "Ground")
-                {
-                    grounded = true;
-                    Debug.DrawRay(feet_pos.transform.position, dir * ground_hit.distance, Color.yellow);
-                }
-            }
-            else
-            {
-                grounded = false;
-            }
+            Debug.Log("Hitting ground");
+            grounded = true;
+            Debug.DrawLine(ray_origin, ground_hit.point, Color.yellow);
+        }
+        else
+        {
+            Debug.Log("Not hitting ground");
+            grounded = false;
         }
     }
 
@@ -398,6 +390,18 @@ public class NIThirdPersonController : MonoBehaviour
             pop_obj = other.gameObject;
             pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
         }
+
+        if(other.gameObject.tag == "PushOrPull")
+        {
+            is_pushable = true;
+            allow_jump = false;
+        }
+        else
+        {
+            is_pushable = false;
+            allow_jump = true;
+        }
+
     //    ready_to_push = false;
 
     //    if (other.gameObject.GetComponent<PushOrPull>() != null && is_pushable)
