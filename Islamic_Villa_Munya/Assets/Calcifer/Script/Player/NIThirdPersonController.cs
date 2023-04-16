@@ -174,7 +174,7 @@ public class NIThirdPersonController : MonoBehaviour
             //bool floor = Physics.CheckSphere(feet_pos.position, 0.3f, is_ground);
             bool roof = Physics.CheckSphere(head_pos.position, 0.1f, is_ceiling);
             bool wall = Physics.CheckSphere(wall_pos.position, 0.2f, is_a_wall);
-            //push = Physics.CheckSphere(push_pos.position, 0.1f, is_a_pushable);
+            push = Physics.CheckSphere(push_pos.position, 0.2f, is_a_pushable);
 
             CheckFloor();
 
@@ -192,34 +192,32 @@ public class NIThirdPersonController : MonoBehaviour
              //Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
 
             //Check if the object in front of the player is pushable
-            RaycastHit pushable_hit;
-            if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
-            {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
-                is_pushable = true;
-            }
-            else
-            {
-                is_pushable = false;
-            }
+            // RaycastHit pushable_hit;
+            // if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            // {
+            //     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
+            //     is_pushable = true;
+            // }
+            // else
+            // {
+            //     is_pushable = false;
+            // }
 
             //If the player is on the floor then set grounded to true and allow for movement and jumping
             // if (floor)
             // {
             //     grounded = true;
 
-            //     //if (push)
-            //     //{
-            //     //   is_pushable = true;
-            //     //   SetPushingCollider();
-            //     //}
-            //     //else if (!push)
-            //     //{
-            //     //   is_pushable = false;
-            //     //   //ResetCapsuleCollider();
-            //     //   ResetPushCollider();
-            //     //   //rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-            //     //}
+                if (push)
+                {
+                  is_pushable = true;
+                  Debug.Log(is_pushable);
+                }
+                else if (!push)
+                {
+                  is_pushable = false;
+                  Debug.Log(is_pushable);
+                }
             // }
             // else
             // {
@@ -417,13 +415,10 @@ public class NIThirdPersonController : MonoBehaviour
         {
             grounded = true;
             Debug.DrawRay(ray_origin, ray_dir, Color.green);
-            Debug.Log(grounded);
         }
         else
         {
             grounded = false;
-
-            Debug.Log(grounded);
 
             //CheckForObstacles();
 
