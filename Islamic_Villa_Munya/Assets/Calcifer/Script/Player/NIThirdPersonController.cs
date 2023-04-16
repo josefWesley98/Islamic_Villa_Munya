@@ -39,6 +39,7 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private LayerMask is_ceiling;
     [SerializeField] private LayerMask is_a_wall;
     [SerializeField] private LayerMask is_a_pushable;
+    [SerializeField] private LayerMask is_everything;
 
     private bool grounded;
     private bool is_roof;
@@ -191,16 +192,16 @@ public class NIThirdPersonController : MonoBehaviour
              //Debug.DrawRay(feet_pos.position, transform.TransformDirection(Vector3.down) * 0.65f, Color.red);
 
             //Check if the object in front of the player is pushable
-            // RaycastHit pushable_hit;
-            // if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
-            // {
-            //     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
-            //     is_pushable = true;
-            // }
-            // else
-            // {
-            //     is_pushable = false;
-            // }
+            RaycastHit pushable_hit;
+            if(Physics.Raycast(push_pos.position, transform.TransformDirection(Vector3.forward), out pushable_hit, 0.25f))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.cyan);
+                is_pushable = true;
+            }
+            else
+            {
+                is_pushable = false;
+            }
 
             //If the player is on the floor then set grounded to true and allow for movement and jumping
             // if (floor)
@@ -301,14 +302,23 @@ public class NIThirdPersonController : MonoBehaviour
                         }
                     }
                 }
+
+                if(currently_pushing)
+                {
+                    allow_jump = false;
+                }
+                else
+                {
+                    allow_jump = true;
+                }
             }
             else
             {
                 rb.drag = 0f;
                 
                 //Want to shrink the capsule collider when the player is in the air
-                float new_height = 0.9f;
-                capsule.height = new_height;
+                //float new_height = 0.9f;
+                //capsule.height = new_height;
                 
                 //is_stand_jump_ready = false;
             }
@@ -316,13 +326,18 @@ public class NIThirdPersonController : MonoBehaviour
             //If the player falls and has a hard landing, disable the input
             if(hard_landing)
             {
+                allow_jump = false;
                 float disable_input = (animator_ref.GetHardLandAnimTime() / 1.5f) - 0.4f;
                 //StartCoroutine(DisableInput(disable_input));
 
-                capsule.height = prev_capsule_height;
+                //capsule.height = prev_capsule_height;
                 //HardLandCapsuleCollider();
 
                 StartCoroutine(NoRotation(disable_input));
+            }
+            else
+            {
+                allow_jump = true;
             }
         }
         else
@@ -331,51 +346,102 @@ public class NIThirdPersonController : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos() 
+    {
+        Vector3 ray_pos = new Vector3(feet_pos.position.x, feet_pos.position.y - 0.15f, feet_pos.position.z);
+        float ray_length = 0.2f;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(ray_pos, Vector3.forward * ray_length);
+        Gizmos.DrawRay(ray_pos, -Vector3.forward * ray_length);
+        Gizmos.DrawRay(ray_pos, -Vector3.right * ray_length);
+        Gizmos.DrawRay(ray_pos, Vector3.right * ray_length);
+
+    }
+
+    private void FixedUpdate()
+    {
+        //Call player movement
+        if(!input_disabled)
+        {
+            PlayerMovement();
+        }
+
+        if(rb.velocity.y <= 0)
+        {
+            //Check for obstacles as the player falls so they don't get stuck
+            CheckForObstacles();
+        }
+    }
+
+    private bool CheckForObstacles()
+    {
+        RaycastHit hit;
+        float ray_length = 0.2f;
+        Vector3 ray_pos = new Vector3(feet_pos.position.x, feet_pos.position.y -0.15f, feet_pos.position.z);
+
+        Ray front_ray = new Ray(ray_pos, transform.TransformDirection(Vector3.forward));
+        Ray back_ray = new Ray(ray_pos, -transform.TransformDirection(Vector3.forward));
+        Ray left_ray = new Ray(ray_pos, -transform.TransformDirection(Vector3.right));
+        Ray right_ray = new Ray(ray_pos, transform.TransformDirection(Vector3.right));
+
+        if(Physics.Raycast(front_ray, out hit, ray_length, is_everything))
+        {
+            LandOrFall(transform.forward);
+            return true;
+        }
+        if(Physics.Raycast(back_ray, out hit, ray_length, is_everything) || Physics.Raycast(left_ray, out hit, ray_length, is_everything) || Physics.Raycast(right_ray, out hit, ray_length, is_everything))
+        {
+            LandOrFall(hit.normal);
+            return true;
+        }
+        return false;
+    }
+
+    private void LandOrFall(Vector3 move_dir)
+    {
+        //rb.AddForce(((move_dir * 5) + Vector3.down) * Time.fixedDeltaTime);
+        rb.AddForce(move_dir * 10f, ForceMode.Impulse);
+        Debug.Log("Pushing away from obstacle");
+    }
+
     private void CheckFloor()
     {   
         RaycastHit ground_hit;
         Vector3 ray_origin = feet_pos.transform.position;
         Vector3 ray_dir = Vector3.down;
-        float ray_length = 0.2f;
-        float ray_down = 0.15f;
+        //float ray_length = 0.2f;
+        float ray_down = 0.2f;
 
         if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, ray_down))
         {
             grounded = true;
-
-            //Debugging
-            Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-            foreach(Vector3 direction in directions)
-            {
-                if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_ground))
-                {
-                    Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
-                }
-                else
-                {
-                    Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
-                }
-            }
+            Debug.DrawRay(ray_origin, ray_dir, Color.green);
+            Debug.Log(grounded);
         }
         else
         {
             grounded = false;
 
-             // Check if there are any obstacles in front of or behind the player
-            Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-            foreach(Vector3 direction in directions)
-            {
-                if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_ground))
-                {
-                    Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
+            Debug.Log(grounded);
 
-                    rb.AddForce(-direction * 0.5f, ForceMode.Impulse);
-                }
-                else
-                {
-                    Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
-                }
-            }
+            //CheckForObstacles();
+
+            //  // Check if there are any obstacles in front of or behind the player
+            // Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+            // foreach(Vector3 direction in directions)
+            // {
+            //     if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_everything))
+            //     {
+            //         Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
+
+            //         rb.AddForce(-direction * 0.5f, ForceMode.Impulse);
+            //     }
+            //     else
+            //     {
+            //         Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
+            //     }
+            // }
         }
     }
 
@@ -417,52 +483,17 @@ public class NIThirdPersonController : MonoBehaviour
             pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
         }
 
-        if(other.gameObject.tag == "PushOrPull")
-        {
-            is_pushable = true;
-            allow_jump = false;
-        }
-        else
-        {
-            is_pushable = false;
-            allow_jump = true;
-        }
-
-    //    ready_to_push = false;
-
-    //    if (other.gameObject.GetComponent<PushOrPull>() != null && is_pushable)
-    //    {
-    //         ready_to_push = true;
-    //         //Call the game object function to set it's transform as that of the child of the player
-    //         Vector3 direction = other.transform.position - transform.position;
-
-    //         // Set the y component to 0 to ensure only rotation around the y-axis
-    //         direction.y = 0;
-
-    //         // Calculate the target rotation using Quaternion.LookRotation
-    //         Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
-    //         transform.localRotation = targetRotation;
-
-    //         pop_obj = other.gameObject;
-    //         pop_obj.GetComponent<PushOrPull>().Push(pushing, gameObject);
-    //         currently_pushing = pop_obj.GetComponent<PushOrPull>().GetIsParented();
-
-    //         //If the player is no longer pushing because of the object position i.e. it is not on the ground
-    //         //then stop the player pushing
-    //         // if(!currently_pushing)
-    //         // {
-    //         //     pushing = false;
-    //         // }
-    //    }
-    }
-
-    private void FixedUpdate()
-    {
-        //Call player movement
-        if(!input_disabled)
-        {
-            PlayerMovement();
-        }
+        // if(other.gameObject.tag == "PushOrPull")
+        // {
+        //     is_pushable = true;
+        //     allow_jump = false;
+        // }
+        // else
+        // {
+        //     //May be a problem for hard landing
+        //     is_pushable = false;
+        //     allow_jump = true;
+        // }
     }
 
     private void PlayerInput()
@@ -546,50 +577,6 @@ public class NIThirdPersonController : MonoBehaviour
         {
             rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
-
-        #region original_jump
-        //if (grounded &&!is_crouching && allow_jump)
-        //{
-        //    is_jumping = true;
-        //    bool apply_delay = false;
-
-        //    //If the player magnitude is < 0.1, then apply delay for standing jump
-        //    if(rb.velocity.magnitude < 0.1f)
-        //    {
-        //        //Get delay duration for disabling input to be that of the stand animation duration
-        //        disabled_input_delay = animator_ref.GetStandJumpAnimTime() - 0.3f;
-
-        //        apply_delay = true;
-        //        StartCoroutine(DisableInput(disabled_input_delay));
-        //    }
-
-        //    if ((apply_delay && is_stand_jump_ready) || (apply_delay && is_stand_jump_ready && is_wall))
-        //    {
-        //        //Apply the delay before allowing the player to jump
-        //        is_stand_jump_ready = false;
-
-        //        Invoke("DelayedJump", stand_jump_delay);
-        //    }
-
-        //    //Run jump
-        //    else if(rb.velocity.magnitude > 0.1f && !is_wall)
-        //    {
-        //        //Get delay from the animator
-        //        run_jump_delay = animator_ref.GetRunJumpAnimTime() - 0.2f;
-
-        //        //Reset the player y-velocity to 0 so they player jumps to the same height every time
-        //        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        //        //Apply the force once using impulse
-        //        rb.AddForce(transform.up * moving_jump_force, ForceMode.Impulse);
-
-        //        allow_jump = false;
-        //        StartCoroutine(DelayRunJump(run_jump_delay));
-        //    }
-
-            //Invoke("NoRotationDelay", 1f);
-        //}
-        #endregion
 
         if(grounded && !is_crouching && allow_jump)
         {
