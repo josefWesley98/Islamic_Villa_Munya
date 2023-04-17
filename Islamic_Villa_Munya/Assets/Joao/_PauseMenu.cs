@@ -19,7 +19,6 @@ public class _PauseMenu : MonoBehaviour
     [SerializeField] private PlayerControls controls;
     InputAction pause;
     private bool CursorUni = false;
-
     private void Awake()
     {
         //Assign the new input controller
@@ -106,7 +105,7 @@ public class _PauseMenu : MonoBehaviour
 
     public IEnumerator ControlsOff()
     {
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(10f);
         ControlMenu.SetActive(false);
         ControlMenu2.SetActive(false);
     }
