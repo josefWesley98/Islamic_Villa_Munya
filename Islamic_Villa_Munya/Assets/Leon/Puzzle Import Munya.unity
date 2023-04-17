@@ -9556,6 +9556,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!136 &729801844 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2205042012994353786, guid: 107951ca6040bdb4fbb23fc202291273,
+    type: 3}
+  m_PrefabInstance: {fileID: 1927369889}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &737457952
 Mesh:
   m_ObjectHideFlags: 0
@@ -20369,6 +20375,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1571093393}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &1571093395 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8405509288732363258, guid: ff4067200f5aad84c8aa77d0c2826ad3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1571093393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1573776922
 Mesh:
   m_ObjectHideFlags: 0
@@ -26879,6 +26891,18 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 3889
       objectReference: {fileID: 0}
+    - target: {fileID: 90953145, guid: 179158862265e8f419c929abca0e02d7, type: 3}
+      propertyPath: m_CapsuleColliders.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 90953145, guid: 179158862265e8f419c929abca0e02d7, type: 3}
+      propertyPath: m_CapsuleColliders.Array.data[0]
+      value: 
+      objectReference: {fileID: 729801844}
+    - target: {fileID: 90953145, guid: 179158862265e8f419c929abca0e02d7, type: 3}
+      propertyPath: m_CapsuleColliders.Array.data[1]
+      value: 
+      objectReference: {fileID: 1571093395}
     - target: {fileID: 159531689, guid: 179158862265e8f419c929abca0e02d7, type: 3}
       propertyPath: m_Mesh
       value: 
