@@ -6,6 +6,7 @@ public class _TriggerSlow : MonoBehaviour
 {
     private bool freeze = false;
     [SerializeField] GameObject Notification1;
+    [SerializeField] GameObject Notification;
     [SerializeField] GameObject Collider;
     // Start is called before the first frame update
     void Start()
@@ -18,10 +19,11 @@ public class _TriggerSlow : MonoBehaviour
     {
         if(Input.GetKeyDown("space") && freeze == true)
         {
-            Collider.SetActive(false);
+            Debug.Log("pRESSED");
             Notification1.SetActive(false);
             Time.timeScale = 1f;
             freeze = false;
+            Collider.SetActive(false);
         }
     }
 
@@ -29,9 +31,11 @@ public class _TriggerSlow : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            Notification.SetActive(false);
             Notification1.SetActive(true);
-            Time.timeScale = 0.001f;
+            Time.timeScale = 0.0f;
             freeze = true;
+            
         }
     }
 }

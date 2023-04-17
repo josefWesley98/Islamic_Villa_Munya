@@ -45,7 +45,7 @@ public class _PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(ControlsOff());
+        //StartCoroutine(ControlsOff());
         GameManager.SetPauseCursor(true);
     }
     public void Pause()
@@ -103,10 +103,10 @@ public class _PauseMenu : MonoBehaviour
         Debug.Log("Boo!");
     }
 
-    public IEnumerator ControlsOff()
+    /*public IEnumerator ControlsOff()
     {
         yield return new WaitForSeconds(10f);
         ControlMenu.SetActive(false);
         ControlMenu2.SetActive(false);
-    }
+    }*/
 }
