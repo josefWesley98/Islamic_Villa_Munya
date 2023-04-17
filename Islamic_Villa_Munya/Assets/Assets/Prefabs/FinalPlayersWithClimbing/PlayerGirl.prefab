@@ -433,11 +433,14 @@ MonoBehaviour:
   is_a_pushable:
     serializedVersion: 2
     m_Bits: 2048
+  is_everything:
+    serializedVersion: 2
+    m_Bits: 0
   ground_drag: 7
   walk_speed: 60
   run_speed: 120
   stand_jump_force: 300
-  moving_jump_force: 180
+  moving_jump_force: 190
   air_multiplier: 0.4
   capsule_radius: 0.18
   capsule_height: 1.38
@@ -669,7 +672,7 @@ Transform:
   m_Children:
   - {fileID: 1806888456491261335}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2205042012587897923
 GameObject:

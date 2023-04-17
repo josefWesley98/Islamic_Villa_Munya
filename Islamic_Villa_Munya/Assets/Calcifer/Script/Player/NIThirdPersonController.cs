@@ -399,7 +399,7 @@ public class NIThirdPersonController : MonoBehaviour
     private void LandOrFall(Vector3 move_dir)
     {
         //rb.AddForce(((move_dir * 5) + Vector3.down) * Time.fixedDeltaTime);
-        rb.AddForce(move_dir * 10f, ForceMode.Impulse);
+        rb.AddForce(move_dir * 5f, ForceMode.Impulse);
         Debug.Log("Pushing away from obstacle");
     }
 

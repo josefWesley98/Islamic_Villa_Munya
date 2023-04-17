@@ -226,7 +226,7 @@ public class ClimbingScript : MonoBehaviour
     {
         if(startClimb)
         {
-            rb.AddForce(-transform.forward * 100, ForceMode.Impulse);
+            //rb.AddForce(-transform.forward * 100, ForceMode.Impulse);
         }
         moveController.enabled = true;
         startClimb = false;
