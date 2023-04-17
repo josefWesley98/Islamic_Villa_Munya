@@ -12,6 +12,16 @@ public class GameManager : MonoBehaviour
     static protected bool hub_travel = false;
     static protected bool pause_cursor = false;
 
+    //Player selection
+    static protected bool boy_select = false;
+    static protected bool girl_select = false;
+
+    //Difficulty Selection - Primary, secondary, university
+    static protected bool easy_diff = false;
+    static protected bool medium_diff = false;
+    static protected bool hard_diff = false;
+
+
     Transform PLAYER;
 
     private void Start()
@@ -22,10 +32,7 @@ public class GameManager : MonoBehaviour
         else
             Debug.LogError("Player not found!");
     }
-    private void Update()
-    {
-        print("AAAAAAAA");
-    }
+
     //Setters
     public static void SetArtefactCollected(bool val)
     {
@@ -47,6 +54,32 @@ public class GameManager : MonoBehaviour
     {
         pause_cursor = val;
     }
+
+    public static void SetBoy(bool val)
+    {
+        boy_select = val;
+    }
+
+    public static void SetGirl(bool val)
+    {
+        girl_select = val;
+    }
+
+    public static void SetEasy(bool val)
+    {
+        easy_diff = val;
+    }
+
+    public static void SetMedium(bool val)
+    {
+        medium_diff = val;
+    }
+
+    public static void SetHard(bool val)
+    {
+        hard_diff = val;
+    }
+
     //Getters
     public static bool GetArtefactCollected()
     {
@@ -66,6 +99,31 @@ public class GameManager : MonoBehaviour
     public static bool GetPauseCursor()
     {
         return pause_cursor;
+    }
+
+    public static bool GetBoy()
+    {
+        return boy_select;
+    }
+
+    public static bool GetGirl()
+    {
+        return girl_select;
+    }
+
+    public static bool GetEasy()
+    {
+        return easy_diff;
+    }
+
+    public static bool GetMedium()
+    {
+        return medium_diff;
+    }
+
+    public static bool GetHard()
+    {
+        return hard_diff;
     }
 }
 
