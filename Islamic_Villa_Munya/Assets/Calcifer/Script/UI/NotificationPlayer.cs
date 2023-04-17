@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class _TriggerSlow : MonoBehaviour
+/*Modifed by Cal*/
+public class NotificationPlayer : MonoBehaviour
 {
     private bool freeze = false;
-    [SerializeField] GameObject Notification1;
+    private bool active = true;
     [SerializeField] GameObject Notification;
     private Collider col;
     // Start is called before the first frame update
@@ -20,22 +21,21 @@ public class _TriggerSlow : MonoBehaviour
         if(Input.GetKeyDown("space") && freeze == true)
         {
             Debug.Log("pRESSED");
-            Notification1.SetActive(false);
+            Notification.SetActive(false);
             Time.timeScale = 1f;
             freeze = false;
             Destroy(col);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected())
+        if (other.gameObject.tag == "Player" && GameManager.GetArtefactCollected() && active)
         {
-            Notification.SetActive(false);
-            Notification1.SetActive(true);
+            Notification.SetActive(true);
             Time.timeScale = 0.0f;
             freeze = true;
-            
+            active = false;
         }
     }
 }

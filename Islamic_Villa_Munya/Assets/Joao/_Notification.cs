@@ -22,7 +22,7 @@ public class _Notification : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && !GameManager.GetHaveKey())
         {
             Locked.SetActive(true);
         }
@@ -34,7 +34,6 @@ public class _Notification : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             Locked.SetActive(false);
-            Collider.SetActive(false);
         }
     }
 }

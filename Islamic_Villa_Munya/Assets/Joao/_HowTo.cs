@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class _HowTo : MonoBehaviour
 {
-    [SerializeField] GameObject Collider;
+    Collider col;
     [SerializeField] GameObject HowTo;
 
-  
+    private void Start() 
+    {
+        col.GetComponent<Collider>();    
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,8 +23,7 @@ public class _HowTo : MonoBehaviour
 
     IEnumerator Execute()
     {
-        yield return new WaitForSeconds(10);
-        HowTo.SetActive(false);
-        Collider.SetActive(false);
+        yield return new WaitForSeconds(7);
+        Destroy(HowTo);
     }
 }
