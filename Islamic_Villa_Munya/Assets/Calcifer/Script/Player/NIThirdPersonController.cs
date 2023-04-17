@@ -211,12 +211,12 @@ public class NIThirdPersonController : MonoBehaviour
                 if (push)
                 {
                   is_pushable = true;
-                  Debug.Log(is_pushable);
+                  //Debug.Log(is_pushable);
                 }
                 else if (!push)
                 {
                   is_pushable = false;
-                  Debug.Log(is_pushable);
+                  //Debug.Log(is_pushable);
                 }
             // }
             // else
@@ -400,7 +400,7 @@ public class NIThirdPersonController : MonoBehaviour
     {
         //rb.AddForce(((move_dir * 5) + Vector3.down) * Time.fixedDeltaTime);
         rb.AddForce(move_dir * 5f, ForceMode.Impulse);
-        Debug.Log("Pushing away from obstacle");
+        //Debug.Log("Pushing away from obstacle");
     }
 
     private void CheckFloor()

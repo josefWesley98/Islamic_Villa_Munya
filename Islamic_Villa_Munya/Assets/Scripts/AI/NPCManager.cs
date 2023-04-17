@@ -1652,7 +1652,7 @@ public class NPCManager : MonoBehaviour
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
                             AI[rand].GetComponent<AIController2>().SetSocialDestination(socialDestination);
-                            Debug.Log("Find social position correctly...");
+                            //Debug.Log("Find social position correctly...");
                             return true;
                         }
 
@@ -1692,7 +1692,7 @@ public class NPCManager : MonoBehaviour
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
                             AI[rand].GetComponent<AIController2>().SetSocialDestination(socialDestination);
-                            Debug.Log("Find social position correctly...");
+                            //Debug.Log("Find social position correctly...");
                             return true;
                         }
                     }

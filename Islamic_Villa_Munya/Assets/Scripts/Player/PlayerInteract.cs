@@ -43,7 +43,7 @@ public class PlayerInteract : MonoBehaviour
         movement = GetComponent<Movement>();
         ASC = GetComponent<AnimationStateController>(); 
         inspect.gameObject.SetActive(false);
-        infoObject.SetActive(false);
+        //infoObject.SetActive(false);
         //closeButton.SetActive(false);
     }
 
@@ -64,8 +64,10 @@ public class PlayerInteract : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        Debug.Log("Object name: " + other.name + ", Active: " + other.gameObject.activeSelf);
         if(other.GetComponent<InteractalbeObject>())
         {
+            Debug.Log("Interacting");
             //LookAt = other.GetComponent<InteractalbeObject>().GetLookAt();
             interactableObj = other.GetComponent<InteractalbeObject>();
             if(other.GetComponent<MeshRenderer>() != null)
@@ -126,7 +128,7 @@ public class PlayerInteract : MonoBehaviour
         
         if(isInspecting == false)
         {
-            infoObject.SetActive(false);
+            //infoObject.SetActive(false);
         }
 
         if(!canInspect)
@@ -156,7 +158,7 @@ public class PlayerInteract : MonoBehaviour
             
             if(!artifactGenerated)
             {
-                 
+                 Debug.Log("Am I ever called?");
                 Quaternion rotation = Quaternion.identity;
                 destination = new Vector3(destination.x + positionOffset.x,destination.y + positionOffset.y,destination.z + positionOffset.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
@@ -201,7 +203,7 @@ public class PlayerInteract : MonoBehaviour
     {
         if(canInspect)
         {
-            
+            Debug.Log("Can inspect");       
             isInspecting = true;
         }
     }

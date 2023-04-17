@@ -13,7 +13,7 @@ public class SpawnAudioPrefabs : MonoBehaviour
     {
         WhatToSpawnClone[sound] = Instantiate(WhatToSpawn[sound], spawnLocations[Num].transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
         // spawns prefabs number
-        Debug.Log("Spawning audio at " + Num);
+        //Debug.Log("Spawning audio at " + Num);
 
         if (attachTo)
         {

@@ -481,7 +481,7 @@ public class AIController2 : MonoBehaviour
                     spawnAudioPrefabs.spawnAudioPrefab(id, rand);
                     doSocialAudio = false;
                     soundFix = true;
-                    Debug.Log("calling this...");
+                    //Debug.Log("calling this...");
                 }
 
                 if(actionTimer >= doSocialisingFor)
@@ -731,7 +731,7 @@ public class AIController2 : MonoBehaviour
             actionTimer = 0.0f;
             doWalkingFor = ActionRandomTimer();
             walkingCd = ActionCdRandomTimer();
-            Debug.Log("walking job setup done");
+            //Debug.Log("walking job setup done");
         }
         else if(newJob == "Walking" && !allowWalkingAbout || newJob == "Walking" && !manager.CheckForWalkingSpotsAvailable(currentLocation))
         {
