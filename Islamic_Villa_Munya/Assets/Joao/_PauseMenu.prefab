@@ -9194,6 +9194,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1283266087}
+        m_TargetAssemblyTypeName: QuitGame, Assembly-CSharp
+        m_MethodName: QuitToMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2072221291
 GameObject:
   m_ObjectHideFlags: 0
@@ -10245,7 +10257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8652570455692439469
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10476,7 +10488,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Locked... a key is needed...
+  m_text: You discovered a missing artefact! Go check it out!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 178faba314461214795e2b1efbcad77d, type: 2}
   m_sharedMaterial: {fileID: 5957511325562163408, guid: 178faba314461214795e2b1efbcad77d,
@@ -10573,7 +10585,7 @@ RectTransform:
   m_GameObject: {fileID: 2104352925335000878}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.8103325, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5583145066865472281}
@@ -10676,13 +10688,14 @@ GameObject:
   - component: {fileID: 4354688169842446346}
   - component: {fileID: 6387522348825448244}
   - component: {fileID: 1808061941}
+  - component: {fileID: 1283266087}
   m_Layer: 5
   m_Name: _PauseMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1977581457369688327
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10709,7 +10722,7 @@ RectTransform:
   - {fileID: 1982531751}
   - {fileID: 5583145066865472281}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -10795,6 +10808,18 @@ MonoBehaviour:
   ControlMenu2: {fileID: 1799896495}
   Mixer: {fileID: 24100000, guid: 0d2f50187d28b144ab12adfa0347177d, type: 2}
   AudioSource: {fileID: 0}
+--- !u!114 &1283266087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2312924108551504400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cad3cbd918b367b4d9b55ed2c812e5bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2653119836281179470
 GameObject:
   m_ObjectHideFlags: 0

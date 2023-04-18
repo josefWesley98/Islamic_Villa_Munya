@@ -22,16 +22,23 @@ public class ActivatePlayer : MonoBehaviour
             if(GameManager.GetBoy())
             {
                 //Enable the boy model
-                Debug.Log("Selected boy");
                 boy_cam.SetActive(true);
                 player_boy.SetActive(true);
+
+                //Disable Girl model
+                girl_cam.SetActive(false);
+                player_girl.SetActive(false);
+
             }
             else if(GameManager.GetGirl())
             {
                 //Enable the girl model
-                Debug.Log("Selected girl");
                 girl_cam.SetActive(true);
                 player_girl.SetActive(true);
+
+                //Disable Boy model
+                boy_cam.SetActive(false);
+                player_boy.SetActive(false);
             }
         }
     }

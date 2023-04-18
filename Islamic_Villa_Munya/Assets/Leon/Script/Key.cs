@@ -30,7 +30,14 @@ public class Key : MonoBehaviour
         triggered = true;
         pickupAudioSource.Play();
 
-        Destroy(gameObject, 2f);
+        /*Cal's code starts here*/
+
+        //Disable the key and collider
+        gameObject.SetActive(false);
+
+        //Destroy(gameObject, 2f);
+
+        /*Cal's code ends here*/
     }
 
     private void Update()
@@ -38,4 +45,8 @@ public class Key : MonoBehaviour
         transform.Rotate(Vector3.up, 60 * Time.deltaTime, Space.World);
         transform.position = new Vector3(transform.position.x, startY + Mathf.Sin(Time.time * 1.5f) * 0.15f, transform.position.z);
     }
+
+    /*Cal's code starts here*/
+
+    /*Cal's code ends here*/
 }
