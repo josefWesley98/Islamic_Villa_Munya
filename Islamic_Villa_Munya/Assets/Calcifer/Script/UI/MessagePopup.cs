@@ -19,6 +19,7 @@ public class MessagePopup : MonoBehaviour
         //So when the player returns to the HUB, we don't show the tutorial again
         if(other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected())
         {
+            Debug.Log("Read me");
             msg.SetActive(true);
         }    
     }

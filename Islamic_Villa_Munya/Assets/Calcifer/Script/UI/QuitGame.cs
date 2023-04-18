@@ -9,6 +9,8 @@ public class QuitGame : MonoBehaviour
     [SerializeField] Key key; //key object
     [SerializeField] PickedUp artefacts; //artefact object(s)
     [SerializeField] Door door; //Complicated door object
+    [SerializeField] Transform new_pos_cube;
+    [SerializeField] Transform new_pos_table;
 
     //Reset variables in the GameManager
     public void QuitToMenu()
@@ -21,6 +23,7 @@ public class QuitGame : MonoBehaviour
         GameManager.SetEasy(false);
         GameManager.SetMedium(false);
         GameManager.SetHard(false);
+        GameManager.SetHUBTravel(false);
 
         //Reset key for collection
         key.SetkeyActive(true);

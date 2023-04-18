@@ -85,5 +85,10 @@ public class ObjectController : MonoBehaviour
             //rb.constraints &= ~RigidbodyConstraints.FreezeRotation;
         }
     }
+
+    public void ResetPosition(Transform new_pos)
+    {
+        gameObject.transform.position = new_pos.position;
+    }
 }
 /*Cal's code ends here*/
