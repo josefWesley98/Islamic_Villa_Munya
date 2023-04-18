@@ -11,7 +11,7 @@ public class _TriggerSlow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        col.GetComponent<Collider>();
+        col = GetComponent<Collider>();
     }
 
     // Update is called once per frame
@@ -21,9 +21,10 @@ public class _TriggerSlow : MonoBehaviour
         {
             Debug.Log("pRESSED");
             Notification1.SetActive(false);
+            Debug.Log("Destroy");
             Time.timeScale = 1f;
             freeze = false;
-            Destroy(col);
+            Destroy(gameObject);
         }
     }
 
@@ -31,11 +32,11 @@ public class _TriggerSlow : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected())
         {
-            Notification.SetActive(false);
+            //Notification.SetActive(false);
             Notification1.SetActive(true);
             Time.timeScale = 0.0f;
             freeze = true;
-            
+
         }
     }
 }
