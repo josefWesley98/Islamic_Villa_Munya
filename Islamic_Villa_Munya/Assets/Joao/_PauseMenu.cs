@@ -65,6 +65,9 @@ public class _PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         Cursor.visible = false;
+        CursorUni = false;
+        GameManager.SetPauseCursor(true);
+        Debug.Log(CursorUni);
     }
 
     public void Home()
@@ -86,6 +89,7 @@ public class _PauseMenu : MonoBehaviour
             {
                 CursorUni = false;
                 GameManager.SetPauseCursor(CursorUni);
+                //GameManager.SetPauseCursor(false);
                 Debug.Log(CursorUni);
                 Resume();
             }
@@ -96,6 +100,7 @@ public class _PauseMenu : MonoBehaviour
             {
                 CursorUni = true;
                 GameManager.SetPauseCursor(CursorUni);
+                //GameManager.SetPauseCursor(true);
                 Debug.Log(CursorUni);
                 Pause();
             }
