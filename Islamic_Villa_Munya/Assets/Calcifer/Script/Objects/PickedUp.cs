@@ -22,13 +22,19 @@ public class PickedUp : MonoBehaviour
                 GameManager.SetArtefactCollected(true);
                 GameManager.SetHUBTravel(true);
                 //Destroy the game object when picked up
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                gameObject.SetActive(false);
             }
     }
 
     public bool GetPickedUp()
     {
         return is_picked;
+    }
+
+    public void SetArtefactActive(bool val)
+    {
+        gameObject.SetActive(val);
     }
 }
 /*Cal's script starts here*/

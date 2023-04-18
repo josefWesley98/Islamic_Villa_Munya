@@ -76,7 +76,11 @@ public class Door : MonoBehaviour
         //failsafe
         if (unlockNextPress && temporaryPlayerReferenceDeleteLaterOk == null)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+
+            /*Cal's script starts here*/
+            gameObject.SetActive(false);
+            /*Cal's script ends here*/
         }
 
         //print(Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos));
@@ -292,4 +296,11 @@ public class Door : MonoBehaviour
         locked = !locked;
         return locked;
     }
+
+    /*Cal's script starts here*/
+    public void SetDoorActive(bool val)
+    {
+        gameObject.SetActive(true);
+    }
+    /*Cal's script ends here*/
 }

@@ -47,6 +47,9 @@ public class Key : MonoBehaviour
     }
 
     /*Cal's code starts here*/
-
+    public void SetkeyActive(bool val)
+    {
+        gameObject.SetActive(val);
+    }
     /*Cal's code ends here*/
 }
