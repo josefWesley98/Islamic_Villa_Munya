@@ -126,12 +126,8 @@ public class PlayerInteract : MonoBehaviour
         //Toggle the inspecting
         if(canInspect)
         {
-            Debug.Log(isInspecting);
-            if (isInspecting)
+            if(isInspecting)
             {
-                isInspecting = false;
-                isInspecting = false;
-                
                 if(inspectPress.triggered)
                 {
                     isInspecting = false;
@@ -140,9 +136,7 @@ public class PlayerInteract : MonoBehaviour
         }
         else
         {
-            isInspecting = true;
-            
-            if (inspectPress.triggered)
+            if(inspectPress.triggered)
             {
                 isInspecting = true;
             }
@@ -228,11 +222,11 @@ public class PlayerInteract : MonoBehaviour
     }
     private void Inspecting(InputAction.CallbackContext context)
     {
-        //if(canInspect)
-        //{
-        //    Debug.Log("Can inspect");       
-        //    isInspecting = true;
-        //}
+        if(canInspect)
+        {
+            Debug.Log("Can inspect");       
+            isInspecting = true;
+        }
     }
     public void ButtonCloseInspection()
     {
