@@ -43,7 +43,7 @@ public class PlayerInteract : MonoBehaviour
         movement = GetComponent<Movement>();
         ASC = GetComponent<AnimationStateController>(); 
         inspect.gameObject.SetActive(false);
-        //infoObject.SetActive(false);
+        infoObject.SetActive(false);
         //closeButton.SetActive(false);
     }
 
@@ -64,7 +64,7 @@ public class PlayerInteract : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.Log("Object name: " + other.name + ", Active: " + other.gameObject.activeSelf);
+        //Debug.Log("Object name: " + other.name + ", Active: " + other.gameObject.activeSelf);
         if(other.GetComponent<InteractalbeObject>())
         {
             Debug.Log("Interacting");
@@ -128,7 +128,7 @@ public class PlayerInteract : MonoBehaviour
         
         if(isInspecting == false)
         {
-            //infoObject.SetActive(false);
+            infoObject.SetActive(false);
         }
 
         if(!canInspect)
@@ -150,7 +150,7 @@ public class PlayerInteract : MonoBehaviour
                 objRenderer2.enabled = false;
             }
             //ASC.enabled = false;
-            cameraPos.position = new Vector3(transform.position.x,transform.position.y + 1.15f, transform.position.z);
+            cameraPos.position = new Vector3(transform.position.x,transform.position.y + 1.3f, transform.position.z);
             firstPersonCamera.Priority = 15;
 
             infoObject.SetActive(true);
@@ -158,7 +158,6 @@ public class PlayerInteract : MonoBehaviour
             
             if(!artifactGenerated)
             {
-                 Debug.Log("Am I ever called?");
                 Quaternion rotation = Quaternion.identity;
                 destination = new Vector3(destination.x + positionOffset.x,destination.y + positionOffset.y,destination.z + positionOffset.z);
                 var inspectObject = Instantiate(displayObject,destination, rotation) as GameObject;
