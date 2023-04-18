@@ -15,6 +15,8 @@ public class _PauseMenu : MonoBehaviour
     [SerializeField] GameObject ControlMenu2;
     [SerializeField] private AudioMixer Mixer;
     [SerializeField] private AudioSource AudioSource;
+    [SerializeField] private Slider slider;
+    float volume = 0.2f;
 
     [SerializeField] private PlayerControls controls;
     InputAction pause;
@@ -47,6 +49,9 @@ public class _PauseMenu : MonoBehaviour
     {
         //StartCoroutine(ControlsOff());
         GameManager.SetPauseCursor(true);
+        AudioSource = AudioSource.GetComponent<AudioSource>();
+        slider.value = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
+        AudioSource.volume = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
     }
     public void Pause()
     {
@@ -60,6 +65,9 @@ public class _PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         Cursor.visible = false;
+        CursorUni = false;
+        GameManager.SetPauseCursor(true);
+        Debug.Log(CursorUni);
     }
 
     public void Home()
@@ -71,6 +79,7 @@ public class _PauseMenu : MonoBehaviour
     public void SetLevel (float sliderValue)
     {
         Mixer.SetFloat("Volume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("Volume", volume);
     }
     private void Update()
     {
@@ -80,6 +89,7 @@ public class _PauseMenu : MonoBehaviour
             {
                 CursorUni = false;
                 GameManager.SetPauseCursor(CursorUni);
+                //GameManager.SetPauseCursor(false);
                 Debug.Log(CursorUni);
                 Resume();
             }
@@ -90,6 +100,7 @@ public class _PauseMenu : MonoBehaviour
             {
                 CursorUni = true;
                 GameManager.SetPauseCursor(CursorUni);
+                //GameManager.SetPauseCursor(true);
                 Debug.Log(CursorUni);
                 Pause();
             }

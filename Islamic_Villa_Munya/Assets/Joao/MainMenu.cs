@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private AudioMixer Mixer;
     [SerializeField] private AudioSource AudioSource;
     [SerializeField] private GameObject DifficultyMenu;
+    [SerializeField] private Slider slider;
+    float volume = 0.5f;
     //
     public bool BOY = false;
     public bool GIRL = false;
@@ -20,7 +23,13 @@ public class MainMenu : MonoBehaviour
     public bool Medium = false;
     public bool Hard = false;
 
-
+    void Start()
+    {
+        AudioSource = AudioSource.GetComponent<AudioSource>();
+        //AudioSource.volume = PlayerPrefs.GetFloat("SliderVolumeLevel", volume);
+        slider.value = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
+        AudioSource.volume = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
+    }
 
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
     {
@@ -84,5 +93,6 @@ public class MainMenu : MonoBehaviour
     public void SetLevel(float sliderValue)
     {
         Mixer.SetFloat("Volume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("Volume", volume);
     }
 }

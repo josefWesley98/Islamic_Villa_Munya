@@ -458,7 +458,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""899e574e-6228-4889-99ea-a4643ebbf57b"",
                     ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""SlowTap(duration=0.1,pressPoint=0.1)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Push/Pull"",

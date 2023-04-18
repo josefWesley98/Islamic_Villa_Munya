@@ -53,7 +53,8 @@ public class PlayerInteract : MonoBehaviour
         
         inspectPress = playercontrols.Player.Inspect;
         inspectPress.Enable();
-        inspectPress.performed += Inspecting;
+        inspectPress.performed += _ => Inspecting(_);
+        inspectPress.canceled += _ => Inspecting(_);
     }
 
     private void OnDisable()
@@ -121,6 +122,27 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        /*Cal's script starts here*/
+        //Toggle the inspecting
+        if(canInspect)
+        {
+            if(isInspecting)
+            {
+                if(inspectPress.triggered)
+                {
+                    isInspecting = false;
+                }
+            }
+        }
+        else
+        {
+            if(inspectPress.triggered)
+            {
+                isInspecting = true;
+            }
+        }
+        /*Cal's script ends here*/
+
         if(!isTouching || isInspecting)
         {
             inspect.gameObject.SetActive(false);
