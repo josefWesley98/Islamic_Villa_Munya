@@ -48,7 +48,7 @@ public class Door : MonoBehaviour
     public Door puppetDoor;
     public UnityEvent doorReachOpen, doorReachClose;
 
-    public Transform temporaryPlayerReferenceDeleteLaterOk;
+    public Transform playerBoy, playerGirl;
     float interactMinDistance = 3f;
     public Rigidbody lockRB;
     public AudioClip unlockAudio;
@@ -74,7 +74,7 @@ public class Door : MonoBehaviour
     void Update()
     {
         //failsafe
-        if (unlockNextPress && temporaryPlayerReferenceDeleteLaterOk == null)
+        if (unlockNextPress && (playerBoy == null || playerGirl == null))
         {
             //Destroy(gameObject);
 
@@ -92,7 +92,7 @@ public class Door : MonoBehaviour
         }
         else if (hinge != null)
         {
-            if (Input.GetKeyDown(KeyCode.F) && Vector3.Distance(temporaryPlayerReferenceDeleteLaterOk.position, closedPos) < interactMinDistance)//TEMPORARY
+            if (Input.GetKeyDown(KeyCode.F) && ((Vector3.Distance(playerBoy.position, closedPos) < interactMinDistance) || (Vector3.Distance(playerGirl.position, closedPos) < interactMinDistance)))
             {
                 print("in range");
                 if (unlockNextPress && locked)
