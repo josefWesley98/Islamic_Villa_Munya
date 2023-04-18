@@ -48,7 +48,9 @@ public class _PauseMenu : MonoBehaviour
     private void Start()
     {
         //StartCoroutine(ControlsOff());
-        GameManager.SetPauseCursor(true);
+        //GameManager.SetPauseCursor(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         AudioSource = AudioSource.GetComponent<AudioSource>();
         slider.value = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
         AudioSource.volume = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
@@ -64,10 +66,12 @@ public class _PauseMenu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
-        Cursor.visible = false;
+        //Cursor.visible = false;
         CursorUni = false;
-        GameManager.SetPauseCursor(true);
+        //GameManager.SetPauseCursor(true);
         Debug.Log(CursorUni);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void Home()
@@ -88,8 +92,10 @@ public class _PauseMenu : MonoBehaviour
             if(pause.triggered)
             {
                 CursorUni = false;
-                GameManager.SetPauseCursor(CursorUni);
+                //GameManager.SetPauseCursor(CursorUni);
                 //GameManager.SetPauseCursor(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 Debug.Log(CursorUni);
                 Resume();
             }
@@ -99,8 +105,10 @@ public class _PauseMenu : MonoBehaviour
             if(pause.triggered)
             {
                 CursorUni = true;
-                GameManager.SetPauseCursor(CursorUni);
-                //GameManager.SetPauseCursor(true);
+                //GameManager.SetPauseCursor(CursorUni);
+                GameManager.SetPauseCursor(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
                 Debug.Log(CursorUni);
                 Pause();
             }
