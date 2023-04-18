@@ -160,7 +160,15 @@ public class NIThirdPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
+#if UNITY_EDITOR
+    if(Input.GetKeyDown(KeyCode.F1))
+    {
+            walk_speed = 400;
+            run_speed = 600;
+            stand_jump_force = 600;
+            moving_jump_force = 600;
+    }
+#endif
         if (!isClimbing)
         {
             PlayerInput();

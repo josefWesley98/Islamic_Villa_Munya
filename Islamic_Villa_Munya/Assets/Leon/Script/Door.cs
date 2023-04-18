@@ -49,6 +49,7 @@ public class Door : MonoBehaviour
     public UnityEvent doorReachOpen, doorReachClose;
 
     public Transform playerBoy, playerGirl;
+    Transform actualPlayerBoy, actualPlayerGirl;
     float interactMinDistance = 3f;
     public Rigidbody lockRB;
     public AudioClip unlockAudio;
@@ -74,7 +75,7 @@ public class Door : MonoBehaviour
     void Update()
     {
         //failsafe
-        if (unlockNextPress && (playerBoy == null || playerGirl == null))
+        if (unlockNextPress && (actualPlayerBoy == null || actualPlayerGirl == null))
         {
             //Destroy(gameObject);
 
@@ -92,7 +93,7 @@ public class Door : MonoBehaviour
         }
         else if (hinge != null)
         {
-            if (Input.GetKeyDown(KeyCode.F) && ((Vector3.Distance(playerBoy.position, closedPos) < interactMinDistance) || (Vector3.Distance(playerGirl.position, closedPos) < interactMinDistance)))
+            if (Input.GetKeyDown(KeyCode.F) && ((Vector3.Distance(actualPlayerBoy.position, closedPos) < interactMinDistance) || (Vector3.Distance(actualPlayerGirl.position, closedPos) < interactMinDistance)))
             {
                 print("in range");
                 if (unlockNextPress && locked)
@@ -240,6 +241,9 @@ public class Door : MonoBehaviour
         unlockAudioSource = transform.AddComponent<AudioSource>();
         unlockAudioSource.clip = unlockAudio;
         unlockAudioSource.spatialBlend = 1f;
+
+        actualPlayerBoy = playerBoy.GetChild(0);
+        actualPlayerGirl = playerGirl.GetChild(0);
     }
 
     //editor helpers
@@ -300,7 +304,7 @@ public class Door : MonoBehaviour
     /*Cal's script starts here*/
     public void SetDoorActive(bool val)
     {
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
     }
     /*Cal's script ends here*/
 }
