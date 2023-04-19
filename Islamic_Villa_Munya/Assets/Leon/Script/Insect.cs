@@ -90,9 +90,10 @@ public class Insect : MonoBehaviour
 
     void FixedUpdate()
     {
+        
         if (!setUpComplete)
             return;
-
+        transform.localScale = Vector3.one;
         transform.rotation = Quaternion.Slerp(transform.rotation, rotHelper.rotation, Time.time * rotSpeed);
 
         switch (state)
