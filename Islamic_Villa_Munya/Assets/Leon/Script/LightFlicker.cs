@@ -42,6 +42,7 @@ public class LightFlicker : MonoBehaviour
 
     void Start()
     {
+        smoothing *= 4;
         smoothQueue = new Queue<float>(smoothing);
         // External or internal light?
         if (light == null)
