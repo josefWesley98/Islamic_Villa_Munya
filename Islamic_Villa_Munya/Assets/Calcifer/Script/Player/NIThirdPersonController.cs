@@ -380,6 +380,7 @@ public class NIThirdPersonController : MonoBehaviour
         if(rb.velocity.y == 0)
         {
             grounded = true;
+            CheckForObstacles();
         }
     }
 
@@ -396,7 +397,7 @@ public class NIThirdPersonController : MonoBehaviour
 
         if(Physics.Raycast(front_ray, out hit, ray_length, is_everything))
         {
-            if(hit.rigidbody.gameObject.tag == "PushOrPull")
+            if(hit.rigidbody.gameObject.tag == "PushOrPull" || hit.rigidbody.gameObject.tag == "Ground")
             {
                 LandOrFall(transform.forward);
                 return true;
@@ -404,7 +405,7 @@ public class NIThirdPersonController : MonoBehaviour
         }
         if(Physics.Raycast(back_ray, out hit, ray_length, is_everything) || Physics.Raycast(left_ray, out hit, ray_length, is_everything) || Physics.Raycast(right_ray, out hit, ray_length, is_everything))
         {
-            if(hit.rigidbody.gameObject.tag == "PushOrPull")
+            if(hit.rigidbody.gameObject.tag == "PushOrPull" || hit.rigidbody.gameObject.tag == "Ground")
             {
                 LandOrFall(hit.normal);
                 return true;
