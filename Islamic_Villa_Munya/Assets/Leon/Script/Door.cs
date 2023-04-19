@@ -75,7 +75,7 @@ public class Door : MonoBehaviour
     void Update()
     {
         //failsafe
-        if (unlockNextPress && (actualPlayerBoy == null || actualPlayerGirl == null))
+        if (unlockNextPress && (actualPlayerBoy == null && actualPlayerGirl == null))
         {
             //Destroy(gameObject);
 
