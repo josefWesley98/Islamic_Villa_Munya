@@ -52,41 +52,13 @@ public class DownwardClimbing : MonoBehaviour
     private int chosenReference = 0;
     private Vector2 movementDirection;
     private bool gotFootHolds = false;
-    private Vector3 leftFootPositionUp;
-    private Vector3 leftFootPositionUpLeft;
-    private Vector3 leftFootPositionUpRight;
 
-    private Vector3 rightFootPositionUp;
-    private Vector3 rightFootPositionUpLeft;
-    private Vector3 rightFootPositionUpRight;
-
-     private Vector3 leftFootPositionDown;
-    private Vector3 leftFootPositionDownLeft;
-    private Vector3 leftFootPositionDownRight;
-
-    private Vector3 rightFootPositionDown;
-    private Vector3 rightFootPositionDownLeft;
-    private Vector3 rightFootPositionDownRight;
     
+    private bool paused = false;
     // Start is called before the first frame update
     void Start()
     {
-        // leftFootPositionUp;
-        // leftFootPositionUpLeft;
-        // leftFootPositionUpRight;
-
-        // rightFootPositionUp;
-        // rightFootPositionUpLeft;
-        // rightFootPositionUpRight;
-
-        // leftFootPositionDown;
-        // leftFootPositionDownLeft;
-        // leftFootPositionDownRight;
-
-        // rightFootPositionDown;
-        // rightFootPositionDownLeft;
-        // rightFootPositionDownRight;
-
+  
         movingLeftFoot = true;
         needNewLeftFootSpot = true; 
         m_Started = true; 
@@ -105,12 +77,21 @@ public class DownwardClimbing : MonoBehaviour
 
         FindRightFootClimbingPositions();
         FindLeftFootClimbingPositions();
+        if(movementDirection.x == 0 && movementDirection.y == 0)
+        {
+            paused = true;
+        }
+        else
+        {
+            paused = false;
+        }
         
-        if(!climbingScript.GetDetach())
+        if(!climbingScript.GetDetach() && !paused)
         {
             LerpRightFootToTarget();
             LerpLeftFootToTarget();
         }
+
         RiggingWeightLerp();
        
     }
@@ -342,7 +323,7 @@ public class DownwardClimbing : MonoBehaviour
         {
             if(upwardClimbing.GetMovingDirecionally())
             {
-                 interpolateAmountRightFoot += Time.deltaTime *1.5f;
+                 interpolateAmountRightFoot += Time.deltaTime *1.75f;
             }
             else
             {
@@ -381,7 +362,7 @@ public class DownwardClimbing : MonoBehaviour
         {
             if(upwardClimbing.GetMovingDirecionally())
             {
-                interpolateAmountLeftFoot += Time.deltaTime * 1.5f;
+                interpolateAmountLeftFoot += Time.deltaTime * 1.75f;
             }
             else
             {
