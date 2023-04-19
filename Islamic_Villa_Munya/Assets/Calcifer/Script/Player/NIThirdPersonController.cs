@@ -185,7 +185,6 @@ public class NIThirdPersonController : MonoBehaviour
             push = Physics.CheckSphere(push_pos.position, 0.2f, is_a_pushable);
 
             CheckFloor();
-
             //Check for the ground state
             // RaycastHit ground_hit;
             // if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, 0.65f))
@@ -378,6 +377,10 @@ public class NIThirdPersonController : MonoBehaviour
             //Check for obstacles as the player falls so they don't get stuck
             CheckForObstacles();
         }
+        if(rb.velocity.y == 0)
+        {
+            grounded = true;
+        }
     }
 
     private bool CheckForObstacles()
@@ -393,21 +396,28 @@ public class NIThirdPersonController : MonoBehaviour
 
         if(Physics.Raycast(front_ray, out hit, ray_length, is_everything))
         {
-            LandOrFall(transform.forward);
-            return true;
+            if(hit.rigidbody.gameObject.tag == "PushOrPull")
+            {
+                LandOrFall(transform.forward);
+                return true;
+            }
         }
         if(Physics.Raycast(back_ray, out hit, ray_length, is_everything) || Physics.Raycast(left_ray, out hit, ray_length, is_everything) || Physics.Raycast(right_ray, out hit, ray_length, is_everything))
         {
-            LandOrFall(hit.normal);
-            return true;
+            if(hit.rigidbody.gameObject.tag == "PushOrPull")
+            {
+                LandOrFall(hit.normal);
+                return true;
+            }
         }
         return false;
     }
 
     private void LandOrFall(Vector3 move_dir)
     {
+        Vector3 new_dir = new Vector3(move_dir.x, 5f, move_dir.z);
         //rb.AddForce(((move_dir * 5) + Vector3.down) * Time.fixedDeltaTime);
-        rb.AddForce(move_dir * 5f, ForceMode.Impulse);
+        rb.AddForce(new_dir * 10f, ForceMode.Impulse);
         //Debug.Log("Pushing away from obstacle");
     }
 
@@ -419,7 +429,7 @@ public class NIThirdPersonController : MonoBehaviour
         //float ray_length = 0.2f;
         float ray_down = 0.2f;
 
-        if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, ray_down))
+        if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, ray_down))                                                                                                                                                                                                                                                                                                                                                            
         {
             grounded = true;
             Debug.DrawRay(ray_origin, ray_dir, Color.green);
