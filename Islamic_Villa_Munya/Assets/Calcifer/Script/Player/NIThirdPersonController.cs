@@ -311,11 +311,8 @@ public class NIThirdPersonController : MonoBehaviour
 
                 if(currently_pushing)
                 {
+                    Debug.Log("Stop Jumping");
                     allow_jump = false;
-                }
-                else
-                {
-                    allow_jump = true;
                 }
             }
             else
@@ -343,7 +340,10 @@ public class NIThirdPersonController : MonoBehaviour
             }
             else
             {
-                allow_jump = true;
+                if(!currently_pushing)
+                {
+                    allow_jump = true;
+                }
             }
         }
         else
