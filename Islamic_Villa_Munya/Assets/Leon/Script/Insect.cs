@@ -58,7 +58,7 @@ public class Insect : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Invoke(nameof(SetUp), 1f);
+        Invoke(nameof(SetUp), 3f);
     }
 
     private void SetUp()
@@ -93,7 +93,6 @@ public class Insect : MonoBehaviour
         
         if (!setUpComplete)
             return;
-        transform.localScale = Vector3.one;
         transform.rotation = Quaternion.Slerp(transform.rotation, rotHelper.rotation, Time.time * rotSpeed);
 
         switch (state)
@@ -233,6 +232,7 @@ public class Insect : MonoBehaviour
         rotHelper.Rotate(new Vector3(50, Random.Range(-180f, 180f), 0));
         anim.speed = 1;
         anim.SetBool("grounded", false);
+        transform.localScale = Vector3.one;
     }
 
     public bool IsInLayerMask(GameObject obj, LayerMask layerMask)
