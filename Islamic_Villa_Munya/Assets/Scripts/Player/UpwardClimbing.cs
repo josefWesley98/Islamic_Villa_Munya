@@ -23,7 +23,7 @@ public class UpwardClimbing : MonoBehaviour
     [SerializeField] private Transform rightArmPos;
     private float interpolateAmountRightArm = 0.0f;
     private bool moveRightArm = true;
-
+    [SerializeField] private Animator animator;
 
     [SerializeField] private Transform leftArmStartPosition;
     [SerializeField] private Transform leftRigAimPosition;
@@ -64,7 +64,7 @@ public class UpwardClimbing : MonoBehaviour
     private bool rotateToWall = false;
 	private Vector3 wallPosition = Vector3.zero;
     private bool movingDown = false;
-
+    private bool paused = false;
     void Start()
     {
         
@@ -132,16 +132,32 @@ public class UpwardClimbing : MonoBehaviour
             stopLeft = false;
             stopRight = false;
         }
-
-        FindRightHandClimbingPositions();
-        FindLeftHandClimbingPositions();
+       
+            FindRightHandClimbingPositions();
+            FindLeftHandClimbingPositions();
+            
         
-        if(!climbingScript.GetDetach())
+        
+        if(!climbingScript.GetDetach() && !paused)
         {
             LerpRightHandToTarget();
             LerpLeftHandToTarget();
         }
-        
+        if(movementDirection.x == 0 && movementDirection.y == 0)
+        {
+            paused = true;
+            animator.speed = 0f;
+        }
+        else
+        {
+            paused = false;
+            animator.speed = 0.65f;
+        }
+        if(climbingScript.GetDetach())
+        {
+            paused = true;
+            animator.speed = 1.0f;
+        }
         RiggingWeightLerp();
         downwardClimbing.SetMovementDirection(movementDirection);
 
@@ -447,7 +463,7 @@ public class UpwardClimbing : MonoBehaviour
             
             if(movingDirecionally)
             {
-                 interpolateAmountRightArm += Time.deltaTime * 1.5f;
+                 interpolateAmountRightArm += Time.deltaTime * 1.75f;
             }
             else
             {
@@ -471,7 +487,7 @@ public class UpwardClimbing : MonoBehaviour
                 interpolateAmountRightArm = 0.0f;
             }
         }
-        if(!movingRightHand && currentHandSpotRight != null && rightRigAimPosition.position != currentHandSpotRight.transform.position)
+        if(!movingRightHand && currentHandSpotRight != null) //&& rightRigAimPosition.position != currentHandSpotRight.transform.position)
         {
             //rightRigAimPosition.position = Vector3.Lerp(rightRigAimPosition.position, currentHandSpotRight.transform.position, interpolateAmountRightArm);
             rightRigAimPosition.position = currentHandSpotRight.transform.position;
@@ -489,7 +505,7 @@ public class UpwardClimbing : MonoBehaviour
             
             if(movingDirecionally)
             {
-                interpolateAmountLeftArm  += Time.deltaTime * 1.5f;
+                interpolateAmountLeftArm  += Time.deltaTime * 1.75f;
             }
             else
             {
@@ -530,7 +546,7 @@ public class UpwardClimbing : MonoBehaviour
                
             }
         }
-        if(!movingLeftHand && currentHandSpotLeft != null && leftRigAimPosition.position != currentHandSpotLeft.transform.position)
+        if(!movingLeftHand && currentHandSpotLeft != null)// && leftRigAimPosition.position != currentHandSpotLeft.transform.position)
         {
             //leftRigAimPosition.position = Vector3.Lerp(leftRigAimPosition.position, currentHandSpotLeft.transform.position, Time.deltaTime * 2.0f);
             leftRigAimPosition.position = currentHandSpotLeft.transform.position;

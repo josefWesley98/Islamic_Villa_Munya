@@ -42,6 +42,7 @@ public class ClimbingScript : MonoBehaviour
     private Vector3 direction = Vector3.zero;
     private Vector3 target = Vector3.zero;
     private Quaternion targetRotation;
+    
     //private Quaternion slerpStart = Quaternion.identity;
     //private Quaternion lookRotation = Quaternion.identity;
     private void Awake() => playercontrols = new PlayerControls();
@@ -70,6 +71,10 @@ public class ClimbingScript : MonoBehaviour
         stopClimb = playercontrols.Player.Drop;
         stopClimb.Enable();
         stopClimb.started += StopClimb;
+
+        jump = playercontrols.Player.Jump;
+        jump.Enable();
+
     }
 
     private void OnDisable()
@@ -77,27 +82,33 @@ public class ClimbingScript : MonoBehaviour
         playercontrols.Disable();
         climb.Disable();
         stopClimb.Disable();
+        jump.Disable();
     }
     // Update is called once per frame
     void Update()
     {
+        if(jump.ReadValue<float>() > 0)
+        {
+            isJumping = true;
+        }
+        else
+        {
+            isJumping = false;
+        }
         if(startClimb && lookDirection[0])
         {
             Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
             // Set the y component to 0 to ensure only rotation around the y-axis
             direction.y = 0;
 
-            if(lookDirection[0])
-            {
-                targetRotation = Quaternion.LookRotation(direction.normalized);
-            }
+            targetRotation = Quaternion.LookRotation(direction.normalized);
             
-            // Calculate the target rotation using Quaternion.LookRotation
+            
 
             if(startClimb && transform.localRotation != targetRotation)
             {
                 transform.localRotation = targetRotation;
-                Debug.Log("rotating.");
+                Debug.Log("rotating forward.");
             }
             
         }
@@ -111,7 +122,7 @@ public class ClimbingScript : MonoBehaviour
             if(startClimb && transform.localRotation != targetRotation)
             {
                 transform.localRotation = targetRotation;
-                Debug.Log("rotating.");
+                Debug.Log("rotating right.");
             }
         }
         if(startClimb && lookDirection[2])
@@ -124,7 +135,7 @@ public class ClimbingScript : MonoBehaviour
             if(startClimb && transform.localRotation != targetRotation)
             {
                 transform.localRotation = targetRotation;
-                Debug.Log("rotating.");
+                Debug.Log("rotating back.");
             }
         }
         if(startClimb && lookDirection[3])
@@ -137,7 +148,7 @@ public class ClimbingScript : MonoBehaviour
             if(startClimb && transform.localRotation != targetRotation)
             {
                 transform.localRotation = targetRotation;
-                Debug.Log("rotating.");
+                Debug.Log("rotating left.");
             }
         }
 
@@ -238,7 +249,7 @@ public class ClimbingScript : MonoBehaviour
     }
     private void DoClimbing(InputAction.CallbackContext context)
     {
-        if(upwardClimbing.GetCanClimb() && !startClimb)
+        if(upwardClimbing.GetCanClimb() && !startClimb && !isJumping)
         {  
             isConnectedToWall = true;
             //Debug.Log("starting the climb.");
@@ -276,7 +287,7 @@ public class ClimbingScript : MonoBehaviour
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.25f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y - 0.5f, endLerpPoint.z + climbOffset);
                
             }
             //Debug.Log(" looking forward or back");
@@ -292,7 +303,7 @@ public class ClimbingScript : MonoBehaviour
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.25f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
 
             }
             //Debug.Log(" looking left or right");
@@ -313,7 +324,7 @@ public class ClimbingScript : MonoBehaviour
                 }
                 if(upwardClimbing.GetMovingDirecionally())
                 {
-                    interpolateAmount = (interpolateAmount + Time.deltaTime * 0.75f);
+                    interpolateAmount = (interpolateAmount + Time.deltaTime * 1.25f);
                 }
             }
             
