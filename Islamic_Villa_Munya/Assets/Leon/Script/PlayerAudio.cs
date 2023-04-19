@@ -16,7 +16,8 @@ public class PlayerAudio : MonoBehaviour
     List<AudioSource> stepCarpetSources = new List<AudioSource>();
     public float stepCarpetVolume = 0.25f;
 
-    GameObject player;
+    public Transform playerBoy, playerGirl;
+    Transform actualPlayer;
     NIThirdPersonController pController;
 
     public float footstepTimeWalk = 0.3f;
@@ -34,14 +35,24 @@ public class PlayerAudio : MonoBehaviour
     GameObject previousFloor;
 
     bool onTile = true;
+
+    void FindPlayer()
+    {
+        if (playerBoy.gameObject.activeSelf)
+            actualPlayer = playerBoy;
+        else if (playerGirl.gameObject.activeSelf)
+            actualPlayer = playerGirl;
+
+        transform.parent = actualPlayer.GetChild(0);
+        transform.position = actualPlayer.GetChild(0).position;
+
+        pController = actualPlayer.GetChild(0).GetComponentInChildren<NIThirdPersonController>();
+    }
+
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
-        transform.parent = player.transform;
-        transform.position = player.transform.position;
-
-        pController = player.GetComponentInChildren<NIThirdPersonController>();
-
+        //player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
+        Invoke(nameof(FindPlayer), 3f);
         footstepMaster[0] = stepCarpetSources;
         footstepMaster[1] = stepTileSources;
 
