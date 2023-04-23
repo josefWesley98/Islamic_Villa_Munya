@@ -17,7 +17,7 @@ public class MessagePopup : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         //So when the player returns to the HUB, we don't show the tutorial again
-        if(other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected())
+        if(other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected(0))
         {
             Debug.Log("Read me");
             msg.SetActive(true);

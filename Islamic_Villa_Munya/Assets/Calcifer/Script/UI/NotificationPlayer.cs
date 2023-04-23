@@ -28,9 +28,11 @@ public class NotificationPlayer : MonoBehaviour
         }
     }
 
+    /*Modified by Cal*/
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player" && GameManager.GetArtefactCollected() && active)
+        //Only want to show the 'You're free to explore' message once then no more after that so check if the second artefact has been found. If it has then never show the message 
+        if (other.gameObject.tag == "Player" && GameManager.GetArtefactCollected(0) && !GameManager.GetArtefactCollected(1) && active)
         {
             Notification.SetActive(true);
             Time.timeScale = 0.0f;

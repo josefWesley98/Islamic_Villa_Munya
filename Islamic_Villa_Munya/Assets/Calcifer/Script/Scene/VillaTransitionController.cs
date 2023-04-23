@@ -15,6 +15,9 @@ public class VillaTransitionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Set the current artefact to not collected here so when the player collides with the travel hit box, nothing happens before getting next artefact
+        GameManager.SetCurrentArtefactCollected(false);
+        
         if(!is_loading && other.tag == "Player")// && !GameManager.GetHaveKey())
         {
             StartCoroutine(LoadVillaScene());

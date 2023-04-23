@@ -57,7 +57,6 @@ public class Door : MonoBehaviour
     void Start()
     {
         //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1);
-        doorState = DoorState.Closed;
         //store the open and close positions
         UpdatePositions();
         //on game start, make a hinge for this door object
@@ -70,6 +69,20 @@ public class Door : MonoBehaviour
             //print("ok");
             //CreateDoorParent();
         }
+
+        /*Cal's script starts here*/
+        if(GameManager.GetDoorUnlocked())
+        {
+            doorState = DoorState.Open;
+            Debug.Log("open");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Closed");
+            doorState = DoorState.Closed;
+        }
+        /*Cal's script ends here*/
     }
 
     void Update()
@@ -118,6 +131,7 @@ public class Door : MonoBehaviour
                 if (!locked)
                 {
                     ToggleOpen();
+                    GameManager.SetDoorUnlocked(true);
                 }
             }
 

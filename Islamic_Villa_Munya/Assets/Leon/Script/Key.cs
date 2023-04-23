@@ -10,6 +10,11 @@ public class Key : MonoBehaviour
     AudioSource pickupAudioSource;
     private void Start()
     {
+        if(GameManager.GetHaveKey())
+        {
+            Destroy(gameObject);
+        }
+        
         startY = transform.position.y;
 
         pickupAudioSource = transform.AddComponent<AudioSource>();
@@ -33,15 +38,16 @@ public class Key : MonoBehaviour
         /*Cal's code starts here*/
 
         //Disable the key and collider
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
 
-        //Destroy(gameObject, 2f);
+        Destroy(gameObject, 1f);
 
         /*Cal's code ends here*/
     }
 
     private void Update()
     {
+        Debug.Log(GameManager.GetHaveKey());
         transform.Rotate(Vector3.up, 60 * Time.deltaTime, Space.World);
         transform.position = new Vector3(transform.position.x, startY + Mathf.Sin(Time.time * 1.5f) * 0.15f, transform.position.z);
     }

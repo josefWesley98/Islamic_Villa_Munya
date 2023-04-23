@@ -30,7 +30,7 @@ public class _TriggerSlow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected())
+        if (other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected(0))
         {
             //Notification.SetActive(false);
             Notification1.SetActive(true);

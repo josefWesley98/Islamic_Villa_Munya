@@ -463,7 +463,8 @@ public class NIThirdPersonController : MonoBehaviour
     {
         if(other.gameObject.tag == "Pickup")
         {
-            GameManager.SetArtefactCollected(true);
+            //Choose the ID to set to being picked up
+            GameManager.SetArtefactCollected(gameObject.GetComponent<PickedUp>().GetID(), true);
             GameManager.SetHUBTravel(true);
             Destroy(other.gameObject);
         }

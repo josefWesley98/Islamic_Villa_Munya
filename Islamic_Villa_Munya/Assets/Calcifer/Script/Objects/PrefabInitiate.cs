@@ -12,7 +12,7 @@ public class PrefabInitiate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.GetArtefactCollected())
+        if(GameManager.GetArtefactCollected(0))
         {
             artefact.SetActive(true);
             Destroy(invisHint);

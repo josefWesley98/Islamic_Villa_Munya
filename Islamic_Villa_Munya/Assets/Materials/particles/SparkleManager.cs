@@ -27,13 +27,13 @@ public class SparkleManager : MonoBehaviour
                 sparkles.gameObject.SetActive(false);
             }
         }
-        if(GameManager.GetArtefactCollected() && leavingPuzzle)
+        if(GameManager.GetArtefactCollected(0) && leavingPuzzle)
         {
             sparklesOneActive = true;
             sparkles.gameObject.SetActive(true);
            
         }
-        if(id == 10 && GameManager.GetArtefactCollected())
+        if(id == 10 && GameManager.GetArtefactCollected(0))
         {
             sparklesOneActive = false;
             sparkles.gameObject.SetActive(false);

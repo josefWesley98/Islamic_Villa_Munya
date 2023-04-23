@@ -9,12 +9,24 @@ using UnityEngine;
 //Dynamic Level loading
 public class HUBTransitionController : MonoBehaviour
 {
-    public string hub_scene_name;
+    [SerializeField] private string hub_scene_name;
     private bool is_loading = false;
+    private int total_artefact_collected = 0;
+
+    //Each time an artefact is collected, move this trigger elsewhere and reset it
+    [SerializeField] private Transform[] spawn_points;
+
+    private void Start() 
+    {
+        //Reposition the hub trigger to next artefact
+        //Check how many artefacts have been collected and then choose the next spawn point.
+        total_artefact_collected = GameManager.GetArtefactCounter();
+        transform.position = spawn_points[total_artefact_collected].position;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!is_loading && other.tag == "Player" && GameManager.GetHUBTravel())
+        if(!is_loading && other.tag == "Player" && GameManager.GetHUBTravel() && GameManager.GetCurrentArtefactCollected())
         {
             //If the player has picked up the artefact then they can return to the HUB world. Initiate loading
             StartCoroutine(LoadHubScene());

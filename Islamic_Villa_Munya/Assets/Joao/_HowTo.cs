@@ -12,9 +12,11 @@ public class _HowTo : MonoBehaviour
         col.GetComponent<Collider>();    
     }
 
+    //Modified by Cal
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        //Make sure that the message pops once so check if the first artefact has been collected. If it has then don't show message
+        if (other.gameObject.tag == "Player" && !GameManager.GetArtefactCollected(0))
         {
             HowTo.SetActive(true);
             StartCoroutine(Execute());

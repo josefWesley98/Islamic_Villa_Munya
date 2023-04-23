@@ -16,7 +16,7 @@ public class QuitGame : MonoBehaviour
     public void QuitToMenu()
     {
         //Variables to reset
-        GameManager.SetArtefactCollected(false);
+        GameManager.ResetArtefacts(false);
         GameManager.SetHasKey(false);
         GameManager.SetBoy(false);
         GameManager.SetGirl(false);

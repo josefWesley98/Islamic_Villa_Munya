@@ -5,10 +5,13 @@ using UnityEngine;
 /*Cal's script starts here*/
 public class GameManager : MonoBehaviour
 {
-
+    private const int total_main_artefacts = 3;
+    static protected int artefact_counter = 0;
+    static protected bool current_artefact_collected = false;
     //variables
-    static protected bool player_artefact = false;
+    static protected bool[] player_artefact = new bool[total_main_artefacts];
     static protected bool has_key = false;
+    static protected bool door_unlocked = false;
     static protected bool hub_travel = false;
     static protected bool pause_cursor = false;
 
@@ -21,28 +24,42 @@ public class GameManager : MonoBehaviour
     static protected bool medium_diff = false;
     static protected bool hard_diff = false;
 
-
-    Transform PLAYER;
-
-    private void Start()
-    {
-        PLAYER = GameObject.FindGameObjectWithTag("Player").transform;
-        if (PLAYER != null)
-            print("Found " + PLAYER);
-        else
-            Debug.LogError("Player not found!");
-    }
+    // private void Start() 
+    // {
+    //     player_artefact = new bool[total_main_artefacts];
+    //     Debug.Log("Call me");
+    // }
 
     //Setters
-    public static void SetArtefactCollected(bool val)
+    public static void SetArtefactCollected(int artefact_idx, bool val)
     {
-        player_artefact = val;
-        print("ARTEFACT");
+        player_artefact[artefact_idx] = val;
+        artefact_counter += 1;
+    }
+
+    public static void SetCurrentArtefactCollected(bool val)
+    {
+        current_artefact_collected = val;
+    }
+    
+    //When player quits the game, we reset every artefact to original state
+    public static void ResetArtefacts(bool val)
+    {
+        for(int i = 0; i < total_main_artefacts; i++)
+        {
+            Debug.Log("resetting the artefacts");
+            player_artefact[i] = val;
+        }
     }
 
     public static void SetHasKey(bool val)
     {
         has_key = val;
+    }
+
+    public static void SetDoorUnlocked(bool val)
+    {
+        door_unlocked = val;
     }
 
     public static void SetHUBTravel(bool val)
@@ -81,14 +98,24 @@ public class GameManager : MonoBehaviour
     }
 
     //Getters
-    public static bool GetArtefactCollected()
+    public static bool GetArtefactCollected(int artefact_idx)
     {
-        return player_artefact;
+        return player_artefact[artefact_idx];
+    }
+
+    public static bool GetCurrentArtefactCollected()
+    {
+        return current_artefact_collected;
     }
 
     public static bool GetHaveKey()
     {
         return has_key;
+    }
+
+    public static bool GetDoorUnlocked()
+    {
+        return door_unlocked;
     }
 
     public static bool GetHUBTravel()
@@ -124,6 +151,16 @@ public class GameManager : MonoBehaviour
     public static bool GetHard()
     {
         return hard_diff;
+    }
+
+    public static int GetArtefactCounter()
+    {
+        return artefact_counter;
+    }
+
+    public static int GetTotalArtefacts()
+    {
+        return total_main_artefacts;
     }
 }
 
