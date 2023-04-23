@@ -11,7 +11,8 @@ public class VillaTransitionController : MonoBehaviour
 {
     public string villa_scene_name;
     private bool is_loading = false;
-    [SerializeField] private GameObject load_screen;
+    [SerializeField] private Animator transition;
+    [SerializeField] private float transition_t = 2f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,13 +22,16 @@ public class VillaTransitionController : MonoBehaviour
         if(!is_loading && other.tag == "Player")// && !GameManager.GetHaveKey())
         {
             StartCoroutine(LoadVillaScene());
-            load_screen.SetActive(true);
         }
       
     }
 
     private IEnumerator LoadVillaScene()
     {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(transition_t);
+
         is_loading = true;
         yield return null; //Wait for next frame
 

@@ -11,6 +11,8 @@ public class HUBTransitionController : MonoBehaviour
 {
     [SerializeField] private string hub_scene_name;
     private bool is_loading = false;
+    [SerializeField] private Animator transition;
+    [SerializeField] private float transition_t = 2f;
     private int total_artefact_collected = 0;
 
     //Each time an artefact is collected, move this trigger elsewhere and reset it
@@ -35,6 +37,10 @@ public class HUBTransitionController : MonoBehaviour
 
     private IEnumerator LoadHubScene()
     {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(transition_t);
+
         is_loading = true;
         yield return null; //Wait for next frame
 
