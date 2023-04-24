@@ -593,7 +593,7 @@ public class NIThirdPersonController : MonoBehaviour
             rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
 
-        if(grounded && !is_crouching && allow_jump)
+        if(grounded && !is_crouching && allow_jump && !input_disabled)
         {
             is_jumping = true;
             //Get delay from the animator
@@ -824,6 +824,11 @@ public class NIThirdPersonController : MonoBehaviour
     }
 
     //Getters relevant for passing variables into the animator controller
+    public bool GetInput()
+    {
+        return input_disabled;
+    }
+
     public Vector3 GetRBVelocity(Vector3 vel)
     {
         vel = rb.velocity;

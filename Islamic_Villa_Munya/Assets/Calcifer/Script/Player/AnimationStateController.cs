@@ -270,171 +270,175 @@ public class AnimationStateController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        bool forward_pressed = kb.wKey.isPressed;
-        bool left_pressed = kb.aKey.isPressed;
-        bool right_pressed = kb.dKey.isPressed;
+        bool forward_pressed = kb.wKey.isPressed || kb.upArrowKey.isPressed;
+        bool left_pressed = kb.aKey.isPressed || kb.leftArrowKey.isPressed;
+        bool right_pressed = kb.dKey.isPressed || kb.rightArrowKey.isPressed;
         bool run_pressed = kb.leftShiftKey.isPressed;
-        bool backward_pressed = kb.sKey.isPressed;
+        bool backward_pressed = kb.sKey.isPressed || kb.downArrowKey.isPressed;
         bool crouch_pressed = controller_ref.GetCrouching();
         bool jump_pressed = kb.spaceKey.isPressed;
 
         bool is_grounded = controller_ref.GetGrounded();
         rb_vel = controller_ref.GetRBVelocity(rb_vel);
 
-        if(controller_ref.GetPushOrPull())
-        {
-            animator.SetLayerWeight(movementLayerIndex, 0.0f);
-            animator.SetLayerWeight(pushing_layer_index, 1f);
-            animator.SetLayerWeight(crouch_layer_index, 1f);
-        }
-        else
-        {
-            animator.SetLayerWeight(pushing_layer_index, 0f);
-            animator.SetLayerWeight(crouch_layer_index, 0f);
-            animator.SetLayerWeight(movementLayerIndex, 1f);
-        }
-
-        if (controller_ref.GetIsClimbing())
-        {
-            animator.SetLayerWeight(climbLayerIndex, 1.0f);
-            animator.SetLayerWeight(movementLayerIndex, 0.0f);
-           
-        }
-        else 
+        if(!controller_ref.GetInput())
         {
 
-            animator.SetLayerWeight(climbLayerIndex, 0.0f);
-            animator.SetLayerWeight(movementLayerIndex, 1.0f);
-        }
-
-        //Set current max_vel
-        float current_max_vel = run_pressed ? max_run_vel : max_walk_vel;
-
-        //Handle changes in velocity
-        ChangeVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
-        LockOrResetVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
-
-        //When the player presses crouch, set the layer weight to 1        
-        if(!controller_ref.GetPushOrPull())
-        {
-            if (crouch_pressed)
-            {
-                //Increment the weight of the crouch
-                if (weight >= -0.5)
+                if(controller_ref.GetPushOrPull())
                 {
-                    weight += Time.deltaTime * crouch_weight;
+                    animator.SetLayerWeight(movementLayerIndex, 0.0f);
+                    animator.SetLayerWeight(pushing_layer_index, 1f);
+                    animator.SetLayerWeight(crouch_layer_index, 1f);
                 }
-                animator.SetLayerWeight(crouch_layer_index, weight);
-            }
-
-            //Return the layer weight to 0 when the player releases the crouch button
-            if (!crouch_pressed)
-            {
-                //Decrement the weight of the crouch
-                if (weight > 0f)
+                else
                 {
-                    weight -= Time.deltaTime * crouch_weight;
+                    animator.SetLayerWeight(pushing_layer_index, 0f);
+                    animator.SetLayerWeight(crouch_layer_index, 0f);
+                    animator.SetLayerWeight(movementLayerIndex, 1f);
                 }
-                animator.SetLayerWeight(crouch_layer_index, weight);
-            }
+
+                if (controller_ref.GetIsClimbing())
+                {
+                    animator.SetLayerWeight(climbLayerIndex, 1.0f);
+                    animator.SetLayerWeight(movementLayerIndex, 0.0f);
+                
+                }
+                else 
+                {
+
+                    animator.SetLayerWeight(climbLayerIndex, 0.0f);
+                    animator.SetLayerWeight(movementLayerIndex, 1.0f);
+                }
+
+                //Set current max_vel
+                float current_max_vel = run_pressed ? max_run_vel : max_walk_vel;
+
+                //Handle changes in velocity
+                ChangeVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
+                LockOrResetVel(forward_pressed, backward_pressed, left_pressed, right_pressed, run_pressed, crouch_pressed, current_max_vel);
+
+                //When the player presses crouch, set the layer weight to 1        
+                if(!controller_ref.GetPushOrPull())
+                {
+                    if (crouch_pressed)
+                    {
+                        //Increment the weight of the crouch
+                        if (weight >= -0.5)
+                        {
+                            weight += Time.deltaTime * crouch_weight;
+                        }
+                        animator.SetLayerWeight(crouch_layer_index, weight);
+                    }
+
+                    //Return the layer weight to 0 when the player releases the crouch button
+                    if (!crouch_pressed)
+                    {
+                        //Decrement the weight of the crouch
+                        if (weight > 0f)
+                        {
+                            weight -= Time.deltaTime * crouch_weight;
+                        }
+                        animator.SetLayerWeight(crouch_layer_index, weight);
+                    }
+                }
+
+                #region OG Jumping Anim Code
+                // if (rb_vel.y > 0f)
+                // {
+                //    //If the player is able to jump then play the animations relevant to the velocity of the player
+                //    if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
+                //    {
+                //        animator.SetBool("IsJumping", true);
+                //        run_jump = true;
+                //        stand_jump = false;
+
+                //        j_timer_run = run_jump_time - 0.5f;
+
+                //    }
+
+                // }
+                // else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
+                // {
+                //    animator.SetBool("IsJumping", false);
+                //    run_jump = false;
+                // }
+                
+                // //Rigidody velocity will not be above the threshold
+                // if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
+                // {
+                //    if(!currently_jumping)
+                //    {
+                //        currently_jumping = true;
+                //        animator.SetBool("IsJumping", true);
+
+                //        stand_jump = true;
+                //        run_jump = false;
+
+                //        j_timer_stand = stand_jump_time - 0.3f;
+                //        StartCoroutine(StandJumpTimer());
+                //    }
+                // }
+
+                // if (run_jump)
+                // {
+                //     stand_jump = false;
+
+                //     j_timer_run -= Time.deltaTime;
+                //     if(j_timer_run <= 0)
+                //     {
+                //         animator.SetBool("IsJumping", false);
+                //         run_jump = false;
+                //     }
+                // }
+                #endregion
+
+                if(animator.GetBool("IsJumping"))
+                {   
+                    if(run_jump)
+                    {
+                        j_timer_run = run_jump_time - 0.5f;
+                        run_jump = false;
+                    }
+                    
+                    j_timer_run -= Time.deltaTime;
+                    
+                    if(j_timer_run <= 0)
+                    {
+                        animator.SetBool("IsJumping", false);
+                        run_jump = false;
+
+                        //We want the player to stop being able to jump further than what is realistic so after the animation ends, prevent further input from the player until they hit the ground
+                    }
+                }
+
+                //Is the player falling? Play animation if they are
+                if(!animator.GetBool("IsJumping") && !is_grounded)
+                {
+                    // StartCoroutine(DelayFallingAnim());
+                    time_since_fallen += Time.deltaTime;
+                    animator.SetBool("IsFalling", true);
+                }
+                else if(!animator.GetBool("IsJumping") && is_grounded)
+                {
+                    //Set the falling animation to stop playing
+                    animator.SetBool("IsFalling", false);
+
+                    if(time_since_fallen > hard_landing_threshold)
+                    {
+                        hard_land = true;
+                        controller_ref.SetInput(true);
+                        StartCoroutine(HardLandAnimation());
+                    }
+
+                    time_since_fallen = 0f;
+                }
+
+                //Pass in hash values, cheaper to use for updating the animator values
+                animator.SetFloat(velZ_hash, velocityZ);
+                animator.SetFloat(velX_hash, velocityX);
+                animator.SetFloat(rb_velX_hash, rb_vel.x);
+                animator.SetFloat(rb_velZ_hash, rb_vel.z);
         }
-
-        #region OG Jumping Anim Code
-        // if (rb_vel.y > 0f)
-        // {
-        //    //If the player is able to jump then play the animations relevant to the velocity of the player
-        //    if (!crouch_pressed && jump_pressed && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)) && !controller_ref.GetPushOrPull())
-        //    {
-        //        animator.SetBool("IsJumping", true);
-        //        run_jump = true;
-        //        stand_jump = false;
-
-        //        j_timer_run = run_jump_time - 0.5f;
-
-        //    }
-
-        // }
-        // else if(run_jump && is_grounded && ((rb_vel.x < -0.1 || rb_vel.x > 0.1) || (rb_vel.z < -0.1 || rb_vel.z > 0.1)))
-        // {
-        //    animator.SetBool("IsJumping", false);
-        //    run_jump = false;
-        // }
-        
-        // //Rigidody velocity will not be above the threshold
-        // if(!crouch_pressed && jump_pressed && ((rb_vel.x >= -0.1 && rb_vel.x <= 0.1) || (rb_vel.z >= -0.1 && rb_vel.z <= 0.1)) && !controller_ref.GetPushOrPull())
-        // {
-        //    if(!currently_jumping)
-        //    {
-        //        currently_jumping = true;
-        //        animator.SetBool("IsJumping", true);
-
-        //        stand_jump = true;
-        //        run_jump = false;
-
-        //        j_timer_stand = stand_jump_time - 0.3f;
-        //        StartCoroutine(StandJumpTimer());
-        //    }
-        // }
-
-        // if (run_jump)
-        // {
-        //     stand_jump = false;
-
-        //     j_timer_run -= Time.deltaTime;
-        //     if(j_timer_run <= 0)
-        //     {
-        //         animator.SetBool("IsJumping", false);
-        //         run_jump = false;
-        //     }
-        // }
-        #endregion
-
-        if(animator.GetBool("IsJumping"))
-        {   
-            if(run_jump)
-            {
-                j_timer_run = run_jump_time - 0.5f;
-                run_jump = false;
-            }
-            
-            j_timer_run -= Time.deltaTime;
-            
-            if(j_timer_run <= 0)
-            {
-                animator.SetBool("IsJumping", false);
-                run_jump = false;
-
-                //We want the player to stop being able to jump further than what is realistic so after the animation ends, prevent further input from the player until they hit the ground
-            }
-        }
-
-        //Is the player falling? Play animation if they are
-        if(!animator.GetBool("IsJumping") && !is_grounded)
-        {
-            // StartCoroutine(DelayFallingAnim());
-            time_since_fallen += Time.deltaTime;
-            animator.SetBool("IsFalling", true);
-        }
-        else if(!animator.GetBool("IsJumping") && is_grounded)
-        {
-            //Set the falling animation to stop playing
-            animator.SetBool("IsFalling", false);
-
-            if(time_since_fallen > hard_landing_threshold)
-            {
-                hard_land = true;
-                controller_ref.SetInput(true);
-                StartCoroutine(HardLandAnimation());
-            }
-
-            time_since_fallen = 0f;
-        }
-
-        //Pass in hash values, cheaper to use for updating the animator values
-        animator.SetFloat(velZ_hash, velocityZ);
-        animator.SetFloat(velX_hash, velocityX);
-        animator.SetFloat(rb_velX_hash, rb_vel.x);
-        animator.SetFloat(rb_velZ_hash, rb_vel.z);
     }
 
     IEnumerator StandJumpTimer()
