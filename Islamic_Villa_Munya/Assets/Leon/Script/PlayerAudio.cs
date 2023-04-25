@@ -36,12 +36,15 @@ public class PlayerAudio : MonoBehaviour
 
     bool onTile = true;
 
+    bool setupComplete = false;
     void FindPlayer()
     {
         if (playerBoy.gameObject.activeSelf)
             actualPlayer = playerBoy;
         else if (playerGirl.gameObject.activeSelf)
             actualPlayer = playerGirl;
+        else
+            Debug.LogError("No player assigned for player audio!");
 
         transform.parent = actualPlayer.GetChild(0);
         transform.position = actualPlayer.GetChild(0).position;
@@ -53,31 +56,13 @@ public class PlayerAudio : MonoBehaviour
     {
         //player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
         Invoke(nameof(FindPlayer), 3f);
-        footstepMaster[0] = stepCarpetSources;
-        footstepMaster[1] = stepTileSources;
-
-        for (int i = 0; i < stepTileClips.Count(); i++)
-        {
-            AudioSource a = transform.AddComponent<AudioSource>();
-            a.clip = stepTileClips[i];
-            a.spatialBlend = 1f;
-            a.volume = stepTileVolume;
-            stepTileSources.Add(a);
-        }
-
-        for (int i = 0; i < stepCarpetClips.Count(); i++)
-        {
-            AudioSource a = transform.AddComponent<AudioSource>();
-            a.clip = stepCarpetClips[i];
-            a.spatialBlend = 1f;
-            a.volume = stepCarpetVolume;
-            stepCarpetSources.Add(a);
-        }
-
+        Invoke(nameof(SetUp), 3f);
     }
+
     private void FixedUpdate()
     {
-
+        if (!setupComplete)
+         return;
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayers))
@@ -104,6 +89,9 @@ public class PlayerAudio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!setupComplete)
+         return;
+
         bool playerStepping = pController.GetPlayerInput() != Vector2.zero;
         //print(pController.GetRunning());
 
@@ -119,5 +107,31 @@ public class PlayerAudio : MonoBehaviour
             footstepTimer = 0f;
             //print(rng);
         }
+    }
+
+    void SetUp()
+    {
+        footstepMaster[0] = stepCarpetSources;
+        footstepMaster[1] = stepTileSources;
+
+        for (int i = 0; i < stepTileClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = stepTileClips[i];
+            a.spatialBlend = 1f;
+            a.volume = stepTileVolume;
+            stepTileSources.Add(a);
+        }
+
+        for (int i = 0; i < stepCarpetClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = stepCarpetClips[i];
+            a.spatialBlend = 1f;
+            a.volume = stepCarpetVolume;
+            stepCarpetSources.Add(a);
+        }
+
+        setupComplete = true;
     }
 }
