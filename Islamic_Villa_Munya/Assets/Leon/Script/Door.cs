@@ -54,6 +54,8 @@ public class Door : MonoBehaviour
     public Rigidbody lockRB;
     public AudioClip unlockAudio;
     AudioSource unlockAudioSource;
+
+    public bool permanentlyUnlocked = false;
     void Start()
     {
         //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1);
@@ -71,29 +73,34 @@ public class Door : MonoBehaviour
         }
 
         /*Cal's script starts here*/
-        if(GameManager.GetDoorUnlocked())
-        {
-            doorState = DoorState.Open;
-            Debug.Log("open");
-            Destroy(gameObject);
-        }
-        else
-        {
-            Debug.Log("Closed");
-            doorState = DoorState.Closed;
-        }
+        // if(GameManager.GetDoorUnlocked())
+        // {
+        //     doorState = DoorState.Open;
+        //     Debug.Log("open");
+        //     Destroy(gameObject);
+        // }
+        // else
+        // {
+        //     Debug.Log("Closed");
+        //     doorState = DoorState.Closed;
+        // }
         /*Cal's script ends here*/
     }
 
     void Update()
     {
+        //dont do door stuff anymore if perma unlocked
+        //if (permanentlyUnlocked)
+            //return;
+
         //failsafe
         if (unlockNextPress && (actualPlayerBoy == null && actualPlayerGirl == null))
         {
             //Destroy(gameObject);
 
             /*Cal's script starts here*/
-            gameObject.SetActive(false);
+            if(!GameManager.GetDoorUnlocked())// if players not found and door not unlocked disable door
+                gameObject.SetActive(false);
             /*Cal's script ends here*/
         }
 
@@ -258,6 +265,15 @@ public class Door : MonoBehaviour
 
         actualPlayerBoy = playerBoy.GetChild(0);
         actualPlayerGirl = playerGirl.GetChild(0);
+
+        if (!permanentlyUnlocked && GameManager.GetDoorUnlocked())
+        {
+            ToggleOpen();
+            locked = false;
+            unlockNextPress = false;
+            permanentlyUnlocked = true;
+            lockRB.gameObject.SetActive(false);
+        }
     }
 
     //editor helpers
