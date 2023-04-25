@@ -26,8 +26,10 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
     [SerializeField] Transform cameraPos;
     [SerializeField] TMPro.TMP_Text inspect;
+    
     [SerializeField] TMPro.TMP_Text info;
     [SerializeField] GameObject infoObject;
+    [SerializeField] GameObject leaveInspectUI;
     //[SerializeField] GameObject closeButton;
     [SerializeField] Camera cam;
     [SerializeField] float distFromCam = 1.5f;
@@ -35,6 +37,9 @@ public class PlayerInteract : MonoBehaviour
     public bool isInspecting = false;
     private bool canInspect = false;
     GameObject phObject;
+    private bool inspectionCooldown = false;
+    private float inspectionCooldownTimer = 0.0f;
+    private float inspectionCooldownTime = 2.0f;
 
     private void Awake() => playercontrols = new PlayerControls();
 
@@ -44,6 +49,7 @@ public class PlayerInteract : MonoBehaviour
         ASC = GetComponent<AnimationStateController>(); 
         inspect.gameObject.SetActive(false);
         infoObject.SetActive(false);
+        leaveInspectUI.SetActive(false);
         //closeButton.SetActive(false);
     }
 
@@ -122,6 +128,16 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+      
+        if(inspectionCooldown)
+        {
+            inspectionCooldownTimer += Time.deltaTime;
+            if(inspectionCooldownTimer >= inspectionCooldownTime)
+            {
+                inspectionCooldownTimer = 0f;
+                inspectionCooldown = false;
+            }
+        }
         /*Cal's script starts here*/
         //Toggle the inspecting
         if(canInspect)
@@ -162,6 +178,7 @@ public class PlayerInteract : MonoBehaviour
 
         if(isInspecting)
         {
+            leaveInspectUI.SetActive(true);
             controller.ShowCursor();
             if(objRenderer != null && objRenderer.enabled != false)
             {
@@ -213,6 +230,7 @@ public class PlayerInteract : MonoBehaviour
         {
             artifactGenerated = false;
             firstPersonCamera.Priority = 5;
+            leaveInspectUI.SetActive(false);
             //closeButton.SetActive(false);
             if(holder != null)
             {
@@ -222,10 +240,41 @@ public class PlayerInteract : MonoBehaviour
     }
     private void Inspecting(InputAction.CallbackContext context)
     {
-        if(canInspect)
+        if(isInspecting)
+        {
+            isInspecting = false;
+            if(interactableObj)
+            {
+                if(objRenderer != null)
+                {
+                    objRenderer.enabled = true;
+                }
+
+                if(objRenderer2 != null)
+                {
+                    objRenderer2.enabled = true;
+                }
+                firstPersonCamera.Priority = 5;
+
+                isTouching = false;
+                canInspect = false;
+                isInspecting = false;
+
+                inspect.gameObject.SetActive(false);
+                if(holder != null)
+                {
+                    Destroy(holder);
+                }
+                phObject = null;
+            }
+            inspectionCooldown = true;
+            leaveInspectUI.SetActive(false);
+        }
+        if(canInspect && !inspectionCooldown)
         {
             Debug.Log("Can inspect");       
             isInspecting = true;
+            leaveInspectUI.SetActive(true);
         }
     }
     public void ButtonCloseInspection()
