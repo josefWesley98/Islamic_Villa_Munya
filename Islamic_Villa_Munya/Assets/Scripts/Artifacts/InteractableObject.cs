@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractalbeObject : MonoBehaviour
+public class InteractableObject : MonoBehaviour
 {
     [TextArea]
     [SerializeField] private string artifactInfo = "";
@@ -12,21 +12,16 @@ public class InteractalbeObject : MonoBehaviour
     [SerializeField] private string artifactInfoMedium = "Medium";
     [TextArea]
     [SerializeField] private string artifactInfoHard = "Hard";
-    [SerializeField] private Vector3 scale = new Vector3(0.35f,0.35f,0.35f);
-    [SerializeField] private Vector3 rotation = new Vector3(0,0,0);
-    [SerializeField] private Vector3 positinOffset = new Vector3(0,0,0);
-    [SerializeField] private GameObject LookAt;
-    // Start is called before the first frame update
-    void Start()
-    {
-      
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("set the scale the inspectable item will have.")]
+    [SerializeField] private Vector3 scale = new Vector3(0.35f,0.35f,0.35f);
+    [Header("Set the rotation the inspectable item will have.")]
+    [SerializeField] private Vector3 rotation = new Vector3(0,0,0);
+    [Header("Set the offset on X,Y,Z the object will have.")]
+    [SerializeField] private Vector3 positinOffset = new Vector3(0,0,0);
+    [Header("Set the look at object the camera will focus on (generally this object.)")]
+    [SerializeField] private GameObject LookAt;
+
     public string GetArtifactInfo()
     {
         return artifactInfo;
