@@ -4,145 +4,167 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 public class UpwardClimbing : MonoBehaviour
 {
-    [SerializeField] private LayerMask climableLayer;
+    [Header("Scrips")]
     [SerializeField] private DownwardClimbing downwardClimbing;
-    [SerializeField] private Vector3 detectionRadius = new Vector3(5, 5, 5);
-    // 0 = up. 1 = down. 2 = left. 3 = right. 4 = up left. 5 = up right. 6 = down left. 7 = down right.
-    [SerializeField] private Transform[] rightGrabPointReference;
-    private int chosenReference = 0;
-    [SerializeField] private Transform[] leftGrabPointReference;
-    private Vector3 middlePoint = Vector3.zero;
-    private bool canClimb = false;
-    bool m_Started;
     [SerializeField] private ClimbingScript climbingScript;
-    // rigging start
-    [SerializeField] private Transform rightArmStartPosition;
-    [SerializeField] private Transform rightRigAimPosition;
-    [SerializeField] private float rigTargetWeightRightArm;
-    [SerializeField] private Rig rightArmRig;
-    [SerializeField] private Transform rightArmPos;
-    private float interpolateAmountRightArm = 0.0f;
-    private bool moveRightArm = true;
     [SerializeField] private Animator animator;
 
+    [Header("References for 8D Movement")]
+    [SerializeField] private Transform[] rightGrabPointReference;
+    [SerializeField] private Transform[] leftGrabPointReference;
+
+    [Header("Grab Point Lists")]
+    [SerializeField] private Transform[] grabbablePositionsRightHand;
+    [SerializeField] private Transform[] grabbablePositionsLeftHand;
+
+    [Header("Right Arm References")]
+    [SerializeField] private Transform rightArmStartPosition;
+    [SerializeField] private Transform rightRigAimPosition;
+    [SerializeField] private Transform rightArmPos;
+
+    [Header("Left Arm References")]
     [SerializeField] private Transform leftArmStartPosition;
     [SerializeField] private Transform leftRigAimPosition;
-    [SerializeField] private float rigTargetWeightLeftArm;
-    [SerializeField] private Rig leftArmRig;
     [SerializeField] private Transform leftArmPos;
-    private float interpolateAmountLeftArm = 0.0f;
+    
+    [Header("Rig References")]
+    [SerializeField] private Rig rightArmRig;
+    [SerializeField] private Rig leftArmRig;
+
+    [Header("Rig Weighting")]
+    [SerializeField] private float rigTargetWeightRightArm;
+    [SerializeField] private float rigTargetWeightLeftArm;
+    
+    [Header("Materials")]
+    [SerializeField] private Material newMaterialRefR;
+    [SerializeField] private Material newMaterialRefL;
+
+    [Header("Layer Masks")]
+    [SerializeField] private LayerMask climableLayer;
+
+
+    private Vector3 detectionRadius = new Vector3(5, 5, 5);
+    private Vector3 middlePoint = Vector3.zero;
+    private Vector3 objectToRotateTo = Vector3.zero;
+	private Vector3 wallPosition = Vector3.zero;
+    private Vector3 idleHandPosL = Vector3.zero;
+    private Vector3 idleHandPosR = Vector3.zero;
+    private Vector2 movementDirection;
+
+
+    private Transform targetSpotLeftHand;
+    private Transform targetSpotRightHand;
+    
+    private GameObject currentHandSpotLeft;
+    private GameObject currentHandSpotRight;
+    
+    private bool[] direction = new bool[4] { false, false,false,false};
+    private bool movingLeftHand = false;
+    private bool movingRightHand = false;
+    private bool needNewLeftHandSpot = false;
+    private bool needNewRightHandSpot = false;
     private bool movingDirecionally = false;
     private bool left = false;
     private bool right = false;
-    //rigging end.
-    [SerializeField] private Transform[] grabbablePositionsRightHand;
-    [SerializeField] private Transform[] grabbablePositionsLeftHand;
-    [SerializeField] private Material newMaterialRefR;
-    [SerializeField] private Material newMaterialRefL;
-    private bool isRotatedToWall = false;
-    private Transform targetSpotLeftHand;
-    private Transform targetSpotRightHand;
-    private GameObject currentHandSpotLeft;
-    private GameObject currentHandSpotRight;
-    private Vector2 movementDirection;
-    private int arrayPosLeftHand = 0;
-    private int arrayPosRightHand = 0;
-    private bool finishCurrentGrab = false;
-    [Range(-1.0f, 1.0f)]
-    [SerializeField] private float movingX = 0.0f;
-    [Range(-1.0f, 1.0f)]
-    [SerializeField] private float movingY = 0.0f;
-    [SerializeField] private bool movingLeftHand = false;
-    [SerializeField] private bool movingRightHand = false;
-    [SerializeField]  private bool needNewLeftHandSpot = false;
-    [SerializeField] private bool needNewRightHandSpot = false;
-    [SerializeField] private bool[] direction = new bool[4] { false, false,false,false};
-    private Vector3 objectToRotateTo = Vector3.zero;
+    private bool canClimb = false;
+    private bool moveRightArm = true;
     private bool needNewSpots = true;
     private bool stopLeft = false;
     private bool stopRight = false;
     private bool rotateToWall = false;
-	private Vector3 wallPosition = Vector3.zero;
+    private bool isRotatedToWall = false;
+    private bool m_Started;
+    private bool finishCurrentGrab = false;
     private bool movingDown = false;
     private bool paused = false;
+    
+    // what number each of the directions of travel are assigned to.
+    // 0 = up. 1 = down. 2 = left. 3 = right. 4 = up left. 5 = up right. 6 = down left. 7 = down right.
+    private int chosenReference = 0;
+    private int arrayPosLeftHand = 0;
+    private int arrayPosRightHand = 0;
+
+    private float interpolateAmountRightArm = 0.0f;
+    private float interpolateAmountLeftArm = 0.0f;
+    private float idleHandLInterpolate = 0.0f;
+    private float idleHandRInterpolate = 0.0f;
+    private float movingX = 0.0f;
+    private float movingY = 0.0f;
+
     void Start()
     {
-        
-
         m_Started = true;
+
+        // initaise grabable spots.
         for(int i = 0; i < 150; i++)
         {
             grabbablePositionsLeftHand[i] = gameObject.transform;
             grabbablePositionsRightHand[i] = gameObject.transform;
         }
-        
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
         if (m_Started)
-            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+        {
             Gizmos.DrawWireCube(transform.position, detectionRadius);
+        }
     }
-    // Update is called once per frame
+
     void Update()
     {
-        // if(currentHandSpotLeft != null && currentHandSpotRight != null && !left && !right)
-        // {
-        //     wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position);
-        //     Debug.Log("moving up and down.");
-        // }
-        // if(currentHandSpotLeft != null & downwardClimbing.GetCurrentSpotLeftFoot() != Vector3.zero && left && !right)
-        // {
-        //     wallPosition = GetMiddlePoint(currentHandSpotLeft.transform.position, downwardClimbing.GetCurrentSpotLeftFoot());
-        //     Debug.Log("moving left");
-        // }
-        // if(currentHandSpotRight != null & downwardClimbing.GetCurrentSpotRightFoot() != Vector3.zero && right && !left)
-        // {
-        //     wallPosition = GetMiddlePoint(currentHandSpotRight.transform.position, downwardClimbing.GetCurrentSpotRightFoot());
-        //     Debug.Log("moving right");
-        // }
-        if(currentHandSpotLeft != null && currentHandSpotRight != null && downwardClimbing.GetCurrentSpotLeftFoot() != Vector3.zero && downwardClimbing.GetCurrentSpotRightFoot() != Vector3.zero)
-        {
-            wallPosition = GetMiddlePointForRotate(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position, downwardClimbing.GetCurrentSpotLeftFoot(), downwardClimbing.GetCurrentSpotRightFoot());
-        }
+        // movement.
+        movementDirection.x = climbingScript.GetMovementDirectionX();
+        movementDirection.y = climbingScript.GetMovementDirectionY();
 
+        // direction facing.
         for(int i = 0; i < 4; i++)
         {
             direction[i] = climbingScript.GetLookDirection(i);
         }
 
-        if(movementDirection.x == 0 && movementDirection.y == 0 && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach()) 
+        //pausing to stop jitter.
+        PausingAnimationAndLerping();
+        
+        // find new positions.
+        if(!paused)
         {
-           
-            needNewSpots = false;
-            finishCurrentGrab = true;
-            if(stopLeft && stopRight)
-            {
-                //animator.speed = 0.0f;
-            }
-        }
-        else if(climbingScript.GetIsConnectedToWall())
-        {
-            finishCurrentGrab = false;
-            //animator.speed = 0.8f;
-            needNewSpots = true;
-            stopLeft = false;
-            stopRight = false;
-        }
-       
+            // finding new climbing spots.
             FindRightHandClimbingPositions();
             FindLeftHandClimbingPositions();
-            
-        
+        }
         
         if(!climbingScript.GetDetach() && !paused)
         {
+            // hand lerping to new positions.
             LerpRightHandToTarget();
             LerpLeftHandToTarget();
+
         }
+        // calculates the point which the body should to.
+        CalculateRotationPoint();
+
+        // lerps the weights on the players limbs.
+        RiggingWeightLerp();
+
+        // tells downward climbing the direction player is moving.
+        downwardClimbing.SetMovementDirection(movementDirection);
+   
+    }
+    private void CalculateRotationPoint()
+    {
+        if(currentHandSpotLeft != null && currentHandSpotRight != null && downwardClimbing.GetCurrentSpotLeftFoot() != Vector3.zero && downwardClimbing.GetCurrentSpotRightFoot() != Vector3.zero)
+        {
+            // tells the climbing script the player is ready to rotate.
+            climbingScript.SetDoRotatingToTrue();
+            // calculates a position between 2 hand holds and foot holds to create an authentic body angle to the surface they are climbing on.
+            wallPosition = GetMiddlePointForRotate(currentHandSpotLeft.transform.position, currentHandSpotRight.transform.position, downwardClimbing.GetCurrentSpotLeftFoot(), downwardClimbing.GetCurrentSpotRightFoot());
+        }
+    }
+    private void PausingAnimationAndLerping()
+    {
+        // halts the animations and movement of the hands if the player isnt moving.
         if(movementDirection.x == 0 && movementDirection.y == 0)
         {
             paused = true;
@@ -155,22 +177,20 @@ public class UpwardClimbing : MonoBehaviour
         }
         if(climbingScript.GetDetach())
         {
-            paused = true;
+            paused = false;
             animator.speed = 1.0f;
         }
-        RiggingWeightLerp();
-        downwardClimbing.SetMovementDirection(movementDirection);
-
-        movementDirection.x = climbingScript.GetMovementDirectionX();
-        movementDirection.y = climbingScript.GetMovementDirectionY();
+        
     }
     private void RiggingWeightLerp()
     {
-        rightArmRig.weight = Mathf.Lerp(rightArmRig.weight, rigTargetWeightRightArm, Time.deltaTime*10);
-        leftArmRig.weight = Mathf.Lerp(leftArmRig.weight, rigTargetWeightLeftArm, Time.deltaTime*10);
+        // sets the rigs off and on based on if they are attached to the wall.
+        rightArmRig.weight = Mathf.Lerp(rightArmRig.weight, rigTargetWeightRightArm, Time.deltaTime*5);
+        leftArmRig.weight = Mathf.Lerp(leftArmRig.weight, rigTargetWeightLeftArm, Time.deltaTime*5);
         
         if(canClimb && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach())
         {
+            
             rigTargetWeightRightArm = 1.0f;
             rigTargetWeightLeftArm = 1.0f;
         }
@@ -182,23 +202,28 @@ public class UpwardClimbing : MonoBehaviour
     }
     private void FindRightHandClimbingPositions()
     {
+        // generates a box around the player that detects hand holds that are tagged with a specific layer.
         Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
+            //creates a list of possible hand holds for the player.
             grabbablePositionsRightHand[i] = climableSpots[i].gameObject.transform;
         }
 
         if(climableSpots.Length == 0)
         {
+            // if no spots then cant climb.
             canClimb = false;
         }
         else
         {
+            // if spots the can climb
             canClimb = true;
             arrayPosRightHand = 0;
         }
 
+            // checks what direction the player is moving on an 8D spectrum which is tagged by assignin a number between 0-7 for each direction.
             if(movementDirection.y > 0)//Up
             {
                 if(movementDirection.x > 0)
@@ -251,23 +276,24 @@ public class UpwardClimbing : MonoBehaviour
                 chosenReference = 2;
                 movingDirecionally = true;
             }
-                
+                // an array that orders from nearest to furthest from the to a gameobject attached to the player based on the 8 directions they might want to move.
+                // there are 8 game objects that are assigned between 0-7 in an array that link up with the previously mentioned chosenReference vairables that was decied based
+                // on user input.
                 System.Array.Sort(grabbablePositionsRightHand, (x, y) =>
                 { 
                     float distanceX = Vector3.Distance(x.transform.position, rightGrabPointReference[chosenReference].position);
                     float distanceY = Vector3.Distance(y.transform.position, rightGrabPointReference[chosenReference].position);
                     return distanceX.CompareTo(distanceY);
                 });
-                
+                // the clostest hand hold to the to object in the direction they want to move is assigned as the target hand hold spot (the ideal spot to for moving in the direction they want to go.).
                 targetSpotRightHand = grabbablePositionsRightHand[arrayPosRightHand];
 
-                
+        //changes the current hand hold to the target hand hold when its the right hands turn to move and disconect from the wall(this condition occurs when the left hand reaches destination.).
         if(needNewRightHandSpot && needNewSpots)
         {
             currentHandSpotRight = targetSpotRightHand.gameObject;
             needNewRightHandSpot = false;
-	        //wallPosition = currentHandSpotRight.transform.parent.gameObject.transform.localPosition;
-
+            // the middle point Vector3 reference the middle point between either hands or feet depending on direction the player is moving to create a smooth transition between points.
             if(chosenReference == 2)
             {
                  middlePoint = GetMiddlePoint(targetSpotLeftHand.position, downwardClimbing.GetCurrentSpotLeftFoot());
@@ -298,13 +324,13 @@ public class UpwardClimbing : MonoBehaviour
     }
     public Vector3 GetNewMiddleSpot()
     {
-        needNewLeftHandSpot = true;
-        movingLeftHand = true;
+        // sets a new middle point.
         middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);
         return middlePoint;
     }
     private void FindLeftHandClimbingPositions()
     {
+        // this is all the same as the FindRightHandClimbingPositions so refer to the comments there.
         Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
@@ -385,10 +411,6 @@ public class UpwardClimbing : MonoBehaviour
                 return distanceX.CompareTo(distanceY);
             });
             
-            // if(grabbablePositionsLeftHand[0].position == currentHandSpotLeft.transform.position && grabbablePositionsLeftHand.Length > 1)
-            // {
-            //     arrayPosLeftHand++;
-            // }
         
             targetSpotLeftHand = grabbablePositionsLeftHand[arrayPosLeftHand];
 
@@ -398,25 +420,21 @@ public class UpwardClimbing : MonoBehaviour
         {
             currentHandSpotLeft = targetSpotLeftHand.gameObject;
             needNewLeftHandSpot = false;
-	        //wallPosition = currentHandSpotLeft.transform.parent.gameObject.transform.localPosition;
+
             if(chosenReference == 2)
             {
-                //Debug.Log("getting a middle point to the left");
                 middlePoint = GetMiddlePoint(downwardClimbing.GetCurrentSpotLeftFoot(), targetSpotLeftHand.position);
             }
             else if(chosenReference == 3)
             {
-                //Debug.Log("getting a middle point to the right");
                  middlePoint = GetMiddlePoint(targetSpotRightHand.position, downwardClimbing.GetCurrentSpotRightFoot());
             }
             else if(chosenReference == 6 || chosenReference == 7 || chosenReference == 1)
             {
-                //Debug.Log("getting a middle point down");
                 middlePoint = downwardClimbing.GetMiddlePoint();
             }
             else
             {  
-                //Debug.Log("getting a middle point above");
                 middlePoint = GetMiddlePoint(targetSpotRightHand.position, targetSpotLeftHand.position);   
             }
               
@@ -431,25 +449,15 @@ public class UpwardClimbing : MonoBehaviour
         }
         
     }
-    public bool GetIsRotatedToWall()
-    {
-        return isRotatedToWall;
-    }
+ 
     private void LerpRightHandToTarget()
     {
         if(rightArmStartPosition == null)
         {
             rightArmStartPosition.position = rightArmPos.position;
         }
-        if(movingRightHand && currentHandSpotRight != null && !stopRight)
+        if(movingRightHand && currentHandSpotRight != null)
         {
-            //Debug.Log("moving right hand.");
-            //float spotZ = currentHandSpotRight.transform.position.z + 0.15f;
-            // float newX = Mathf.Lerp(rightRigAimPosition.position.x, currentHandSpotRight.transform.position.x, interpolateAmountRightArm);
-            // float newY = Mathf.Lerp(rightRigAimPosition.position.y, currentHandSpotRight.transform.position.y, interpolateAmountRightArm);
-            // float newZ = Mathf.Lerp(rightRigAimPosition.position.z, spotZ, interpolateAmountRightArm);
-            
-            //rightRigAimPosition.position = new Vector3(newX, newY, newZ);
             Vector3 LHandPos = Vector3.zero;
 
             if(climbingScript.GetLookDirection(0) || climbingScript.GetLookDirection(2))
@@ -463,13 +471,16 @@ public class UpwardClimbing : MonoBehaviour
             
             if(movingDirecionally)
             {
-                 interpolateAmountRightArm += Time.deltaTime * 1.75f;
+                interpolateAmountRightArm += Time.deltaTime * 1.75f;
+            }
+            else if(movingDown)
+            {
+                interpolateAmountRightArm += Time.deltaTime * 1.75f;
             }
             else
             {
                  interpolateAmountRightArm += Time.deltaTime * 1.25f;
             }
-            //interpolateAmountRightArm += Time.deltaTime * 1.25f;
 
             rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position, LHandPos, interpolateAmountRightArm);
 
@@ -477,33 +488,42 @@ public class UpwardClimbing : MonoBehaviour
             {
                 movingLeftHand = true;
                 movingRightHand = false;
-
+                idleHandRInterpolate = 0.0f;
+                idleHandPosR = rightRigAimPosition.position;
                 needNewLeftHandSpot = true;
-                if(finishCurrentGrab)
-                {
-                    stopRight = true;
-                }
                 rightArmStartPosition.position = currentHandSpotRight.transform.position;
                 interpolateAmountRightArm = 0.0f;
             }
         }
-        if(!movingRightHand && currentHandSpotRight != null) //&& rightRigAimPosition.position != currentHandSpotRight.transform.position)
+        if(!movingRightHand && currentHandSpotRight != null)
         {
-            //rightRigAimPosition.position = Vector3.Lerp(rightRigAimPosition.position, currentHandSpotRight.transform.position, interpolateAmountRightArm);
-            rightRigAimPosition.position = currentHandSpotRight.transform.position;
+            idleHandRInterpolate += Time.deltaTime * 1.25f;
+            rightRigAimPosition.position = Vector3.Lerp(idleHandPosR, currentHandSpotRight.transform.position, idleHandRInterpolate);
+            if(idleHandLInterpolate >= 1.0f)
+            {
+                idleHandLInterpolate = 0.0f;
+                idleHandPosL =  rightRigAimPosition.position;
+            }
         }
 
     }
     private void LerpLeftHandToTarget()
     {
+        // checks if the start point for the lerping isnt null as to avoid errors.
         if(leftArmStartPosition == null)
         {
             leftArmStartPosition.position = leftArmPos.position;
         }
-        if(movingLeftHand && currentHandSpotLeft != null && !stopLeft)
+
+        // checks if its the left hands turn to move and if there is a current hand hold to move to.
+        if(movingLeftHand && currentHandSpotLeft != null)
         {
-            
+            // variable lerping speeds to make it look clean when the player moves.
             if(movingDirecionally)
+            {
+                interpolateAmountLeftArm  += Time.deltaTime * 1.75f;
+            }
+            else if(movingDown)
             {
                 interpolateAmountLeftArm  += Time.deltaTime * 1.75f;
             }
@@ -513,6 +533,7 @@ public class UpwardClimbing : MonoBehaviour
             }
             Vector3 RHandPos = Vector3.zero;
 
+            // a slight offset based on the direction the player is look to get a better looking hold on objects.
             if(climbingScript.GetLookDirection(0) || climbingScript.GetLookDirection(2))
             {//z
                 RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z + 0.15f);
@@ -521,39 +542,40 @@ public class UpwardClimbing : MonoBehaviour
             {//x
                 RHandPos =  new Vector3(currentHandSpotLeft.transform.position.x + 0.15f, currentHandSpotLeft.transform.position.y, currentHandSpotLeft.transform.position.z);
             }
+
+            // the actual slerping happens here, I know its named lerping function but slerping ended up looking a lot better.
             leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, RHandPos, interpolateAmountLeftArm);
 
-            // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentHandSpotLeft.transform.position.x, interpolateAmountLeftArm);
-            // float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentHandSpotLeft.transform.position.y, interpolateAmountLeftArm);
-            // float newZ = Mathf.Lerp(leftRigAimPosition.position.z, spotZ, interpolateAmountLeftArm);
-            
-            // leftRigAimPosition.position = new Vector3(newX, newY, newZ);
-
+            // when the slerp is complete reset values and set the right hand to move now and tell the find hand hold function it needs a new hand hold for this hand.
             if(interpolateAmountLeftArm >= 1.0f)
             {
                 interpolateAmountLeftArm = 0.0f;
 
                 movingLeftHand = false;
                 movingRightHand = true;
-
+                idleHandPosL = leftRigAimPosition.position;
+                idleHandLInterpolate = 0.0f;
                 needNewRightHandSpot = true; 
                 leftArmStartPosition.position = currentHandSpotLeft.transform.position;
-                
-                if(finishCurrentGrab)
-                {
-                    stopLeft = true;
-                }
+        
                
             }
         }
-        if(!movingLeftHand && currentHandSpotLeft != null)// && leftRigAimPosition.position != currentHandSpotLeft.transform.position)
+        if(!movingLeftHand && currentHandSpotLeft != null)
         {
-            //leftRigAimPosition.position = Vector3.Lerp(leftRigAimPosition.position, currentHandSpotLeft.transform.position, Time.deltaTime * 2.0f);
-            leftRigAimPosition.position = currentHandSpotLeft.transform.position;
+            // this continously keeps the hand on the spot its on while the body moves so it doesnt look disconnected from the hand hold, i found lerping this decreased jiter.
+            idleHandLInterpolate += Time.deltaTime * 1.25f;
+            leftRigAimPosition.position = Vector3.Lerp(idleHandPosL, currentHandSpotLeft.transform.position, idleHandLInterpolate);
+            if(idleHandLInterpolate >= 1)
+            {
+                idleHandLInterpolate = 0.0f;
+                idleHandPosL = leftRigAimPosition.position;
+            }
         }
     }
     private Vector3 GetMiddlePoint(Vector3 leftHandPos, Vector3 rightHandPos)
     {
+        // finds the middle point between the two points.
         float x = (leftHandPos.x + rightHandPos.x) / 2;
         float y = (leftHandPos.y + rightHandPos.y) / 2;
         float z = (leftHandPos.z + rightHandPos.z) / 2;
@@ -563,6 +585,7 @@ public class UpwardClimbing : MonoBehaviour
     }
     private Vector3 GetMiddlePointForRotate(Vector3 leftHandPos, Vector3 rightHandPos, Vector3 leftFootPos, Vector3 rightFootPos)
     {
+        // finds the middle point between 4 points.
         float x = (leftHandPos.x + rightHandPos.x + leftFootPos.x + rightFootPos.x) / 4;
         float y = (leftHandPos.y + rightHandPos.y + leftFootPos.y + rightFootPos.y) / 4;
         float z = (leftHandPos.z + rightHandPos.z + leftFootPos.z + rightFootPos.z) / 4;
@@ -570,6 +593,8 @@ public class UpwardClimbing : MonoBehaviour
 
         return newPos;
     }
+
+    // everything below this point is getters and setters.
     public bool GetCanClimb()
     {
         return canClimb;
@@ -611,4 +636,22 @@ public class UpwardClimbing : MonoBehaviour
     {
         detectionRadius = _detectionRadius;
     }
+    public bool GetIsClimbingPaused()
+    {
+        return paused;
+    }
+    public bool GetIsRotatedToWall()
+    {
+        return isRotatedToWall;
+    }
+    public void ResetCurrentHandHolds()
+    {
+        needNewLeftHandSpot = true;
+        needNewRightHandSpot = false;
+        movingLeftHand = true;
+        movingRightHand = false;
+        currentHandSpotRight = null;
+        currentHandSpotLeft = null;
+    }
+
 }

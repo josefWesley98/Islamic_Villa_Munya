@@ -5,78 +5,126 @@ using UnityEngine.Animations.Rigging;
 public class DownwardClimbing : MonoBehaviour
 {
     //scripts
-    [SerializeField] private LayerMask climableLayer;
+    [Header("Scripts")]
     [SerializeField] private UpwardClimbing upwardClimbing; 
-     [SerializeField] private ClimbingScript climbingScript;
-     [SerializeField] private Vector3 detectionRadius = new Vector3(5f,5f,5f);
+    [SerializeField] private ClimbingScript climbingScript;
     // transforms 
+    [Header("Grab Point Lists")]
     [SerializeField] private Transform[] grabbablePositionsRightFoot;
     [SerializeField] private Transform[] grabbablePositionsLeftFoot;
+
+    [Header("References for 8D Movement")]
     [SerializeField] private Transform[] rightGrabPointReference;
     [SerializeField] private Transform[] leftGrabPointReference;
-    [SerializeField] private bool movingLeftFoot = false;
-    [SerializeField] private bool movingRightFoot= false;
-    [SerializeField] private bool needNewLeftFootSpot = false;
-    [SerializeField] private bool needNewRightFootSpot = false;
-    //Mats
+
+    [Header("Left Foot References")]
+    [SerializeField] private Transform leftFootStartPosition;
+    [SerializeField] private Transform leftRigAimPosition;
+    [SerializeField] private Transform leftFootPos;
+
+    [Header("Right Foot References")]
+    [SerializeField] private Transform rightFootStartPosition;
+    [SerializeField] private Transform rightRigAimPosition;
+    [SerializeField] private Transform rightFootPos;
+
+    [Header("Rigs")]
+    [SerializeField] private Rig leftFootRig;
+    [SerializeField] private Rig rightFootRig;
+
+    [Header("Rig Weighting")]
+    [SerializeField] private float rigTargetWeightLeftFoot;
+    [SerializeField] private float rigTargetWeightRightFoot;
+
+    [Header("Materials")]
     [SerializeField] private Material newMaterialRefL;
     [SerializeField] private Material newMaterialRefR;
 
-    // Left Foot Rig
-    [SerializeField] private Transform leftFootStartPosition;
-    [SerializeField] private Transform leftRigAimPosition;
-    [SerializeField] private float rigTargetWeightLeftFoot;
-    [SerializeField] private Rig leftFootRig;
-    [SerializeField] private Transform leftFootPos;
-    [SerializeField] private bool[] direction = new bool[4] { false, false,false,false};
-    private float interpolateAmountLeftFoot = 0.0f;
-     private bool moveLeftFoot = true;
+    [Header("Layer Masks")]
+    [SerializeField] private LayerMask climableLayer;
 
-    // Right Foot Rig
-    [SerializeField] private Transform rightFootStartPosition;
-    [SerializeField] private Transform rightRigAimPosition;
-    [SerializeField] private float rigTargetWeightRightFoot;
-    [SerializeField] private Rig rightFootRig;
-    [SerializeField] private Transform rightFootPos;
-    private float interpolateAmountRightFoot = 0.0f;
-    private bool moveRightFoot = true;
-    private Vector3 middlePoint = Vector3.zero;
-    // general variables
-    private bool m_Started;
-    private Transform targetSpotLeftFoot;
-    private Transform targetSpotRightFoot;
     private GameObject currentFootSpotLeft;
     private GameObject currentFootSpotRight;
-    private int arrayPosLeftFoot = 0;
-    private int arrayPosRightFoot = 0;
-    private int chosenReference = 0;
-    private Vector2 movementDirection;
-    private bool gotFootHolds = false;
 
+    private Transform targetSpotLeftFoot;
+    private Transform targetSpotRightFoot;
+
+    private Vector3 detectionRadius = new Vector3(5f,5f,5f);
+    private Vector3 middlePoint = Vector3.zero;
+    private Vector2 movementDirection;
     
+    private bool[] direction = new bool[4] { false, false,false,false};
+    private bool needNewLeftFootSpot = false;
+    private bool needNewRightFootSpot = false;
+    private bool movingLeftFoot = false;
+    private bool movingRightFoot= false;
+    private bool gotFootHolds = false;
+    private bool moveRightFoot = true;
+    private bool moveLeftFoot = true;
     private bool paused = false;
-    // Start is called before the first frame update
+    private bool m_Started;
+    
+    private int arrayPosRightFoot = 0;
+    private int arrayPosLeftFoot = 0;
+    private int chosenReference = 0;
+
+    private float interpolateAmountRightFoot = 0.0f;
+    private float interpolateAmountLeftFoot = 0.0f;
+
     void Start()
     {
-  
         movingLeftFoot = true;
         needNewLeftFootSpot = true; 
         m_Started = true; 
+
+        // initalise grabable positions array.
         for(int i = 0; i < 150; i++)
         {
             grabbablePositionsLeftFoot[i] = gameObject.transform;
             grabbablePositionsRightFoot[i] = gameObject.transform;
         }
     }
+    
+    void OnDrawGizmos()
+    {
+        // draws a box around the player for debugging that shows the detection radius for footholds.
+        Gizmos.color = Color.blue;
+        if (m_Started)
+        {
+            Vector3 colliderBoxPos = new Vector3(transform.position.x, transform.position.y +0.2f,transform.position.z);
+            Gizmos.DrawWireCube(colliderBoxPos, detectionRadius);
+        }
+    }
     void Update()
     {
+        // get directions.
         for(int i = 0; i < 4; i++)
         {
             direction[i] = climbingScript.GetLookDirection(i);
         }
 
-        FindRightFootClimbingPositions();
-        FindLeftFootClimbingPositions();
+        // pauses animation and lerping when not moving.
+        Pausing();
+        
+        // finds new foot holds.
+        if(!paused)
+        {
+            FindRightFootClimbingPositions();
+            FindLeftFootClimbingPositions();
+        }
+        
+        //Lerps feet positions.
+        if(!climbingScript.GetDetach() && !paused)
+        {
+            LerpRightFootToTarget();
+            LerpLeftFootToTarget();
+        }
+
+        // handles the changing of weight when attaching to the wall.
+        RiggingWeightLerp();
+       
+    }
+    private void Pausing()
+    {
         if(movementDirection.x == 0 && movementDirection.y == 0)
         {
             paused = true;
@@ -85,21 +133,14 @@ public class DownwardClimbing : MonoBehaviour
         {
             paused = false;
         }
-        
-        if(!climbingScript.GetDetach() && !paused)
-        {
-            LerpRightFootToTarget();
-            LerpLeftFootToTarget();
-        }
-
-        RiggingWeightLerp();
-       
     }
     private void RiggingWeightLerp()
     {
-        rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*10);
-        leftFootRig.weight = Mathf.Lerp(leftFootRig.weight, rigTargetWeightLeftFoot, Time.deltaTime*10);
+        // lerps the weight to create clean transitions.
+        rightFootRig.weight = Mathf.Lerp(rightFootRig.weight, rigTargetWeightRightFoot, Time.deltaTime*5);
+        leftFootRig.weight = Mathf.Lerp(leftFootRig.weight, rigTargetWeightLeftFoot, Time.deltaTime*5);
         
+        // checks if on the wall climbing and sets the target weight accordingly.
         if(gotFootHolds && climbingScript.GetIsConnectedToWall() && !climbingScript.GetDetach())
         {
             rigTargetWeightRightFoot = 1.0f;
@@ -113,8 +154,13 @@ public class DownwardClimbing : MonoBehaviour
     }
     private void FindRightFootClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
+        //moves the collider box up slightly.
+        Vector3 colliderBoxPos = new Vector3(transform.position.x, transform.position.y +0.2f,transform.position.z);
+
+        // please refer to the UpwardClimbing Script for a break down of this code and they are basically duplicates, the functions name: FindRightHandClimbingPositions().
+        Collider[] climableSpots = Physics.OverlapBox(colliderBoxPos, detectionRadius, transform.rotation, climableLayer);
         
+
         for(int i = 0; i < climableSpots.Length; i++)
         {
             grabbablePositionsRightFoot[i] = climableSpots[i].gameObject.transform;
@@ -201,13 +247,12 @@ public class DownwardClimbing : MonoBehaviour
         }
         
     }
-    public Vector3 GetMiddlePoint()
-    {
-        return middlePoint;
-    }
+   
     private void FindLeftFootClimbingPositions()
     {
-        Collider[] climableSpots = Physics.OverlapBox(transform.position, detectionRadius, transform.rotation, climableLayer);
+        // please refer to the UpwardClimbing Script for a break down of this code and they are basically duplicates, the functions name: FindLeftHandClimbingPositions().
+        Vector3 colliderBoxPos = new Vector3(transform.position.x, transform.position.y +0.2f,transform.position.z);
+        Collider[] climableSpots = Physics.OverlapBox(colliderBoxPos, detectionRadius, transform.rotation, climableLayer);
         
         for(int i = 0; i < climableSpots.Length; i++)
         {
@@ -233,12 +278,10 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 4;
-                    
                 }
                 else // Up
                 {
                     chosenReference = 0;
-                   
                 }
             }   
             if(movementDirection.y < 0)//Down
@@ -246,17 +289,14 @@ public class DownwardClimbing : MonoBehaviour
                 if(movementDirection.x > 0)
                 {
                     chosenReference = 7;
-                    //Debug.Log("moving down and to the left");
                 }
                 if(movementDirection.x < 0)
                 {
                     chosenReference = 6;
-                    //Debug.Log("moving down and to the right");
                 }
                 else // down
                 {
                     chosenReference = 1;
-                    //Debug.Log("just moving down");
                 }
             }     
 
@@ -271,7 +311,6 @@ public class DownwardClimbing : MonoBehaviour
                
             }
         
-
             System.Array.Sort(grabbablePositionsLeftFoot, (x, y) =>
             {
                 float distanceX = Vector3.Distance(x.transform.position, leftGrabPointReference[chosenReference].position);
@@ -279,14 +318,7 @@ public class DownwardClimbing : MonoBehaviour
                 return distanceX.CompareTo(distanceY);
             });
             
-            // if(grabbablePositionsLeftFoot[0].position == currentFootSpotLeft.transform.position && grabbablePositionsLeftFoot.Length > 1)
-            // {
-            //     arrayPosLeftFoot++;
-            // }
-        
             targetSpotLeftFoot = grabbablePositionsLeftFoot[arrayPosLeftFoot];
-
-        
 
         if(needNewLeftFootSpot && upwardClimbing.GetNeedNewSpots())
         {
@@ -299,22 +331,10 @@ public class DownwardClimbing : MonoBehaviour
             }
         }   
     }
-    public Vector3 GetNewMiddleSpot()
-    {
-        middlePoint = GetMiddlePoint(targetSpotRightFoot.position, targetSpotLeftFoot.position);
-        return middlePoint;
-    }
-    private Vector3 GetMiddlePoint(Vector3 leftHandPos, Vector3 rightHandPos)
-    {
-        float x = (leftHandPos.x + rightHandPos.x) / 2;
-        float y = (leftHandPos.y + rightHandPos.y) / 2;
-        float z = (leftHandPos.z + rightHandPos.z) / 2;
-        Vector3 newPos = new Vector3(x,y,z);
-
-        return newPos;
-    }
+  
     private void LerpRightFootToTarget()
     {
+        // please refer to the UpwardClimbing Script for a break down of this code and they are basically duplicates, the functions name: LerpRightHandToTarget().
         if(rightFootStartPosition == null)
         {
             rightFootStartPosition.position = rightFootPos.position;
@@ -325,11 +345,15 @@ public class DownwardClimbing : MonoBehaviour
             {
                  interpolateAmountRightFoot += Time.deltaTime *1.75f;
             }
+            else if(upwardClimbing.GetMovingDownwards())
+            {
+                interpolateAmountRightFoot += Time.deltaTime *1.1f;
+            }
             else
             {
                  interpolateAmountRightFoot += Time.deltaTime *1.25f;
             }
-            //interpolateAmountRightFoot += Time.deltaTime *1.25f;
+
             rightRigAimPosition.position = Vector3.Slerp(rightRigAimPosition.position,  currentFootSpotRight.transform.position, interpolateAmountRightFoot);
           
 
@@ -354,6 +378,7 @@ public class DownwardClimbing : MonoBehaviour
     }
     private void LerpLeftFootToTarget()
     {
+        // please refer to the UpwardClimbing Script for a break down of this code and they are basically duplicates, the functions name: LerpLeftHandToTarget().
         if(leftFootStartPosition == null)
         {
             leftFootStartPosition.position = leftFootPos.position;
@@ -364,22 +389,21 @@ public class DownwardClimbing : MonoBehaviour
             {
                 interpolateAmountLeftFoot += Time.deltaTime * 1.75f;
             }
+            else if(upwardClimbing.GetMovingDownwards())
+            {
+                interpolateAmountLeftFoot += Time.deltaTime * 1.1f;
+            }
             else
             {
                 interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
             }
-            //interpolateAmountLeftFoot += Time.deltaTime * 1.25f;
-            leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, currentFootSpotLeft.transform.position, interpolateAmountLeftFoot);
-            // float newX = Mathf.Lerp(leftRigAimPosition.position.x, currentFootSpotLeft.transform.position.x, interpolateAmountLeftFoot);
-            // float newY = Mathf.Lerp(leftRigAimPosition.position.y, currentFootSpotLeft.transform.position.y, interpolateAmountLeftFoot);
-            // float newZ = Mathf.Lerp(leftRigAimPosition.position.z, currentFootSpotLeft.transform.position.z, interpolateAmountLeftFoot);
 
-            // leftRigAimPosition.position = new Vector3(newX, newY, newZ);
+            leftRigAimPosition.position = Vector3.Slerp(leftRigAimPosition.position, currentFootSpotLeft.transform.position, interpolateAmountLeftFoot);
 
             if(interpolateAmountLeftFoot >= 1.0f)
             {
                 interpolateAmountLeftFoot = 0.0f;
-
+                
                 movingLeftFoot = false;
                 movingRightFoot = true;
 
@@ -394,13 +418,22 @@ public class DownwardClimbing : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    // getters and setters.
+    public Vector3 GetNewMiddleSpot()
     {
-        Gizmos.color = Color.blue;
-        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
-        if (m_Started)
-            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-            Gizmos.DrawWireCube(transform.position, detectionRadius);
+        // returns middle point between the two feet.
+        middlePoint = GetMiddlePoint(targetSpotRightFoot.position, targetSpotLeftFoot.position);
+        return middlePoint;
+    }
+    private Vector3 GetMiddlePoint(Vector3 leftHandPos, Vector3 rightHandPos)
+    {
+        // gets middle point between 2 positions.
+        float x = (leftHandPos.x + rightHandPos.x) / 2;
+        float y = (leftHandPos.y + rightHandPos.y) / 2;
+        float z = (leftHandPos.z + rightHandPos.z) / 2;
+        Vector3 newPos = new Vector3(x,y,z);
+
+        return newPos;
     }
     public Transform GetTargetSpotLeftFoot()
     {
@@ -439,5 +472,18 @@ public class DownwardClimbing : MonoBehaviour
     public void SetDetectionRadius(Vector3 _detectionRadius)
     {
         detectionRadius = _detectionRadius;
+    }
+    public Vector3 GetMiddlePoint()
+    {
+        return middlePoint;
+    }
+    public void ResetCurrentFootHolds()
+    {
+        needNewLeftFootSpot = true;
+        needNewRightFootSpot = true;
+        movingLeftFoot = true;
+        movingRightFoot = false;
+        currentFootSpotLeft = null;
+        currentFootSpotRight = null;
     }
 }
