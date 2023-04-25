@@ -2276,12 +2276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a7060c05b17f949856a7882c719a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   upwardClimbing: {fileID: 6571598036124693571}
   climbingScript: {fileID: 2723775625618994281}
-  detectionRadius: {x: 0.5, y: 1, z: 1}
   grabbablePositionsRightFoot:
   - {fileID: 0}
   - {fileID: 0}
@@ -2602,23 +2598,21 @@ MonoBehaviour:
   - {fileID: 6571598036187223506}
   - {fileID: 6571598036260778081}
   - {fileID: 6571598036226663880}
-  movingLeftFoot: 0
-  movingRightFoot: 0
-  needNewLeftFootSpot: 0
-  needNewRightFootSpot: 0
-  newMaterialRefL: {fileID: 2100000, guid: afb0830f4ed8d574e9f95899849e6e72, type: 2}
-  newMaterialRefR: {fileID: 2100000, guid: f5a6c75fd72ef9847a4d1d9c2e48c0a3, type: 2}
   leftFootStartPosition: {fileID: 6571598036456325646}
   leftRigAimPosition: {fileID: 6571598037657633884}
-  rigTargetWeightLeftFoot: 0
-  leftFootRig: {fileID: 6571598036406599101}
   leftFootPos: {fileID: 6070517586284369868}
-  direction: 00000000
   rightFootStartPosition: {fileID: 6571598037531387840}
   rightRigAimPosition: {fileID: 6571598035964429592}
-  rigTargetWeightRightFoot: 0
-  rightFootRig: {fileID: 6571598037697098817}
   rightFootPos: {fileID: 8995781112819167105}
+  leftFootRig: {fileID: 6571598036406599101}
+  rightFootRig: {fileID: 6571598037697098817}
+  rigTargetWeightLeftFoot: 0
+  rigTargetWeightRightFoot: 0
+  newMaterialRefL: {fileID: 2100000, guid: afb0830f4ed8d574e9f95899849e6e72, type: 2}
+  newMaterialRefR: {fileID: 2100000, guid: f5a6c75fd72ef9847a4d1d9c2e48c0a3, type: 2}
+  climableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &6571598036012840373
 GameObject:
   m_ObjectHideFlags: 0
@@ -2854,11 +2848,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec913c4b9cf1f0b48a9e38e1f7c52e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   downwardClimbing: {fileID: 6571598036003345934}
-  detectionRadius: {x: 0.5, y: 0.5, z: 1}
+  climbingScript: {fileID: 2723775625618994281}
+  animator: {fileID: 2723775625618994284}
   rightGrabPointReference:
   - {fileID: 6571598036080950744}
   - {fileID: 6571598037501899205}
@@ -2877,18 +2869,6 @@ MonoBehaviour:
   - {fileID: 6571598037873058597}
   - {fileID: 6571598036218727656}
   - {fileID: 6571598036665645591}
-  climbingScript: {fileID: 2723775625618994281}
-  rightArmStartPosition: {fileID: 6571598036456578030}
-  rightRigAimPosition: {fileID: 6571598036055704613}
-  rigTargetWeightRightArm: 0
-  rightArmRig: {fileID: 6571598035768926218}
-  rightArmPos: {fileID: 7859892834252912181}
-  animator: {fileID: 2723775625618994284}
-  leftArmStartPosition: {fileID: 6571598037636428417}
-  leftRigAimPosition: {fileID: 6571598037677234377}
-  rigTargetWeightLeftArm: 0
-  leftArmRig: {fileID: 6571598037009264849}
-  leftArmPos: {fileID: 3358061336281029694}
   grabbablePositionsRightHand:
   - {fileID: 0}
   - {fileID: 0}
@@ -3191,15 +3171,21 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  rightArmStartPosition: {fileID: 6571598036456578030}
+  rightRigAimPosition: {fileID: 6571598036055704613}
+  rightArmPos: {fileID: 7859892834252912181}
+  leftArmStartPosition: {fileID: 6571598037636428417}
+  leftRigAimPosition: {fileID: 6571598037677234377}
+  leftArmPos: {fileID: 3358061336281029694}
+  rightArmRig: {fileID: 6571598035768926218}
+  leftArmRig: {fileID: 6571598037009264849}
+  rigTargetWeightRightArm: 0
+  rigTargetWeightLeftArm: 0
   newMaterialRefR: {fileID: 2100000, guid: 04229514d4d3a484ebf8350b5346e4d0, type: 2}
   newMaterialRefL: {fileID: 2100000, guid: 35802e9a998c9074d86f0098180f1d6a, type: 2}
-  movingX: 0
-  movingY: 0
-  movingLeftHand: 0
-  movingRightHand: 0
-  needNewLeftHandSpot: 0
-  needNewRightHandSpot: 0
-  direction: 00000000
+  climableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &6571598036166430758
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,7 +5803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8405509287026908885
 Transform:
   m_ObjectHideFlags: 0
@@ -5832,7 +5818,7 @@ Transform:
   m_Children:
   - {fileID: 8299262563743362582}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8405509287218328964
 GameObject:
@@ -6284,16 +6270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71b99e445a89e4419ea3d148e34b6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 8405509288732363257}
   moveController: {fileID: 8405509288732363206}
   upwardClimbing: {fileID: 6571598036124693571}
   downwardClimbing: {fileID: 6571598036003345934}
-  centre: {x: 0, y: 0, z: 0}
-  radius: 50
-  lm:
-    serializedVersion: 2
-    m_Bits: 1024
-  jumpForce: 0.5
+  rb: {fileID: 8405509288732363257}
 --- !u!114 &2723775625618994282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6361,15 +6341,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 8405509288732363206}
+  ASC: {fileID: 8405509288732363207}
   firstPersonCamera: {fileID: 0}
-  cameraPos: {fileID: 0}
+  fpCameraPos: {fileID: 0}
+  cam: {fileID: 0}
   inspect: {fileID: 0}
   info: {fileID: 0}
   infoObject: {fileID: 0}
   leaveInspectUI: {fileID: 0}
-  cam: {fileID: 0}
   distFromCam: 1.5
-  isInspecting: 0
 --- !u!1 &8847375139044302984
 GameObject:
   m_ObjectHideFlags: 0

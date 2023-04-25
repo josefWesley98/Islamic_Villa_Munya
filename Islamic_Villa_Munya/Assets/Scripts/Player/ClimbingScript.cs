@@ -10,52 +10,41 @@ public class ClimbingScript : MonoBehaviour
     InputAction climb;
     InputAction stopClimb;
     InputAction movement;
-    [SerializeField] private Rigidbody rb;
 
+    [Header("Scripts and Rigidbody")]
     [SerializeField] private NIThirdPersonController moveController;
     [SerializeField] private UpwardClimbing upwardClimbing;
     [SerializeField] private DownwardClimbing downwardClimbing;
-    //[SerializeField] private Transform centreMass;
-    //[SerializeField] private Transform playerPos;
-    private bool isClimbing = false;
-    private bool isJumping = false;
-    private Vector3 climbPoint = new Vector3(0,0,0);
+    [SerializeField] private Rigidbody rb;
     
-    [SerializeField] Vector3 centre;
-    [SerializeField] float radius;
-    [SerializeField] LayerMask lm;
-    [SerializeField] float jumpForce;
-
+    private Vector3 centre = Vector3.zero;
     private Vector3 playerLerpStart = Vector3.zero;
     private Vector3 endLerpPoint =  Vector3.zero;
+    private Vector3 direction = Vector3.zero;
+    private Vector3 target = Vector3.zero;
+    
+    private Quaternion lookRotation = Quaternion.identity;
+    private Quaternion targetRotation = Quaternion.identity;
+
+    private float radius;
     private float interpolateAmount = 0.0f;
+    private float climbOffset = 0.0f;
+    private float yRotForWall = 0.0f;
+    private float interpolateWallRot = 0.0f;
+    private float rotateCooldown = 1.0f;
+
+    private bool[] lookDirection = new bool[4]{false, false, false, false};
+    private bool isClimbing = false;
+    private bool isJumping = false;
     private bool startClimb = false;
     private bool arrived = false;
     private bool holding = false;
-    private float climbOffset = 0.0f;
-    private bool[] lookDirection = new bool[4]{false, false, false, false};
     private bool isConnectedToWall = false;
     private bool detach = true;
-    private float yRotForWall = 0.0f;
-    private float interpolateWallRot = 0.0f;
     private bool startWallRot = true;
-    private Vector3 direction = Vector3.zero;
-    private Vector3 target = Vector3.zero;
-    private Quaternion targetRotation;
-    
-    //private Quaternion slerpStart = Quaternion.identity;
-    //private Quaternion lookRotation = Quaternion.identity;
-    private void Awake() => playercontrols = new PlayerControls();
-    
+    private bool startRotating = false;
 
-    // rotate to wall variables
-    float slerpPercent = 0.0f;
-    Quaternion lookRotation = Quaternion.identity;
-    Vector3 rotationDirection = Vector3.zero;
-    Quaternion slerpStart = Quaternion.identity;
-    float slerpSpeed = 25.0f;
-    bool doRotate = false;
-    bool startedRotation = false;
+    private void Awake() => playercontrols = new PlayerControls();
 
     private void OnEnable()
     {
@@ -76,7 +65,6 @@ public class ClimbingScript : MonoBehaviour
         jump.Enable();
 
     }
-
     private void OnDisable()
     {
         playercontrols.Disable();
@@ -84,9 +72,45 @@ public class ClimbingScript : MonoBehaviour
         stopClimb.Disable();
         jump.Disable();
     }
-    // Update is called once per frame
     void Update()
     {
+        DoJumpCheck();
+        
+        CanDoRotationCheck();
+
+        CalculateDirection();
+
+        ClimbingChecks();
+    }    
+    private void ClimbingChecks()
+    {
+        // checks if can do climb and if hand holds are available.
+        if(!upwardClimbing.GetCanClimb())
+        {
+            startClimb = false;
+            moveController.SetIsClimbing(false);
+        }
+        // starts the climbing.
+        if(upwardClimbing.GetCanClimb() && startClimb)
+        {
+            moveController.SetIsClimbing(true);
+            LerpFunction();
+        }
+        //resets gravity if climbing ends (redundency)
+        if(!startClimb)
+        {
+            rb.useGravity = true;
+        }
+        //when arriving at current lerp target, get another.
+        if(arrived && startClimb )
+        {
+            arrived = false;
+            GetNextClimbSpot();
+        }  
+    }
+    private void DoJumpCheck()
+    {
+        // checks if your jumping, if yes then you cant start climbing. (stops cheating in level to avoid puzzle.)
         if(jump.ReadValue<float>() > 0)
         {
             isJumping = true;
@@ -95,75 +119,26 @@ public class ClimbingScript : MonoBehaviour
         {
             isJumping = false;
         }
-        if(startClimb && lookDirection[0])
-        {
-            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
-            // Set the y component to 0 to ensure only rotation around the y-axis
-            direction.y = 0;
-
-            targetRotation = Quaternion.LookRotation(direction.normalized);
-            
-            
-
-            if(startClimb && transform.localRotation != targetRotation)
-            {
-                transform.localRotation = targetRotation;
-                Debug.Log("rotating forward.");
-            }
-            
-        }
-        if(startClimb && lookDirection[1])
-        {
-            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
-            // Set the y component to 0 to ensure only rotation around the y-axis
-            direction.y = 0;
-            targetRotation = Quaternion.LookRotation(direction.normalized);
-
-            if(startClimb && transform.localRotation != targetRotation)
-            {
-                transform.localRotation = targetRotation;
-                Debug.Log("rotating right.");
-            }
-        }
-        if(startClimb && lookDirection[2])
-        {
-            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
-            // Set the y component to 0 to ensure only rotation around the y-axis
-            direction.y = 0;
-            targetRotation = Quaternion.LookRotation(direction.normalized);
-
-            if(startClimb && transform.localRotation != targetRotation)
-            {
-                transform.localRotation = targetRotation;
-                Debug.Log("rotating back.");
-            }
-        }
-        if(startClimb && lookDirection[3])
-        {
-            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
-            // Set the y component to 0 to ensure only rotation around the y-axis
-            direction.y = 0;
-            targetRotation = Quaternion.LookRotation(direction.normalized);
-
-            if(startClimb && transform.localRotation != targetRotation)
-            {
-                transform.localRotation = targetRotation;
-                Debug.Log("rotating left.");
-            }
-        }
-
+    }
+    private void CalculateDirection()
+    {
         // forward
+        // checks based on the rotation of the player what direction they are facing.
+        // this will be the only commented if nest as they are all the same but with variable changes.
         if(transform.eulerAngles.y >= 315 || transform.eulerAngles.y < 45f)
         {
             if(!startClimb)
             {
+                // sets the offset from the wall so they are face to face with the surface to make things more natural.
                 climbOffset = -0.165f;
+                // assign the direction and make all the others false.
                 lookDirection[0] = true;
                 lookDirection[1] = false;
                 lookDirection[2] = false;
                 lookDirection[3] = false;
-                upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
-                downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+                // change the detection radius of the box.
+                upwardClimbing.SetDetectionRadius(new Vector3(1f,0.55f,0.5f));
+                downwardClimbing.SetDetectionRadius(new Vector3(1f,0.55f,0.5f));
             }
         }
         // right
@@ -176,8 +151,8 @@ public class ClimbingScript : MonoBehaviour
                 lookDirection[1] = true;
                 lookDirection[2] = false;
                 lookDirection[3] = false;
-                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
-                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,0.55f,1f));
+                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,0.55f,1f));
             }
         }
         // backwards
@@ -190,8 +165,8 @@ public class ClimbingScript : MonoBehaviour
                 lookDirection[1] = false;
                 lookDirection[2] = true;
                 lookDirection[3] = false;
-                upwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
-                downwardClimbing.SetDetectionRadius(new Vector3(1f,1f,0.5f));
+                upwardClimbing.SetDetectionRadius(new Vector3(1f,0.55f,0.5f));
+                downwardClimbing.SetDetectionRadius(new Vector3(1f,0.55f,0.5f));
             }
 
         }
@@ -205,40 +180,84 @@ public class ClimbingScript : MonoBehaviour
                 lookDirection[1] = false;
                 lookDirection[2] = false;
                 lookDirection[3] = true;
-                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
-                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,1f,1f));
+                upwardClimbing.SetDetectionRadius(new Vector3(0.5f,0.55f,1f));
+                downwardClimbing.SetDetectionRadius(new Vector3(0.5f,0.55f,1f));
             }
         }
         
-        if(!upwardClimbing.GetCanClimb())
+    }
+    private void calculateRotationToWall()
+    {
+        //checks if the rotation cooldown is less than 0 so it does jitter by rotating 60+ times a second, aswell as if the player is infact climbing.
+        // there is a version of these for each direction to help create an accurate rotation.
+        // again only commenting this if nest becase they are all the same.
+        if(startClimb && lookDirection[0] && rotateCooldown <= 0)
         {
-            startClimb = false;
-            moveController.SetIsClimbing(false);
-        }
-        if(upwardClimbing.GetCanClimb() && startClimb)
-        {
-            moveController.SetIsClimbing(true);
-            LerpFunction();
-        }
+            // gets the hand middle position and takes the current transform from that to get the direction.
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            // make y = 0 so it only rotates on that axis.
+            direction.y = 0;
+            //use the look rotation function to use our vector3 direction to find the Quaternion equivelant.
+            targetRotation = Quaternion.LookRotation(direction.normalized);
 
-        if(!startClimb)
-        {
-            rb.useGravity = true;
+            //finally rotate the player to that angle and reset the cooldown.
+            if(startClimb && transform.localRotation != targetRotation && !upwardClimbing.GetIsClimbingPaused())
+            {
+                transform.localRotation = targetRotation;
+                rotateCooldown = 1.0f;
+            }
+            
         }
-
-        if(arrived && startClimb )
+        if(startClimb && lookDirection[1] && rotateCooldown <= 0)
         {
-            arrived = false;
-            GetNextClimbSpot();
-        }  
-    }    
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
 
+            if(startClimb && transform.localRotation != targetRotation && !upwardClimbing.GetIsClimbingPaused())
+            {
+                transform.localRotation = targetRotation;
+                rotateCooldown = 1.0f;
+            }
+        }
+        if(startClimb && lookDirection[2] && rotateCooldown <= 0)
+        {
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
+
+            if(startClimb && transform.localRotation != targetRotation && !upwardClimbing.GetIsClimbingPaused())
+            {
+                transform.localRotation = targetRotation;
+                rotateCooldown = 1.0f;
+            }
+        }
+        if(startClimb && lookDirection[3] && rotateCooldown <= 0)
+        {
+            Vector3 direction = upwardClimbing.GetWallPosition() - transform.position;
+            direction.y = 0;
+            targetRotation = Quaternion.LookRotation(direction.normalized);
+
+            if(startClimb && transform.localRotation != targetRotation && !upwardClimbing.GetIsClimbingPaused())
+            {
+                transform.localRotation = targetRotation;
+                rotateCooldown = 1.0f;
+            }
+        }
+    }
+    private void CanDoRotationCheck()
+    {
+        // handles the cooldown function and rotation.
+        rotateCooldown -= Time.deltaTime;
+
+        if(startRotating)
+        {
+            calculateRotationToWall();
+        }
+    }
     private void StopClimb(InputAction.CallbackContext context)
     {
-        if(startClimb)
-        {
-            //rb.AddForce(-transform.forward * 100, ForceMode.Impulse);
-        }
+        // ends the climbing and resets values and reactivates scripts.
         moveController.enabled = true;
         startClimb = false;
         rb.useGravity = true;
@@ -249,10 +268,17 @@ public class ClimbingScript : MonoBehaviour
     }
     private void DoClimbing(InputAction.CallbackContext context)
     {
+        // starts climbing if conditions are met.
         if(upwardClimbing.GetCanClimb() && !startClimb && !isJumping)
         {  
+            // resets the current hand holds to account for previous climbing spots.
+            upwardClimbing.ResetCurrentHandHolds();
+            downwardClimbing.ResetCurrentFootHolds();
+            startRotating = false;
+            // does a quick calculation for rotation to line the player up.
+            calculateRotationToWall();
+            // does setup to prepare for the player to be lerped.
             isConnectedToWall = true;
-            //Debug.Log("starting the climb.");
             startClimb = true;
             arrived = false;
             GetNextClimbSpot();
@@ -261,25 +287,31 @@ public class ClimbingScript : MonoBehaviour
             detach = false;
         }
     }
-    
     private void GetNextClimbSpot()
     {
-       
+        
         playerLerpStart = transform.position;
 
-        if(upwardClimbing.GetMovingDownwards() || upwardClimbing.GetMovingDirecionally())
+        //sets up the offsets and lerp start points for moving down or directionally.
+        if(upwardClimbing.GetMovingDownwards())
         {
             Vector3 newCentrePos = Vector3.zero;
-            newCentrePos = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+            newCentrePos = new Vector3(transform.position.x, transform.position.y - 0.6f, transform.position.z);
+            playerLerpStart = newCentrePos;
+        }
+        else if(upwardClimbing.GetMovingDirecionally())
+        {
+            Vector3 newCentrePos = Vector3.zero;
+            newCentrePos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             playerLerpStart = newCentrePos;
         }
        
         endLerpPoint = upwardClimbing.GetNewMiddleSpot();
         
+        // sets up the end point offsets based on direction and movement direction.
         if(lookDirection[0] || lookDirection[2])
         {
             endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y-0.3f, endLerpPoint.z + climbOffset);
-            //Debug.Log(" looking forward or back");
             if(upwardClimbing.GetMovingDownwards())
             {
                 endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.6f, endLerpPoint.z + climbOffset);
@@ -290,7 +322,6 @@ public class ClimbingScript : MonoBehaviour
                 endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y, endLerpPoint.z + climbOffset);
                
             }
-            //Debug.Log(" looking forward or back");
         }
         if(lookDirection[1] || lookDirection[3])
         {
@@ -306,7 +337,6 @@ public class ClimbingScript : MonoBehaviour
                 endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y, endLerpPoint.z + climbOffset);
 
             }
-            //Debug.Log(" looking left or right");
         }
        
     }
@@ -315,21 +345,27 @@ public class ClimbingScript : MonoBehaviour
         if(startClimb && !arrived)
         {
             
-
+            // only occurs if player is directly pressing movement input.
             if(upwardClimbing.GetMovementDirection().y != 0 || upwardClimbing.GetMovementDirection().x != 0)
             {
-                if(!upwardClimbing.GetMovingDirecionally())
+                // different interpolate amounts based on direction for smooth gameplay.
+                if(!upwardClimbing.GetMovingDirecionally() && !upwardClimbing.GetMovingDownwards())
                 {
                     interpolateAmount = (interpolateAmount + Time.deltaTime * 0.55f);
                 }
-                if(upwardClimbing.GetMovingDirecionally())
+                if(upwardClimbing.GetMovingDownwards())
+                {
+                    interpolateAmount = (interpolateAmount + Time.deltaTime * 0.85f);
+                }
+                else if(upwardClimbing.GetMovingDirecionally())
                 {
                     interpolateAmount = (interpolateAmount + Time.deltaTime * 1.25f);
                 }
             }
-            
+            // the actual lerping.
             transform.position = Vector3.Lerp(playerLerpStart, endLerpPoint, interpolateAmount);
-          
+
+            // reset on arrival at lerp destination.
             if(interpolateAmount >= 1.0f)
             {
                 interpolateAmount = 0.0f;
@@ -339,17 +375,17 @@ public class ClimbingScript : MonoBehaviour
     }
     public void SetNewMovement(Vector3 _newEndPoint)
 	{
-
+        // initalises the first attach to the wall.
         playerLerpStart = transform.position;
         endLerpPoint = _newEndPoint;
 
+        // very similar to the GetNextClimbing spot code refer to that.
         if(lookDirection[0] || lookDirection[2])
         {
             endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y-0.3f, endLerpPoint.z + climbOffset);
-            //Debug.Log(" looking forward or back");
             if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
             }
             if(upwardClimbing.GetMovingDirecionally())
             {
@@ -363,7 +399,7 @@ public class ClimbingScript : MonoBehaviour
             //Debug.Log(" looking left or right");
            if(upwardClimbing.GetMovingDownwards())
             {
-                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.4f, endLerpPoint.z + climbOffset);
+                endLerpPoint = new Vector3(endLerpPoint.x, endLerpPoint.y -0.5f, endLerpPoint.z + climbOffset);
             
             }
             if(upwardClimbing.GetMovingDirecionally())
@@ -375,16 +411,15 @@ public class ClimbingScript : MonoBehaviour
         interpolateAmount = 0.0f;
     }
 
+    // getters and setters
     public float GetMovementDirectionY()
     {
         Vector2 moveDirection = movement.ReadValue<Vector2>();
-     //   Debug.Log("move direction y = " + moveDirection.y);
         return moveDirection.y;
     }
      public float GetMovementDirectionX()
     {
         Vector2 moveDirection = movement.ReadValue<Vector2>();
-//        Debug.Log("move direction x = " + moveDirection.x);
         return moveDirection.x;
     }
     private void CanceledHold(InputAction.CallbackContext context)
@@ -404,5 +439,9 @@ public class ClimbingScript : MonoBehaviour
     public bool GetDetach()
     {
         return detach;
+    }
+    public void SetDoRotatingToTrue()
+    {
+        startRotating = true;
     }
 }

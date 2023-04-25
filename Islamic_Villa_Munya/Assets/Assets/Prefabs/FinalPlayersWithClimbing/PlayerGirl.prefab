@@ -460,16 +460,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71b99e445a89e4419ea3d148e34b6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 2205042012994353787}
   moveController: {fileID: 2205042012994353784}
   upwardClimbing: {fileID: 3581726954147558581}
   downwardClimbing: {fileID: 3581726955497157447}
-  centre: {x: 0, y: 0, z: 0}
-  radius: 50
-  lm:
-    serializedVersion: 2
-    m_Bits: 1024
-  jumpForce: 0.5
+  rb: {fileID: 2205042012994353787}
 --- !u!114 &5761079941044602863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,15 +512,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 2205042012994353784}
+  ASC: {fileID: 2205042012994353785}
   firstPersonCamera: {fileID: 0}
-  cameraPos: {fileID: 0}
+  fpCameraPos: {fileID: 0}
+  cam: {fileID: 0}
   inspect: {fileID: 0}
   info: {fileID: 0}
   infoObject: {fileID: 0}
   leaveInspectUI: {fileID: 0}
-  cam: {fileID: 0}
   distFromCam: 1.5
-  isInspecting: 0
 --- !u!1 &1834920320227968777
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2205042012436802458
 Transform:
   m_ObjectHideFlags: 0
@@ -709,7 +703,7 @@ Transform:
   m_Children:
   - {fileID: 1806888456491261335}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2205042012587897923
 GameObject:
@@ -1894,11 +1888,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec913c4b9cf1f0b48a9e38e1f7c52e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   downwardClimbing: {fileID: 3581726955497157447}
-  detectionRadius: {x: 0.5, y: 0.5, z: 1}
+  climbingScript: {fileID: 5761079941044602860}
+  animator: {fileID: 5761079941044602861}
   rightGrabPointReference:
   - {fileID: 3581726955330864758}
   - {fileID: 3581726954821122083}
@@ -1917,18 +1909,6 @@ MonoBehaviour:
   - {fileID: 3581726954263128006}
   - {fileID: 3581726955379899549}
   - {fileID: 3581726954096542959}
-  climbingScript: {fileID: 5761079941044602860}
-  rightArmStartPosition: {fileID: 3581726954105875647}
-  rightRigAimPosition: {fileID: 3581726954154954861}
-  rigTargetWeightRightArm: 0
-  rightArmRig: {fileID: 3581726954986135840}
-  rightArmPos: {fileID: 516874701264176564}
-  animator: {fileID: 5761079941044602861}
-  leftArmStartPosition: {fileID: 3581726954226840437}
-  leftRigAimPosition: {fileID: 3581726954879295099}
-  rigTargetWeightLeftArm: 0
-  leftArmRig: {fileID: 3581726954753830653}
-  leftArmPos: {fileID: 4946507996322967487}
   grabbablePositionsRightHand:
   - {fileID: 0}
   - {fileID: 0}
@@ -2231,15 +2211,21 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  rightArmStartPosition: {fileID: 3581726954105875647}
+  rightRigAimPosition: {fileID: 3581726954154954861}
+  rightArmPos: {fileID: 516874701264176564}
+  leftArmStartPosition: {fileID: 3581726954226840437}
+  leftRigAimPosition: {fileID: 3581726954879295099}
+  leftArmPos: {fileID: 4946507996322967487}
+  rightArmRig: {fileID: 3581726954986135840}
+  leftArmRig: {fileID: 3581726954753830653}
+  rigTargetWeightRightArm: 0
+  rigTargetWeightLeftArm: 0
   newMaterialRefR: {fileID: 2100000, guid: 04229514d4d3a484ebf8350b5346e4d0, type: 2}
   newMaterialRefL: {fileID: 2100000, guid: 35802e9a998c9074d86f0098180f1d6a, type: 2}
-  movingX: 0
-  movingY: 0
-  movingLeftHand: 0
-  movingRightHand: 0
-  needNewLeftHandSpot: 0
-  needNewRightHandSpot: 0
-  direction: 00000000
+  climableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &3581726954154954858
 GameObject:
   m_ObjectHideFlags: 0
@@ -2646,7 +2632,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3581726954445247807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.6, z: 0}
+  m_LocalPosition: {x: 0, y: -1.795, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2863,7 +2849,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3581726954589445419}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.6, z: 0}
+  m_LocalPosition: {x: 0, y: -1.7949998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4086,12 +4072,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a7060c05b17f949856a7882c719a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
   upwardClimbing: {fileID: 3581726954147558581}
   climbingScript: {fileID: 5761079941044602860}
-  detectionRadius: {x: 0.5, y: 1, z: 1}
   grabbablePositionsRightFoot:
   - {fileID: 0}
   - {fileID: 0}
@@ -4412,23 +4394,21 @@ MonoBehaviour:
   - {fileID: 3581726955706011996}
   - {fileID: 3581726955363057780}
   - {fileID: 3581726955706011996}
-  movingLeftFoot: 0
-  movingRightFoot: 0
-  needNewLeftFootSpot: 0
-  needNewRightFootSpot: 0
-  newMaterialRefL: {fileID: 2100000, guid: afb0830f4ed8d574e9f95899849e6e72, type: 2}
-  newMaterialRefR: {fileID: 2100000, guid: f5a6c75fd72ef9847a4d1d9c2e48c0a3, type: 2}
   leftFootStartPosition: {fileID: 3581726954083312144}
   leftRigAimPosition: {fileID: 3581726955162037017}
-  rigTargetWeightLeftFoot: 0
-  leftFootRig: {fileID: 3581726955042963317}
   leftFootPos: {fileID: 4467979548722029645}
-  direction: 00000000
   rightFootStartPosition: {fileID: 3581726953950429394}
   rightRigAimPosition: {fileID: 3581726954360567058}
-  rigTargetWeightRightFoot: 0
-  rightFootRig: {fileID: 3581726955058321581}
   rightFootPos: {fileID: 1650801726098611200}
+  leftFootRig: {fileID: 3581726955042963317}
+  rightFootRig: {fileID: 3581726955058321581}
+  rigTargetWeightLeftFoot: 0
+  rigTargetWeightRightFoot: 0
+  newMaterialRefL: {fileID: 2100000, guid: afb0830f4ed8d574e9f95899849e6e72, type: 2}
+  newMaterialRefR: {fileID: 2100000, guid: f5a6c75fd72ef9847a4d1d9c2e48c0a3, type: 2}
+  climableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &3581726955540919142
 GameObject:
   m_ObjectHideFlags: 0
@@ -4453,7 +4433,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3581726955540919142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.237, y: 0.603, z: -0.054}
+  m_LocalPosition: {x: -0.237, y: 0.151, z: -0.054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
