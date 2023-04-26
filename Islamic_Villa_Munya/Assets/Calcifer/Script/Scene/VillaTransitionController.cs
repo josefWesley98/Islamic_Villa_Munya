@@ -12,7 +12,7 @@ public class VillaTransitionController : MonoBehaviour
     public string villa_scene_name;
     private bool is_loading = false;
     [SerializeField] private Animator transition;
-    [SerializeField] private float transition_t = 4f;
+    [SerializeField] private float transition_t = 10f;
     [SerializeField] private GameObject load_screens_ref;
     [SerializeField] private GameObject transition_UI;
     [SerializeField] private GameObject loading_ref;
@@ -34,17 +34,18 @@ public class VillaTransitionController : MonoBehaviour
         transition.SetTrigger("Start");
 
         transition_UI.SetActive(true);
-        
+
         yield return new WaitForSeconds(transition_t);
+
+        load_screens_ref.SetActive(true);
+        loading_ref.SetActive(true);
 
         is_loading = true;
         //yield return null; //Wait for next frame
 
-        loading_ref.SetActive(true);
-        load_screens_ref.SetActive(true);
 
 
-        yield return new WaitForSeconds(transition_t);
+        yield return new WaitForSeconds(6f);
 
         AsyncOperation async_load = SceneManager.LoadSceneAsync(villa_scene_name, LoadSceneMode.Additive);
 
