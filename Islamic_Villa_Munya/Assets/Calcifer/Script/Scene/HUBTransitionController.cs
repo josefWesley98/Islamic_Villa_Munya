@@ -12,8 +12,11 @@ public class HUBTransitionController : MonoBehaviour
     [SerializeField] private string hub_scene_name;
     private bool is_loading = false;
     [SerializeField] private Animator transition;
-    [SerializeField] private float transition_t = 2f;
+    [SerializeField] private float transition_t = 10f;
     private int total_artefact_collected = 0;
+    [SerializeField] private GameObject load_screens_ref;
+    [SerializeField] private GameObject transition_UI;
+    [SerializeField] private GameObject loading_ref;
 
     //Each time an artefact is collected, move this trigger elsewhere and reset it
     [SerializeField] private Transform[] spawn_points;
@@ -39,10 +42,17 @@ public class HUBTransitionController : MonoBehaviour
     {
         transition.SetTrigger("Start");
 
+        transition_UI.SetActive(true);
+
         yield return new WaitForSeconds(transition_t);
 
+        load_screens_ref.SetActive(true);
+        loading_ref.SetActive(true);
+
         is_loading = true;
-        yield return null; //Wait for next frame
+        //yield return null; //Wait for next frame
+
+        yield return new WaitForSeconds(6f);
 
         AsyncOperation async_load = SceneManager.LoadSceneAsync(hub_scene_name, LoadSceneMode.Additive);
 
