@@ -8,84 +8,12 @@ public class AIController2 : MonoBehaviour
     [SerializeField] private int id = 0;
     [SerializeField] private bool doAudio = true;
     [SerializeField] private SpawnAudioPrefabs spawnAudioPrefabs;
-    // job checks
-    private bool isInspecting = false;
-    private bool isWalking = false;
-    private bool isSocialising = false;
-    private bool isSitting = false;
-    private bool isIdling = false;
-
-    // can do job checks
-    private bool canDoInspecting = true;
-    private bool canDoWalking = true;
-    private bool canDoSocialising = true;
-    private bool canDoSitting = true;
-    private bool canDoIdling = true;
-
-    float doInspectingFor = 30.0f;
-    float doWalkingFor = 30.0f;
-    float doSocialisingFor = 30.0f;
-    float doSittingFor = 30.0f;
-    float doIdlingFor = 30.0f;
-
-    float actionTimer = 0.0f;
-
-    // cooldowns after doing a job
     [SerializeField] private bool findNewJob = false;
 
-    // bool doInspectingCd = false;
-    // bool doWalkingCd = false;
-    // bool doSocialisingCd = false;
-    // bool doSittingCd = false;
-    // bool doDoIdlingCd = false;
-
-    float inspectionCdTimer = 0.0f;
-    float walkingCdTimer = 0.0f;
-    float socialisingCdTimer = 0.0f;
-    float sittingCdTimer = 0.0f;
-    float idlingCdTimer = 0.0f;
-    float viewArtifactTimer = 0.0f;
-
-    float inspectionCd = 30.0f;
-    float walkingCd = 30.0f;
-    float socialisingCd = 30.0f;
-    float sittingCd = 30.0f;
-    float idlingCd = 30.0f;
-    float viewingArtifactCd = 7.0f;
-    // // npc variables.
     [Header("Movement Speed")]
     [SerializeField] float maxSpeed = 1.5f;
     [SerializeField] float minSpeed = 2.5f;
-    private bool soundFix = false;
-    bool arrivedAtDestination = false;
-    bool hasSocialPartner = false;
-    private Vector3 destination =  new Vector3(1111,111,111);
-    private NavMeshAgent agent;
-    private Animator animator;
-    private int currentWaypointPos = -1;
-    private bool readyToSocialise = false;
-    private bool socialPartnerLeftEarly = false;
-    private bool doSitAnim = false;
-    private bool doSocialAnim = false;
-    private bool doWalkingAnim = false;
-    private bool doInspectingAnim = false;
-    private bool doIdlingAnim = false;
-    private float inspectionTime = 8.0f;
-    private float inspectionTimer = 0.0f;
-    private bool findNewArtifact = false;
-    private bool correctRotation = false;
-    private bool rotatingLeft = false;
-    private bool rotatingRight = false;
-    private bool viewingArtifact = false;
-    private bool doSocialAudio = false;
-    private Vector3 socialDestination = Vector3.zero;
-    private float slerpSpeed = 2.0f;
-    private Vector3 direction = Vector3.zero;
-    private Quaternion lookRotation = Quaternion.identity;
-    private bool partnerHasArrived = false;
-    private float slerpPercent = 0.0f;
-    private Quaternion slerpStart = Quaternion.identity;
-    private bool startedRotation = false;
+
     private string[] locations = new string[] { "AreaOne",  "AreaTwo", "AreaThree", "AreaFour", "AreaFive", "AreaSix", "AreaSeven"};
     [Dropdown("locations")]
     [Header("Location Options")]
@@ -105,6 +33,71 @@ public class AIController2 : MonoBehaviour
     [SerializeField] private bool allowSocialising = true;
     [SerializeField] private bool allowIdling = true;
     [SerializeField] private bool allowSitting = true;
+    
+    // script/unity object references.
+    private NavMeshAgent agent;
+    private Animator animator;
+
+    // job checks
+    private bool isInspecting = false;
+    private bool isWalking = false;
+    private bool isSocialising = false;
+    private bool isSitting = false;
+    private bool isIdling = false;
+
+    // can do job checks
+    private bool canDoInspecting = true;
+    private bool canDoWalking = true;
+    private bool canDoSocialising = true;
+    private bool canDoSitting = true;
+    private bool canDoIdling = true;
+
+    // timers.
+    float actionTimer = 0.0f;
+    float inspectionCdTimer = 0.0f;
+    float walkingCdTimer = 0.0f;
+    float socialisingCdTimer = 0.0f;
+    float sittingCdTimer = 0.0f;
+    float idlingCdTimer = 0.0f;
+    float viewArtifactTimer = 0.0f;
+
+    // cooldowns
+    float doInspectingFor = 30.0f;
+    float doWalkingFor = 30.0f;
+    float doSocialisingFor = 30.0f;
+    float doSittingFor = 30.0f;
+    float doIdlingFor = 30.0f;
+    float inspectionCd = 30.0f;
+    float walkingCd = 30.0f;
+    float socialisingCd = 30.0f;
+    float sittingCd = 30.0f;
+    float idlingCd = 30.0f;
+    float viewingArtifactCd = 7.0f;
+
+    // assorted transforms and Quaternions.
+    private Vector3 destination =  new Vector3(1111,111,111);
+    private Vector3 socialDestination = Vector3.zero;
+    private Vector3 direction = Vector3.zero;
+    private Quaternion lookRotation = Quaternion.identity;
+    private Quaternion slerpStart = Quaternion.identity;
+
+    // assorted bools.
+    private bool soundFix = false;
+    private bool arrivedAtDestination = false;
+    private bool hasSocialPartner = false;
+    private bool readyToSocialise = false;
+    private bool socialPartnerLeftEarly = false;
+    private bool doSitAnim = false;
+    private bool doSocialAnim = false;
+    private bool doWalkingAnim = false;
+    private bool doInspectingAnim = false;
+    private bool doIdlingAnim = false;
+    private bool findNewArtifact = false;
+    private bool correctRotation = false;
+    private bool rotatingLeft = false;
+    private bool rotatingRight = false;
+    private bool viewingArtifact = false;
+    private bool doSocialAudio = false;
     private bool doIdleLean = false;
     private bool idleLeanLeft = false;
     private bool idleLeanRight = false;
@@ -112,7 +105,17 @@ public class AIController2 : MonoBehaviour
     private bool doSitDown = false;
     private bool doSitUp = false;
     private bool doingSitUp = false;
+    private bool startedRotation = false;
+    private bool partnerHasArrived = false;
+   
+    // assorted floats and ints.
+    private float inspectionTime = 8.0f;
+    private float inspectionTimer = 0.0f;
+    private float slerpSpeed = 2.0f;
+    private float slerpPercent = 0.0f;
     private float distToDestination = 0.0f;
+    private int currentWaypointPos = -1;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -126,6 +129,7 @@ public class AIController2 : MonoBehaviour
     }
     private void AnimationManagement()
     {
+        // handles all animations and makes sure no animation is running while any other anim is running.
         if(animator != null)
         {
             int rand = Random.Range(0,3);
@@ -136,8 +140,6 @@ public class AIController2 : MonoBehaviour
             animator.SetBool("Inspecting", doInspectingAnim);
             animator.SetBool("Socialising", doSocialAnim);
             animator.SetBool("Idling", doIdlingAnim);
-            // animator.SetBool("TurningLeft", rotatingLeft);
-            // animator.SetBool("TurningRight", rotatingRight);
             animator.SetBool("IdleLeanLeft", idleLeanLeft);
             animator.SetBool("IdleLeanRight", idleLeanRight);
             animator.SetBool("IdleLeanBack", idleLeanBack);
@@ -305,60 +307,56 @@ public class AIController2 : MonoBehaviour
     }    
     void Update()
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("SitUp"))
-        {
-            agent.speed = 0.0f;
-            agent.avoidancePriority = 10;
-            doingSitUp = true;
-        }
-        else
-        {
-            doSitUp = false;
-            doingSitUp = false;
-        }
-        
-        if(currentLocation == "null")
-        {
-            manager.FindNearestLocation(id);
-            Debug.Log("finding current location");
-        }
-        if(currentJob == null || currentJob == "null")
-        {
-            findNewJob = true;
-        }
+        // when getting up from sitting animation this handles halting movement.
+        GettingUpCheck();
+
+        //handles finding the current location, handles reseting destinations.
+        PositionAndAgentChecks();
        
-        if(agent.remainingDistance > 0.1)
-        {
-            arrivedAtDestination = false;
-        }
-        if(destination != null && currentJob != "null" && destination != new Vector3(0,0,0) && distToDestination != Mathf.Infinity)
-        {
-            distToDestination = agent.remainingDistance;
-            //Debug.Log(distToDestination);
-        }
-
-        if(currentJob != "null" && agent.remainingDistance < 0.1 )
-        {
-           arrivedAtDestination = true; 
-        }
-        // if(transform.position.z == destination.z)// && transform.position.z == destination.z)
-        // {
-        //     transform.position.x == destination.x
-            //arrivedAtDestination = true; 
-        //     
-        // }
+        //handles all the setup and changes of animation states.
         AnimationManagement();
-        if(socialPartnerLeftEarly)
+        
+        // checks if social partner left and resets the AI if they have.
+        SocialPartnerLeavingCheck();
+
+        // checks if you have arrived and if you need to rotate to face something.
+        DestinationAndRotationChecks();
+
+        // find new artifact to look at.
+        if(findNewArtifact)
         {
-            socialPartnerLeftEarly = false;
-            isSocialising = false;
-            canDoSocialising = false;
-            actionTimer = 0.0f;
-            findNewJob = true;
-            //doSocialAudio = false; 
-            soundFix = false;
+            DoFindNewArtifact();
         }
 
+        // find a new random job.
+        if(findNewJob && currentLocation != "null")
+        {
+           NewRandomJob();
+        }
+
+        // sets up a new job
+        if(currentJob != newJob)
+        {
+           NewJobSetup();
+        }
+
+        // socialising
+        DoSocialising();
+
+        // walking
+        DoWalking();
+
+        //sitting
+        DoSitting();
+
+        //inspecting
+        DoInspecting();
+
+        //idling
+        DoIdling();
+    }
+    private void DestinationAndRotationChecks()
+    {
         if(arrivedAtDestination && currentJob == "Walking" && currentLocation != "null" && isWalking)
         {
             destination = manager.FindNewDestination(id, currentLocation, currentWaypointPos, currentJob);
@@ -371,8 +369,6 @@ public class AIController2 : MonoBehaviour
             viewingArtifact = true;  
         }
 
-      
-       
         if(arrivedAtDestination && currentJob == "Inspecting" && !correctRotation || arrivedAtDestination &&  currentJob == "Socialising" && !correctRotation || arrivedAtDestination && currentJob == "Idling" && !correctRotation || arrivedAtDestination && currentJob == "Sitting" && !correctRotation)
         {
              Vector3 target = Vector3.zero;
@@ -396,37 +392,57 @@ public class AIController2 : MonoBehaviour
 
             DoRotation(target);
         }
-
-        // find new artifact to look at.
-        if(findNewArtifact)
+    }
+    private void SocialPartnerLeavingCheck()
+    {
+        if(socialPartnerLeftEarly)
         {
-            DoFindNewArtifact();
+            socialPartnerLeftEarly = false;
+            isSocialising = false;
+            canDoSocialising = false;
+            actionTimer = 0.0f;
+            findNewJob = true;
+            soundFix = false;
+        }
+    }
+    private void PositionAndAgentChecks()
+    {
+        if(currentLocation == "null")
+        {
+            manager.FindNearestLocation(id);
+        }
+        if(currentJob == null || currentJob == "null")
+        {
+            findNewJob = true;
+        }
+       
+        if(agent.remainingDistance > 0.1)
+        {
+            arrivedAtDestination = false;
+        }
+        if(destination != null && currentJob != "null" && destination != new Vector3(0,0,0) && distToDestination != Mathf.Infinity)
+        {
+            distToDestination = agent.remainingDistance;
         }
 
-        if(findNewJob && currentLocation != "null")
+        if(currentJob != "null" && agent.remainingDistance < 0.1 )
         {
-           NewRandomJob();
+           arrivedAtDestination = true; 
         }
-        // done
-        if(currentJob != newJob)
+    }
+    private void GettingUpCheck()
+    {
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("SitUp"))
         {
-           NewJobSetup();
+            agent.speed = 0.0f;
+            agent.avoidancePriority = 10;
+            doingSitUp = true;
         }
-
-        // socialising
-        DoSocialising();
-
-        // walking
-        DoWalking();
-
-        //sitting
-        DoSitting();
-
-        //inspecting
-        DoInspecting();
-
-        //idling
-        DoIdling();
+        else
+        {
+            doSitUp = false;
+            doingSitUp = false;
+        }
     }
     private void DoFindNewArtifact()
     {
@@ -439,7 +455,6 @@ public class AIController2 : MonoBehaviour
     {
         if(currentJob == "Socialising")
         {
-
             if(!hasSocialPartner && arrivedAtDestination && !partnerHasArrived /*&& !soundFix*/)
             {
                 
@@ -481,7 +496,6 @@ public class AIController2 : MonoBehaviour
                     spawnAudioPrefabs.spawnAudioPrefab(id, rand);
                     doSocialAudio = false;
                     soundFix = true;
-                    //Debug.Log("calling this...");
                 }
 
                 if(actionTimer >= doSocialisingFor)
@@ -644,23 +658,6 @@ public class AIController2 : MonoBehaviour
         {
             slerpStart = gameObject.transform.rotation;
             startedRotation = true;
-
-            // if(transform.position.z > target.z && transform.position.x > target.x)
-            // {
-            //     rotatingLeft = true;
-            // }
-            // if(transform.position.z < target.z && transform.position.x < target.x)
-            // {
-            //     rotatingRight = true;
-            // }
-            // if(transform.position.z > target.z && transform.position.x < target.x)
-            // {
-            //     rotatingRight = true;
-            // }
-            // if(transform.position.z < target.z && transform.position.x > target.x)
-            // {
-            //     rotatingLeft = true;
-            //}
         }
         direction = (target - transform.position).normalized;
  
@@ -726,12 +723,10 @@ public class AIController2 : MonoBehaviour
             isInspecting = false;
             isSitting = false;
             isWalking = true;
-            //canDoWalking = false;
             walkingCdTimer = 0.0f;
             actionTimer = 0.0f;
             doWalkingFor = ActionRandomTimer();
             walkingCd = ActionCdRandomTimer();
-            //Debug.Log("walking job setup done");
         }
         else if(newJob == "Walking" && !allowWalkingAbout || newJob == "Walking" && !manager.CheckForWalkingSpotsAvailable(currentLocation))
         {
@@ -793,7 +788,6 @@ public class AIController2 : MonoBehaviour
             actionTimer = 0.0f;
             doSocialisingFor = ActionRandomTimer();
             socialisingCd = ActionCdRandomTimer();
-            //doSocialAudio = true;
             soundFix = false;
             if(socialDestination != Vector3.zero)
             {
