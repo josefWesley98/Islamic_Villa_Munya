@@ -13,15 +13,26 @@ public class WindEffect : MonoBehaviour
 
     float timer = 0.0f;
 
+    bool doWind = false;
+
     Rigidbody rb;
+    
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        Invoke(nameof(SetUp), 2f);
     }
 
+    void SetUp()
+    {
+        rb = GetComponent<Rigidbody>();
+        doWind = true;
+    }
     // Update is called once per frame
     void Update()
     {
+        if (!doWind)
+            return;
+
         timer -= Time.deltaTime;
 
         if (timer < 0)
