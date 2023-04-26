@@ -5,10 +5,12 @@ using UnityEngine;
 /*Cal's script starts here*/
 public class ActivateLoadScreens : MonoBehaviour
 {
+    [SerializeField] private GameObject loading_ref;
+
     // Start is called before the first frame update
     void Start()
     {
-        transform.GetChild(1).gameObject.SetActive(true);
+        loading_ref.SetActive(true);
     }
 }
 /*Cal's script ends*/

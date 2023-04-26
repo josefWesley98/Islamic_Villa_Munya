@@ -13,8 +13,9 @@ public class VillaTransitionController : MonoBehaviour
     private bool is_loading = false;
     [SerializeField] private Animator transition;
     [SerializeField] private float transition_t = 4f;
-    //[SerializeField] private GameObject load_screens_ref;
+    [SerializeField] private GameObject load_screens_ref;
     [SerializeField] private GameObject transition_UI;
+    [SerializeField] private GameObject loading_ref;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,14 +33,16 @@ public class VillaTransitionController : MonoBehaviour
     {
         transition.SetTrigger("Start");
 
+        transition_UI.SetActive(true);
+        
         yield return new WaitForSeconds(transition_t);
 
         is_loading = true;
         //yield return null; //Wait for next frame
 
-        //load_screens_ref.SetActive(true);
+        loading_ref.SetActive(true);
+        load_screens_ref.SetActive(true);
 
-        transition_UI.SetActive(true);
 
         yield return new WaitForSeconds(transition_t);
 
