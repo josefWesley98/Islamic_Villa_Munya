@@ -8,6 +8,7 @@ public class LoadScreens : MonoBehaviour
     //Images for the loading screen
     [SerializeField] private Sprite[] load_screen;
     [SerializeField] private float switch_time = 1f;
+    [SerializeField] private float move_speed = 2f;
     private float counter = 0f;
     private Image image_ref;
     private int random_num = 0;
@@ -23,6 +24,7 @@ public class LoadScreens : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //After a certain amount of time, change the image
         if(run)
         {
