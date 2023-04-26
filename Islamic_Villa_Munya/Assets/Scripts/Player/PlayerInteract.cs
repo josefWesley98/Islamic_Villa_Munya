@@ -259,7 +259,7 @@ public class PlayerInteract : MonoBehaviour
     private void Inspecting(InputAction.CallbackContext context)
     {
         // this ends the inspection mechanic and resets the original artifact to its visible state.
-        if(isInspecting)
+        if(isInspecting && !inspectionCooldown)
         {
             isInspecting = false;
             if(interactableObj)
@@ -294,6 +294,7 @@ public class PlayerInteract : MonoBehaviour
         {
             isInspecting = true;
             leaveInspectUI.SetActive(true);
+            inspectionCooldown = true;
         }
     }
     
