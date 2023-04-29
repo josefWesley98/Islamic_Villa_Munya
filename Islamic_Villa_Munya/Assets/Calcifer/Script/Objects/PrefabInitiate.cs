@@ -22,8 +22,6 @@ public class PrefabInitiate : MonoBehaviour
             //GameManager.SetArtefactCollected(false);
         }
     }
-
-
 }
 
 /*Cal's script ends here*/
