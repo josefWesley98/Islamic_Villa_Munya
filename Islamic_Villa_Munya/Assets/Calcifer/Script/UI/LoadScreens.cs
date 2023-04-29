@@ -8,15 +8,16 @@ public class LoadScreens : MonoBehaviour
     //Images for the loading screen
     [SerializeField] private Sprite[] load_screen;
     [SerializeField] private float switch_time;
-    private Image otherWillys;
-    private int willys = 0;
+    private Image image_ref;
+    private int rand_num = 0;
     private bool run = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        otherWillys = gameObject.GetComponent<Image>();
-        otherWillys.sprite = load_screen[0];
+        image_ref = gameObject.GetComponent<Image>();
+        rand_num = Random.Range(0, load_screen.Length);
+        image_ref.sprite = load_screen[rand_num];
     }
 
     // Update is called once per frame
@@ -34,18 +35,19 @@ public class LoadScreens : MonoBehaviour
 
     private IEnumerator SwitchImage()
     {
-        Debug.Log("Being called here BABY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         //Wait for this amount of time before changing the image
-        
         yield return new WaitForSeconds(switch_time);
 
-        Debug.Log("Being called here AGAIN BABY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        
         //Get a random index and use this for the next image
-        willys = Random.Range(0, load_screen.Length);
+        rand_num = Random.Range(0, load_screen.Length);
 
         //Switch to the next image
-        otherWillys.sprite = load_screen[willys];
+        image_ref.sprite = load_screen[rand_num];
         run = true;
+    }
+
+    public float GetSwitchTime()
+    {
+        return switch_time;
     }
 }
