@@ -54,13 +54,21 @@ public class HUBTransitionController : MonoBehaviour
 
         yield return new WaitForSeconds(6f);
 
-        AsyncOperation async_load = SceneManager.LoadSceneAsync(hub_scene_name, LoadSceneMode.Additive);
+        // AsyncOperation async_load = SceneManager.LoadSceneAsync(hub_scene_name, LoadSceneMode.Single);
 
-        while(!async_load.isDone)
-        {
-            //Display loading progress? Possibly keep player walking down endless corridor
-            yield return null;
-        }
+        SceneManager.LoadScene(hub_scene_name);
+
+        // async_load.allowSceneActivation = false;
+
+        // while(!async_load.isDone)
+        // {
+        //     if (async_load.progress >= 0.9f)
+        //     {
+        //         async_load.allowSceneActivation = true;
+        //     }
+        //     //Display loading progress? Possibly keep player walking down endless corridor
+        //     yield return null;
+        // }
 
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(hub_scene_name));

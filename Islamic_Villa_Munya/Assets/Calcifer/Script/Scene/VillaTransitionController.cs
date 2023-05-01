@@ -45,15 +45,25 @@ public class VillaTransitionController : MonoBehaviour
 
 
 
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(transition_t);
 
-        AsyncOperation async_load = SceneManager.LoadSceneAsync(villa_scene_name, LoadSceneMode.Additive);
+        // AsyncOperation async_load = SceneManager.LoadSceneAsync(villa_scene_name, LoadSceneMode.Single);
 
-        while(!async_load.isDone)
-        {
-            //Display loading progress? Possibly keep player walking down endless corridor
-            yield return null;
-        }
+        SceneManager.LoadScene(villa_scene_name);
+        Debug.Log("Loading");
+
+        //  async_load.allowSceneActivation = false;
+        
+        // while(!async_load.isDone)
+        // {
+        //     if (async_load.progress >= 0.9f)
+        //     {
+        //         async_load.allowSceneActivation = true;
+        //     }
+            
+        //     //Display loading progress? Possibly keep player walking down endless corridor
+        //     yield return null;
+        // }
 
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(villa_scene_name));
