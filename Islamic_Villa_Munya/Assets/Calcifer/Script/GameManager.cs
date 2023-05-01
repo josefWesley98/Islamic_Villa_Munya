@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     private const int total_main_artefacts = 3;
     static protected int artefact_counter = 0;
     static protected bool current_artefact_collected = false;
+    static protected bool artifactOneToBePlaced = false;
+    static protected bool doOnce = true;
     //variables
     static protected bool[] player_artefact = new bool[total_main_artefacts];
     static protected bool has_key = false;
@@ -35,13 +37,24 @@ public class GameManager : MonoBehaviour
     {
         player_artefact[artefact_idx] = val;
         artefact_counter += 1;
+        if(player_artefact[0] && doOnce)
+        {
+            artifactOneToBePlaced = true;
+            doOnce = false;
+        }
     }
-
+    public static void SetArtifactOneToBePlaced(bool val)
+    {
+        artifactOneToBePlaced = false;
+    }
     public static void SetCurrentArtefactCollected(bool val)
     {
         current_artefact_collected = val;
     }
-    
+    public static bool GetArtifactOneToBePlaced()
+    {
+        return artifactOneToBePlaced;
+    }
     //When player quits the game, we reset every artefact to original state
     public static void ResetArtefacts(bool val)
     {
