@@ -309,6 +309,7 @@ public class PlayerInteract : MonoBehaviour
             inspectionCooldown = true;
         }
         
+                GameManager.SetArtefactCollected(0, true);
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
