@@ -67,7 +67,8 @@ public class Door : MonoBehaviour
             if (TEMPDELAYDOORSETUP)
                 Invoke(nameof(CreateDoorParent), 10f);
             else
-                CreateDoorParent();
+                Invoke(nameof(CreateDoorParent), 2f);
+            //CreateDoorParent();
             //print("ok");
             //CreateDoorParent();
         }
