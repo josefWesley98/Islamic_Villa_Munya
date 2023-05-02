@@ -21,7 +21,7 @@ public class InteractableObject : MonoBehaviour
     [SerializeField] private Vector3 positinOffset = new Vector3(0,0,0);
     [Header("Set the look at object the camera will focus on (generally this object.)")]
     [SerializeField] private GameObject LookAt;
-
+    [SerializeField] private int pedestalID;
     public string GetArtifactInfo()
     {
         return artifactInfo;
@@ -56,5 +56,8 @@ public class InteractableObject : MonoBehaviour
     {
         return positinOffset;
     }
-
+    public int GetPedestalID()
+    {
+        return pedestalID;
+    }
 }

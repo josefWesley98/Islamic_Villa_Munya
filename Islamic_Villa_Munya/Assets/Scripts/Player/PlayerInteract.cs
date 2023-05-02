@@ -53,7 +53,7 @@ public class PlayerInteract : MonoBehaviour
     private bool canInspect = false;
     private bool inspectionCooldown = false;
     private bool isReset = false;
-
+    private bool firstArtefactPlaced = false;
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
 
@@ -105,12 +105,13 @@ public class PlayerInteract : MonoBehaviour
             positionOffset = other.GetComponent<InteractableObject>().GetPositionOffset();
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
-            if(!GameManager.GetArtifactOneToBePlaced())
+         
+            inspect.gameObject.SetActive(true);
+            placeArtefactUI.SetActive(false);
+            
+            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && !firstArtefactPlaced)
             {
-                inspect.gameObject.SetActive(true);
-            }
-            else
-            {
+                inspect.gameObject.SetActive(false);
                 placeArtefactUI.SetActive(true);
             }
             isTouching = true;
@@ -133,6 +134,7 @@ public class PlayerInteract : MonoBehaviour
         else
         {
             inspect.gameObject.SetActive(false);
+            placeArtefactUI.SetActive(false);
         }
     }
     private void ResetVariables()
@@ -309,20 +311,21 @@ public class PlayerInteract : MonoBehaviour
             inspectionCooldown = true;
         }
         
-                //GameManager.SetArtefactCollected(0, true);
+        //GameManager.SetArtefactCollected(0, true);
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
-            if(!GameManager.GetArtifactOneToBePlaced())
-            {
-                isReset = false;
-                isInspecting = true;
-                inspectionCooldown = true;
-            }
-            else
+            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && !firstArtefactPlaced)
             {
                 GameManager.SetArtifactOneToBePlaced(false);
                 placeArtefactUI.SetActive(false);
+                inspectionCooldown = true;
+                firstArtefactPlaced = true;
+            }
+            else
+            {
+                isReset = false;
+                isInspecting = true;
                 inspectionCooldown = true;
             }
         }

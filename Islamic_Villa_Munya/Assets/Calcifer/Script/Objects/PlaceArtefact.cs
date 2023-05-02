@@ -33,6 +33,7 @@ public class PlaceArtefact : MonoBehaviour
                 Destroy(empty_pedestal);
 
                 do_until = false;
+                Debug.Log("is being called1");
             }
         }
     }
@@ -44,6 +45,7 @@ public class PlaceArtefact : MonoBehaviour
         if(other.gameObject.tag == "Player" && GameManager.GetArtefactCollected(artefact_id))
         {
             can_place = true;
+            Debug.Log("boop");
         }
     }
 
