@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
     {
         return medium_diff;
     }
-
+    // lol
     public static bool GetHard()
     {
         return hard_diff;

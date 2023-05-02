@@ -159,7 +159,31 @@ public class PlayerInteract : MonoBehaviour
         leaveInspectUI.SetActive(true);
         infoObject.SetActive(true);
         leaveInspectUI.gameObject.SetActive(true);
-        info.text = interactableObj.GetArtifactInfo();
+        //info.text = interactableObj.GetArtifactInfo();
+        if(GameManager.GetEasy())
+        {
+            info.text = interactableObj.GetArtifactInfoEasy();
+        }
+        else
+        {
+            info.text = interactableObj.GetArtifactInfo();
+        }
+        if(GameManager.GetMedium())
+        {
+            info.text = interactableObj.GetArtifactInfoMedium();
+        }
+        else
+        {
+            info.text = interactableObj.GetArtifactInfo();
+        }
+        if(GameManager.GetHard())
+        {
+            info.text = interactableObj.GetArtifactInfoHard();
+        }
+        else
+        {
+            info.text = interactableObj.GetArtifactInfo();
+        }
     }
     private void TurnOffPrimaryArtefact()
     {
@@ -177,11 +201,28 @@ public class PlayerInteract : MonoBehaviour
         if(objRenderer != null)
         {
             objRenderer.enabled = true;
+            Debug.Log("Re enabled main artefact.");
         }
-        if(objRenderer2 != null)
+        if(interactableObj)
         {
-            objRenderer2.enabled = true;
+            if(interactableObj.GetComponent<MeshRenderer>())
+            {
+                interactableObj.GetComponent<MeshRenderer>().enabled = true;
+                Debug.Log("Re enabled main artefact.");
+            }
         }
+        // if(objRenderer2 != null)
+        // {
+        //     objRenderer2.enabled = true;
+        // }
+        // if(interactableObj)
+        // {
+        //     if(interactableObj.GetComponent<SkinnedMeshRenderer>())
+        //     {
+        //         interactableObj.GetComponent<SkinnedMeshRenderer>().enabled = true;
+        //     }
+        // }
+        
     }
     private void PositionCamera()
     {
@@ -321,6 +362,7 @@ public class PlayerInteract : MonoBehaviour
                 placeArtefactUI.SetActive(false);
                 inspectionCooldown = true;
                 firstArtefactPlaced = true;
+                isReset = false;
             }
             else
             {
@@ -328,6 +370,7 @@ public class PlayerInteract : MonoBehaviour
                 isInspecting = true;
                 inspectionCooldown = true;
             }
+            isReset = false;
         }
     }
     
