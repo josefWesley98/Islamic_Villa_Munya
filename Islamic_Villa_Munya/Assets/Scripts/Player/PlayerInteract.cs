@@ -54,6 +54,9 @@ public class PlayerInteract : MonoBehaviour
     private bool inspectionCooldown = false;
     private bool isReset = false;
     private bool firstArtefactPlaced = false;
+    private bool secondArtefactPlaced = false;
+    private bool doSetup = false;
+
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
 
@@ -132,6 +135,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 info.text = interactableObj.GetArtifactInfo();
             }
+           
         }
     }
 
@@ -142,9 +146,10 @@ public class PlayerInteract : MonoBehaviour
         {
 
             TurnOnPrimaryArtefact();
-            ResetVariables();
             ResetUI();
             DestroyClonedArtifact();
+            TurnOnPrimaryArtefact();
+            ResetVariables();
             isReset = true;
         }
         else
@@ -183,6 +188,7 @@ public class PlayerInteract : MonoBehaviour
         if(objRenderer != null && objRenderer.enabled != false)
         {
             objRenderer.enabled = false;
+            Debug.Log("being disabled");
         }
         // if(objRenderer2 != null && objRenderer2.enabled != false)
         // {
@@ -195,11 +201,11 @@ public class PlayerInteract : MonoBehaviour
         {
             if(interactableObj.GetComponent<MeshRenderer>())
             {
-                //if(!interactableObj.GetComponent<MeshRenderer>().enabled)
-               // {
+                if(!interactableObj.GetComponent<MeshRenderer>().enabled)
+                {
                     interactableObj.GetComponent<MeshRenderer>().enabled = true;
                     Debug.Log("Re enabled main artefact via interact.");
-               // }
+                }
             }
         }
         if(objRenderer != null)
@@ -312,7 +318,11 @@ public class PlayerInteract : MonoBehaviour
             TurnOnInspectUI();
 
             // stop rendering primary artifact.
-            TurnOffPrimaryArtefact();
+            if(doSetup)
+            {
+                TurnOffPrimaryArtefact();
+                doSetup = false;
+            }
 
             // position the camera and make it the active cam.
             PositionCamera(); 
@@ -343,8 +353,9 @@ public class PlayerInteract : MonoBehaviour
             {
                 TurnOnPrimaryArtefact();
                 ResetUI();
-                ResetVariables();
                 DestroyClonedArtifact();
+                TurnOnPrimaryArtefact();
+                ResetVariables();
                 isReset = true;
             }
         
@@ -355,6 +366,7 @@ public class PlayerInteract : MonoBehaviour
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
+            isReset = false;
             if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && !firstArtefactPlaced)
             {
                 GameManager.SetArtifactOneToBePlaced(false);
@@ -363,13 +375,22 @@ public class PlayerInteract : MonoBehaviour
                 firstArtefactPlaced = true;
                 isReset = false;
             }
+            else if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && !secondArtefactPlaced)
+            {
+                GameManager.SetArtifactTwoToBePlaced(false);
+                placeArtefactUI.SetActive(false);
+                inspectionCooldown = true;
+                secondArtefactPlaced = true;
+                isReset = false;
+            }
             else
             {
                 isReset = false;
                 isInspecting = true;
                 inspectionCooldown = true;
+                doSetup = true;
             }
-            isReset = false;
+            
         }
     }
     

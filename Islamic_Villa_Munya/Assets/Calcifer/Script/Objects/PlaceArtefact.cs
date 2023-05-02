@@ -10,15 +10,23 @@ public class PlaceArtefact : MonoBehaviour
     [SerializeField] private GameObject artefact;
     [SerializeField] private GameObject empty_pedestal;
     [SerializeField] private int artefact_id;
+    [SerializeField] private MeshRenderer renderer;
+    [SerializeField] private InteractableObject IO;
+    [SerializeField] private Material transparentMat;
+    [SerializeField] private Material normalMat;
     private bool replace_artefact;
     private bool can_place = false;
     private bool do_until = true;
 
-    // Start is called before the first frame update
     void Start()
     {
         kb = InputSystem.GetDevice<Keyboard>();
-        artefact.SetActive(false);
+        artefact.SetActive(true);
+        if(IO != null)
+        {
+            IO.enabled = false;
+        }
+        renderer.material = transparentMat;
     }
 
     private void Update() 
@@ -29,19 +37,17 @@ public class PlaceArtefact : MonoBehaviour
         {
             if(GameManager.GetArtefactPlaced(artefact_id))
             {
-                artefact.SetActive(true);
-                Destroy(empty_pedestal);
-
+                renderer.material = normalMat;
+                if(IO != null)
+                {
+                    IO.enabled = true;
+                }
                 do_until = false;
             }
             else if(replace_artefact && can_place)
             {
-                artefact.SetActive(true);
                 Destroy(empty_pedestal);
-
                 GameManager.SetArtefactPlaced(artefact_id, true);
-
-                do_until = false;
                 Debug.Log("is being called1");
             }
         }
