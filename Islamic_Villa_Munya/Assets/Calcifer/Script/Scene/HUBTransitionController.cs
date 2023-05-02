@@ -27,11 +27,16 @@ public class HUBTransitionController : MonoBehaviour
         //Check how many artefacts have been collected and then choose the next spawn point.
         total_artefact_collected = GameManager.GetArtefactCounter();
         transform.position = spawn_points[total_artefact_collected].position;
+
+        if(GameManager.GetArtefactCollected(0))
+        {
+            transform.position = spawn_points[1].position;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!is_loading && other.tag == "Player" && GameManager.GetHUBTravel() && GameManager.GetCurrentArtefactCollected())
+        if(!is_loading && other.tag == "Player" && GameManager.GetHUBTravel())
         {
             //If the player has picked up the artefact then they can return to the HUB world. Initiate loading
             StartCoroutine(LoadHubScene());
