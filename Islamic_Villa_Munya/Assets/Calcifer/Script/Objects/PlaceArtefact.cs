@@ -27,15 +27,25 @@ public class PlaceArtefact : MonoBehaviour
 
         if(do_until)
         {
-            if(replace_artefact && can_place)
+            if(GameManager.GetArtefactPlaced(artefact_id))
             {
                 artefact.SetActive(true);
                 Destroy(empty_pedestal);
 
                 do_until = false;
+            }
+            else if(replace_artefact && can_place)
+            {
+                artefact.SetActive(true);
+                Destroy(empty_pedestal);
+
+                GameManager.SetArtefactPlaced(artefact_id, true);
+
+                do_until = false;
                 Debug.Log("is being called1");
             }
         }
+
     }
 
     //If the player has collected relevant artefact then make it visible when the player interacts with the pedestal/display case

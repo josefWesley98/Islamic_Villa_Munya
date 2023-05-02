@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     static protected bool door_unlocked = false;
     static protected bool hub_travel = false;
     static protected bool pause_cursor = false;
+    static protected bool[] artefact_placed = new bool[total_main_artefacts];
 
     //Player selection
     static protected bool boy_select = false;
@@ -33,6 +34,11 @@ public class GameManager : MonoBehaviour
     // }
 
     //Setters
+    public static void SetArtefactPlaced(int idx, bool val)
+    {
+        artefact_placed[idx] = val;
+    }
+
     public static void SetArtefactCollected(int artefact_idx, bool val)
     {
         player_artefact[artefact_idx] = val;
@@ -111,6 +117,11 @@ public class GameManager : MonoBehaviour
     }
 
     //Getters
+    public static bool GetArtefactPlaced(int idx)
+    {
+        return artefact_placed[idx];
+    }
+
     public static bool GetArtefactCollected(int artefact_idx)
     {
         return player_artefact[artefact_idx];

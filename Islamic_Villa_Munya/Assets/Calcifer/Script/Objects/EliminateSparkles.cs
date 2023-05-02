@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*Cal's script starts here*/
-public class HubtravelSparkles : MonoBehaviour
+public class EliminateSparkles : MonoBehaviour
 {
-    private bool do_until = true;
+    private bool do_until = false;
+    [SerializeField] private int artefact_id;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -18,12 +18,11 @@ public class HubtravelSparkles : MonoBehaviour
     {
         if(do_until)
         {
-            if(GameManager.GetArtefactCollected(0))
+            if(GameManager.GetArtefactCollected(artefact_id) && GameManager.GetArtefactPlaced(artefact_id))
             {
-                gameObject.SetActive(true);
+                Destroy(gameObject);
                 do_until = false;
             }
         }
     }
 }
-/*Cal's script ends here*/
