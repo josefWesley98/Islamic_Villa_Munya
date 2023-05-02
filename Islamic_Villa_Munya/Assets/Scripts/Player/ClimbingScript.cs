@@ -17,6 +17,8 @@ public class ClimbingScript : MonoBehaviour
     [SerializeField] private DownwardClimbing downwardClimbing;
     [SerializeField] private Rigidbody rb;
     
+    [SerializeField] private LayerMask lm;
+
     private Vector3 centre = Vector3.zero;
     private Vector3 playerLerpStart = Vector3.zero;
     private Vector3 endLerpPoint =  Vector3.zero;
@@ -43,7 +45,7 @@ public class ClimbingScript : MonoBehaviour
     private bool detach = true;
     private bool startWallRot = true;
     private bool startRotating = false;
-
+    private bool infrontOfClimbingObject = false;
     private void Awake() => playercontrols = new PlayerControls();
 
     private void OnEnable()
@@ -72,8 +74,25 @@ public class ClimbingScript : MonoBehaviour
         stopClimb.Disable();
         jump.Disable();
     }
+    private void InfrontOfWallRayCheck()
+    {
+        RaycastHit hit;
+        Vector3 rayPos = new Vector3(transform.position.x,transform.position.y + 0.75f,transform.position.z);
+        if (Physics.Raycast(rayPos, transform.TransformDirection(Vector3.forward), out hit, 0.75f, lm))
+        {
+            Debug.DrawRay(rayPos, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            infrontOfClimbingObject = true;
+        }
+        else
+        {
+            infrontOfClimbingObject = false;
+        }
+    }
     void Update()
     {
+
+        InfrontOfWallRayCheck();
+
         DoJumpCheck();
         
         CanDoRotationCheck();
@@ -269,7 +288,7 @@ public class ClimbingScript : MonoBehaviour
     private void DoClimbing(InputAction.CallbackContext context)
     {
         // starts climbing if conditions are met.
-        if(upwardClimbing.GetCanClimb() && !startClimb && !isJumping)
+        if(upwardClimbing.GetCanClimb() && !startClimb && !isJumping && infrontOfClimbingObject)
         {  
             // resets the current hand holds to account for previous climbing spots.
             upwardClimbing.ResetCurrentHandHolds();
