@@ -1,6 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//Leon code
+public enum NamedDoors//names for doors that represent indexes in the door unlock array
+{
+    Unnamed = 0,
+    Puzzle1Door = 1,
+    MuseumEntranceL = 2,
+}
+//Leon end
 
 /*Cal's script starts here*/
 public class GameManager : MonoBehaviour
@@ -32,6 +40,38 @@ public class GameManager : MonoBehaviour
     //     player_artefact = new bool[total_main_artefacts];
     //     Debug.Log("Call me");
     // }
+
+
+//Leon code 
+    //array of door unlock states (true or false for every door)
+    static bool[] doorUnlockStates = new bool[3];
+    //give a name to every index in the door unlock array instead of having to remember numbers
+
+    private void Start()
+    {
+        doorUnlockStates[(int)NamedDoors.Unnamed] = true;
+        doorUnlockStates[(int)NamedDoors.Puzzle1Door] = true;
+        doorUnlockStates[(int)NamedDoors.MuseumEntranceL] = true;
+    }
+
+    public static void SetDoorUnlocked(NamedDoors doorName, bool value)
+    {
+        print("index = " + doorName);
+        if (doorName == NamedDoors.Unnamed)
+            return;
+
+        doorUnlockStates[(int)doorName] = value;
+
+        print("Set " + doorName.ToString() + " to " + value);
+    }
+
+    public static bool GetDoorUnlocked(NamedDoors doorName)
+    {
+        bool value = doorUnlockStates[(int)doorName];
+        print("Door " + doorName.ToString() + " is set to " + value);
+        return value;
+    }
+//Leon end
 
     //Setters
     public static void SetArtefactPlaced(int idx, bool val)
@@ -76,10 +116,10 @@ public class GameManager : MonoBehaviour
         has_key = val;
     }
 
-    public static void SetDoorUnlocked(bool val)
-    {
-        door_unlocked = val;
-    }
+    // public static void SetDoorUnlocked(bool val)
+    // {
+    //     door_unlocked = val;
+    // }
 
     public static void SetHUBTravel(bool val)
     {
@@ -137,10 +177,10 @@ public class GameManager : MonoBehaviour
         return has_key;
     }
 
-    public static bool GetDoorUnlocked()
-    {
-        return door_unlocked;
-    }
+    // public static bool GetDoorUnlocked()
+    // {
+    //     return door_unlocked;
+    // }
 
     public static bool GetHUBTravel()
     {

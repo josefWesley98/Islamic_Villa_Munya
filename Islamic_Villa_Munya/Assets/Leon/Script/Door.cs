@@ -56,6 +56,8 @@ public class Door : MonoBehaviour
     AudioSource unlockAudioSource;
 
     public bool permanentlyUnlocked = false;
+
+    public NamedDoors doorName = NamedDoors.Unnamed;
     void Start()
     {
         //temporaryPlayerReferenceDeleteLaterOk = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1);
@@ -67,7 +69,7 @@ public class Door : MonoBehaviour
             if (TEMPDELAYDOORSETUP)
                 Invoke(nameof(CreateDoorParent), 10f);
             else
-                Invoke(nameof(CreateDoorParent), 2f);
+                Invoke(nameof(CreateDoorParent), 1f);
             //CreateDoorParent();
             //print("ok");
             //CreateDoorParent();
@@ -100,7 +102,7 @@ public class Door : MonoBehaviour
             //Destroy(gameObject);
 
             /*Cal's script starts here*/
-            if(!GameManager.GetDoorUnlocked())// if players not found and door not unlocked disable door
+            if(!GameManager.GetDoorUnlocked(doorName))// if players not found and door not unlocked disable door
                 gameObject.SetActive(false);
             /*Cal's script ends here*/
         }
@@ -139,7 +141,7 @@ public class Door : MonoBehaviour
                 if (!locked)
                 {
                     ToggleOpen();
-                    GameManager.SetDoorUnlocked(true);
+                    GameManager.SetDoorUnlocked(doorName, true);
                 }
             }
 
@@ -267,7 +269,7 @@ public class Door : MonoBehaviour
         actualPlayerBoy = playerBoy.GetChild(0);
         actualPlayerGirl = playerGirl.GetChild(0);
 
-        if (!permanentlyUnlocked && GameManager.GetDoorUnlocked())
+        if (!permanentlyUnlocked && GameManager.GetDoorUnlocked(doorName))
         {
             ToggleOpen();
             locked = false;
