@@ -90,14 +90,13 @@ public class PlayerInteract : MonoBehaviour
             interactableObj = other.GetComponent<InteractableObject>();
 
             //gathers a reference to either the mesh or skinned mesh renderer for future use on the object.
-            if(other.GetComponent<MeshRenderer>() != null)
-            {
-                objRenderer = other.GetComponent<MeshRenderer>();
-            }
-            if(other.GetComponent<SkinnedMeshRenderer>() != null)
-            {
-                objRenderer2 = other.GetComponent<SkinnedMeshRenderer>();
-            }
+           
+            objRenderer = other.GetComponent<MeshRenderer>();
+            
+            // if(other.GetComponent<SkinnedMeshRenderer>() != null)
+            // {
+            //     objRenderer2 = other.GetComponent<SkinnedMeshRenderer>();
+            // }
             
             // sets up all the variables that are declared within each interactable object.
             scale = other.GetComponent<InteractableObject>().GetScale();
@@ -116,6 +115,23 @@ public class PlayerInteract : MonoBehaviour
             }
             isTouching = true;
             canInspect = true;
+
+            if(GameManager.GetEasy())
+            {
+                info.text = interactableObj.GetArtifactInfoEasy();
+            }
+            else if(GameManager.GetMedium())
+            {
+                info.text = interactableObj.GetArtifactInfoMedium();
+            }
+            else if(GameManager.GetHard())
+            {
+                info.text = interactableObj.GetArtifactInfoHard();
+            }
+            else
+            {
+                info.text = interactableObj.GetArtifactInfo();
+            }
         }
     }
 
@@ -160,30 +176,7 @@ public class PlayerInteract : MonoBehaviour
         infoObject.SetActive(true);
         leaveInspectUI.gameObject.SetActive(true);
         //info.text = interactableObj.GetArtifactInfo();
-        if(GameManager.GetEasy())
-        {
-            info.text = interactableObj.GetArtifactInfoEasy();
-        }
-        else
-        {
-            info.text = interactableObj.GetArtifactInfo();
-        }
-        if(GameManager.GetMedium())
-        {
-            info.text = interactableObj.GetArtifactInfoMedium();
-        }
-        else
-        {
-            info.text = interactableObj.GetArtifactInfo();
-        }
-        if(GameManager.GetHard())
-        {
-            info.text = interactableObj.GetArtifactInfoHard();
-        }
-        else
-        {
-            info.text = interactableObj.GetArtifactInfo();
-        }
+        
     }
     private void TurnOffPrimaryArtefact()
     {
@@ -191,24 +184,30 @@ public class PlayerInteract : MonoBehaviour
         {
             objRenderer.enabled = false;
         }
-        if(objRenderer2 != null && objRenderer2.enabled != false)
-        {
-            objRenderer2.enabled = false;
-        }
+        // if(objRenderer2 != null && objRenderer2.enabled != false)
+        // {
+        //     objRenderer2.enabled = false;
+        // }
     }
     private void TurnOnPrimaryArtefact()
     {
-        if(objRenderer != null)
-        {
-            objRenderer.enabled = true;
-            Debug.Log("Re enabled main artefact.");
-        }
         if(interactableObj)
         {
             if(interactableObj.GetComponent<MeshRenderer>())
             {
-                interactableObj.GetComponent<MeshRenderer>().enabled = true;
-                Debug.Log("Re enabled main artefact.");
+                //if(!interactableObj.GetComponent<MeshRenderer>().enabled)
+               // {
+                    interactableObj.GetComponent<MeshRenderer>().enabled = true;
+                    Debug.Log("Re enabled main artefact via interact.");
+               // }
+            }
+        }
+        if(objRenderer != null)
+        {
+            if(!objRenderer.enabled)
+            {
+                objRenderer.enabled = true;
+                Debug.Log("Re enabled main artefact from obj renderer.");
             }
         }
         // if(objRenderer2 != null)
