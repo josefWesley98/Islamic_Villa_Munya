@@ -6,7 +6,6 @@ public class WindEffect : MonoBehaviour
 {
    public float forceTimeMin = 0.1f;
    public float forceTimeMax = 0.5f;
-
     public float forceAmountMin = 10f;
 
     public float forceAmountMax = 30f;
@@ -16,7 +15,7 @@ public class WindEffect : MonoBehaviour
     bool doWind = false;
 
     Rigidbody rb;
-    
+
     void Start()
     {
         Invoke(nameof(SetUp), 2f);
@@ -37,7 +36,7 @@ public class WindEffect : MonoBehaviour
 
         if (timer < 0)
         {
-            rb.AddForce(Vector3.back * Random.Range(forceAmountMin, forceAmountMax));
+            rb.AddForce(Vector3.back * Random.Range(forceAmountMin, forceAmountMax) * 0.333f);
 
             ResetRandomTimer();
         }
