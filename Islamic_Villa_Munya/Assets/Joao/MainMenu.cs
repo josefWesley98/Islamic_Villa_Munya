@@ -62,6 +62,9 @@ public class MainMenu : MonoBehaviour
         Easy = true;
         Medium = false;
         Hard = false;
+        GameManager.SetEasy(Easy);
+        GameManager.SetMedium(Medium);
+        GameManager.SetHard(Hard);
         SceneManager.LoadScene("IraklisScene");
     }
 
@@ -70,6 +73,9 @@ public class MainMenu : MonoBehaviour
         Easy = false;
         Medium = true;
         Hard = false;
+        GameManager.SetEasy(Easy);
+        GameManager.SetMedium(Medium);
+        GameManager.SetHard(Hard);
         SceneManager.LoadScene("IraklisScene");
     }
 
@@ -78,6 +84,9 @@ public class MainMenu : MonoBehaviour
         Easy = false;
         Medium = false;
         Hard = true;
+        GameManager.SetEasy(Easy);
+        GameManager.SetMedium(Medium);
+        GameManager.SetHard(Hard);
         SceneManager.LoadScene("IraklisScene");
     }
 
