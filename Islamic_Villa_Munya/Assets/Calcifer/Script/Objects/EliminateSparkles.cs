@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EliminateSparkles : MonoBehaviour
 {
-    private bool do_until = false;
+    private bool do_until = true;
     [SerializeField] private int artefact_id;
 
     // Start is called before the first frame update
