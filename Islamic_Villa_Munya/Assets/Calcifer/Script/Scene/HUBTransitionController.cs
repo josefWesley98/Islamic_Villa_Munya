@@ -26,12 +26,22 @@ public class HUBTransitionController : MonoBehaviour
         //Reposition the hub trigger to next artefact
         //Check how many artefacts have been collected and then choose the next spawn point.
         total_artefact_collected = GameManager.GetArtefactCounter();
-        transform.position = spawn_points[total_artefact_collected].position;
+        Debug.Log(GameManager.GetArtefactCounter());
 
         if(GameManager.GetArtefactCollected(0))
         {
             transform.position = spawn_points[1].position;
         }
+        else
+        {
+            transform.position = spawn_points[0].position;
+        }
+
+        //if(spawn_points[total_artefact_collected] != null)
+        //{
+        //    transform.position = spawn_points[0].position;
+        //}
+
     }
 
     private void OnTriggerEnter(Collider other)
