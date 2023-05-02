@@ -172,6 +172,9 @@ MonoBehaviour:
   hub_scene_name: IraklisScene
   transition: {fileID: 6256799080619108739}
   transition_t: 1
+  load_screens_ref: {fileID: 2070000057425561774}
+  transition_UI: {fileID: 6256799081394911212}
+  loading_ref: {fileID: 1910417526041612649}
   spawn_points:
   - {fileID: 1412090409}
   - {fileID: 569370786}
@@ -631,6 +634,18 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c0556c0be09574c95506952b855eb0, type: 3}
+--- !u!1 &1910417526041612649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 448447412174467964, guid: 99c0556c0be09574c95506952b855eb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 2070000057016263189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2070000057425561774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 412986043, guid: 99c0556c0be09574c95506952b855eb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 2070000057016263189}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6256799080619108739 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5363368828601682838, guid: 99c0556c0be09574c95506952b855eb0,
@@ -640,6 +655,12 @@ Animator:
 --- !u!224 &6256799081394911208 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5363368830526985725, guid: 99c0556c0be09574c95506952b855eb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 2070000057016263189}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6256799081394911212 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5363368830526985721, guid: 99c0556c0be09574c95506952b855eb0,
     type: 3}
   m_PrefabInstance: {fileID: 2070000057016263189}
   m_PrefabAsset: {fileID: 0}
