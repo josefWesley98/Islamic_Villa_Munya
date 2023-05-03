@@ -46,15 +46,14 @@ public class PlaceArtefact : MonoBehaviour
             }
             else if(replace_artefact && can_place)
             {
-                //Destroy(empty_pedestal);
                 GameManager.SetArtefactPlaced(artefact_id, true);
                 Debug.Log("is being called1");
             }
-            if(GameManager.GetArtefactCollected(artefact_id) && empty_pedestal)
-            {
-                Destroy(empty_pedestal);
-            }
            
+        }
+        if(GameManager.GetArtefactPlaced(artefact_id) && empty_pedestal != null)
+        {
+            Destroy(empty_pedestal);
         }
     }
 

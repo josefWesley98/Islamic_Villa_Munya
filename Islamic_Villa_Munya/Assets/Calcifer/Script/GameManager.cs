@@ -16,11 +16,10 @@ public class GameManager : MonoBehaviour
     private const int total_main_artefacts = 7;
     static protected int artefact_counter = 0;
     static protected bool current_artefact_collected = false;
-    static protected bool artifactOneToBePlaced = false;
-    static protected bool doOnceOne = true;
 
-    static protected bool artifactTwoToBePlaced = false;
-    static protected bool doOnceTwo = true;
+    static protected bool[] artefactToBePlaced = new bool[7] {false, false, false, false, false, false, false};
+    static protected bool[] doOnce = new bool[7] {true, true ,true, true, true, true, true};
+
     //variables
     static protected bool[] player_artefact = new bool[total_main_artefacts];
     static protected bool has_key = false;
@@ -86,37 +85,33 @@ public class GameManager : MonoBehaviour
     {
         player_artefact[artefact_idx] = val;
         artefact_counter += 1;
-        if(player_artefact[0] && doOnceOne)
+
+        for(int i = 0; i < artefactToBePlaced.Length; i++)
         {
-            artifactOneToBePlaced = true;
-            doOnceOne = false;
+            if(i == artefact_idx)
+            {
+                if(player_artefact[i] && doOnce[i])
+                {
+                    artefactToBePlaced[i] = true;
+                    doOnce[i] = false;
+                }
+            }
         }
-        if(player_artefact[1] && doOnceTwo)
-        {
-            artifactTwoToBePlaced = true;
-            doOnceTwo = false;
-        }
     }
-    public static void SetArtifactOneToBePlaced(bool val)
+    public static void SetArtefactToBePlaced(bool val, int idx)
     {
-        artifactOneToBePlaced = false;
+        artefactToBePlaced[idx] = val;
     }
-    public static void SetArtifactTwoToBePlaced(bool val)
-    {
-        artifactTwoToBePlaced = false;
-    }
+
     public static void SetCurrentArtefactCollected(bool val)
     {
         current_artefact_collected = val;
     }
-    public static bool GetArtifactOneToBePlaced()
+    public static bool GetArtefactToBePlaced(int idx)
     {
-        return artifactOneToBePlaced;
+        return artefactToBePlaced[idx];
     }
-    public static bool GetArtifactTwoToBePlaced()
-    {
-        return artifactTwoToBePlaced;
-    }
+
     //When player quits the game, we reset every artefact to original state
     public static void ResetArtefacts(bool val)
     {

@@ -112,12 +112,17 @@ public class PlayerInteract : MonoBehaviour
          
             inspect.gameObject.SetActive(true);
             placeArtefactUI.SetActive(false);
-            
-            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && !firstArtefactPlaced)
+
+            for(int i = 0; i < GameManager.GetTotalArtefacts(); i++)
             {
-                inspect.gameObject.SetActive(false);
-                placeArtefactUI.SetActive(true);
+                if(GameManager.GetArtefactToBePlaced(i) && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == i && !GameManager.GetArtefactPlaced(i))
+                {
+                    inspect.gameObject.SetActive(false);
+                    placeArtefactUI.SetActive(true);
+                    break;
+                }
             }
+           
             isTouching = true;
             canInspect = true;
 
@@ -371,52 +376,23 @@ public class PlayerInteract : MonoBehaviour
         if(canInspect && !inspectionCooldown)
         {
             isReset = false;
-            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && GameManager.GetArtefactPlaced(0))
+            for(int i = 0; i < GameManager.GetTotalArtefacts(); i++)
             {
-                GameManager.SetArtifactOneToBePlaced(false);
-                placeArtefactUI.SetActive(false);
-                inspectionCooldown = true;
-                firstArtefactPlaced = true;
-                isReset = false;
-            }
-            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(1))
-            {
-                GameManager.SetArtifactTwoToBePlaced(false);
-                placeArtefactUI.SetActive(false);
-                inspectionCooldown = true;
-                secondArtefactPlaced = true;
-                isReset = false;
-            }
-            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(4))
-            {
-                GameManager.SetArtifactTwoToBePlaced(false);
-                placeArtefactUI.SetActive(false);
-                inspectionCooldown = true;
-                secondArtefactPlaced = true;
-                isReset = false;
-            }
-            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(5))
-            {
-                GameManager.SetArtifactTwoToBePlaced(false);
-                placeArtefactUI.SetActive(false);
-                inspectionCooldown = true;
-                secondArtefactPlaced = true;
-                isReset = false;
-            }
-            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(6))
-            {
-                GameManager.SetArtifactTwoToBePlaced(false);
-                placeArtefactUI.SetActive(false);
-                inspectionCooldown = true;
-                secondArtefactPlaced = true;
-                isReset = false;
-            }
-            else
-            {
-                isReset = false;
-                isInspecting = true;
-                inspectionCooldown = true;
-                doSetup = true;
+                if(GameManager.GetArtefactToBePlaced(i) && !GameManager.GetArtefactPlaced(0))
+                {
+                    GameManager.SetArtefactToBePlaced(false, i);
+                    placeArtefactUI.SetActive(false);
+                    inspectionCooldown = true;
+                    isReset = false;
+                    break;
+                }
+                else
+                {
+                    isReset = false;
+                    isInspecting = true;
+                    inspectionCooldown = true;
+                    doSetup = true;
+                }
             }
             
         }
