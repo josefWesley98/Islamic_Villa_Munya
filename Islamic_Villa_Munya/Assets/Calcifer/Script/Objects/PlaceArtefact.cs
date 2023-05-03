@@ -51,7 +51,6 @@ public class PlaceArtefact : MonoBehaviour
                 Debug.Log("is being called1");
             }
         }
-
     }
 
     //If the player has collected relevant artefact then make it visible when the player interacts with the pedestal/display case
@@ -63,6 +62,11 @@ public class PlaceArtefact : MonoBehaviour
             can_place = true;
             Debug.Log("boop");
         }
+    }
+
+    public int artefactID()
+    {
+        return artefact_id;
     }
 
 }
