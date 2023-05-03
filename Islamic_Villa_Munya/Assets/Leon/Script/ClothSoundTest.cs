@@ -18,6 +18,6 @@ public class ClothSoundTest : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("wahoo");
+        //print("wahoo");
     }
 }

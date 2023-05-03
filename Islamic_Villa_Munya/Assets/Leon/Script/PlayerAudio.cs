@@ -74,7 +74,7 @@ public class PlayerAudio : MonoBehaviour
             //Debug.Log("Did Hit");
 
 
-            print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
+            //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
 
             onTile = !(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name == carpetMaterials[0]);
 

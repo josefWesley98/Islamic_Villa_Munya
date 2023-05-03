@@ -59,19 +59,19 @@ public class GameManager : MonoBehaviour
 
     public static void SetDoorUnlocked(NamedDoors doorName, bool value)
     {
-        print("index = " + doorName);
+        //print("index = " + doorName);
         if (doorName == NamedDoors.Unnamed)
             return;
 
         doorUnlockStates[(int)doorName] = value;
 
-        print("Set " + doorName.ToString() + " to " + value);
+        //print("Set " + doorName.ToString() + " to " + value);
     }
 
     public static bool GetDoorUnlocked(NamedDoors doorName)
     {
         bool value = doorUnlockStates[(int)doorName];
-        print("Door " + doorName.ToString() + " is set to " + value);
+        //print("Door " + doorName.ToString() + " is set to " + value);
         return value;
     }
 //Leon end

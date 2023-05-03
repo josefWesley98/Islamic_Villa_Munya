@@ -16,7 +16,7 @@ public class TriggerRBActive : MonoBehaviour
         if (c.gameObject.tag != "Player")
             return;
 
-        print(c.gameObject.name + " ENTER");
+        //print(c.gameObject.name + " ENTER");
 
         rigidbodyToSetKinematic.isKinematic = true;
     }
@@ -26,7 +26,7 @@ public class TriggerRBActive : MonoBehaviour
         if (c.gameObject.tag != "Player")
             return;
 
-        print(c.gameObject.name + " EXIT");
+        //print(c.gameObject.name + " EXIT");
 
         rigidbodyToSetKinematic.isKinematic = false;
     }

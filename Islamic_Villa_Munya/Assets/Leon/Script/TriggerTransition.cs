@@ -9,6 +9,8 @@ public class TriggerTransition : MonoBehaviour
 
     ParticleSystem p, p2;
 
+    Rigidbody rb;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -18,13 +20,21 @@ public class TriggerTransition : MonoBehaviour
 
     void OnTriggerEnter(Collider c)
     {
-        print(c);
+        //print(c);
 
         if (c.tag == "Player")
         {
             Activate();
             transitionActivated = true;
+
+            rb = c.GetComponentInChildren<Rigidbody>();
         }
+    }
+
+    void Update()
+    {
+        if (rb != null)
+            rb.AddForce(Vector3.forward * 1000);
     }
 
     void Activate()

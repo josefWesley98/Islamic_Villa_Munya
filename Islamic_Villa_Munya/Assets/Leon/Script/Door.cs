@@ -118,10 +118,10 @@ public class Door : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F) && ((Vector3.Distance(actualPlayerBoy.position, closedPos) < interactMinDistance) || (Vector3.Distance(actualPlayerGirl.position, closedPos) < interactMinDistance)))
             {
-                print("in range");
+                //print("in range");
                 if (unlockNextPress && locked)
                 {
-                    print("toggling open");
+                    //print("toggling open");
                     //play unlock sound
                     unlockAudioSource.Play();
                     if(lockRB != null)
