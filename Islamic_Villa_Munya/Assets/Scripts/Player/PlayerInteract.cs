@@ -26,6 +26,7 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private GameObject infoObject;
     [SerializeField] private GameObject leaveInspectUI;
     [SerializeField] private GameObject placeArtefactUI;
+    [SerializeField] private GameObject textBackdrop;
 
     [Header("Offset For Player Height")]
     [SerializeField] private float distFromCam = 1.5f;
@@ -68,6 +69,7 @@ public class PlayerInteract : MonoBehaviour
         infoObject.SetActive(false);
         leaveInspectUI.SetActive(false);
         placeArtefactUI.SetActive(false);
+        textBackdrop.SetActive(false);
     }
 
     private void OnEnable()
@@ -173,6 +175,7 @@ public class PlayerInteract : MonoBehaviour
         infoObject.SetActive(false);
         inspect.gameObject.SetActive(false);
         leaveInspectUI.gameObject.SetActive(false);
+        textBackdrop.SetActive(false);
     }
     private void TurnOnInspectUI()
     {
@@ -180,6 +183,7 @@ public class PlayerInteract : MonoBehaviour
         leaveInspectUI.SetActive(true);
         infoObject.SetActive(true);
         leaveInspectUI.gameObject.SetActive(true);
+        textBackdrop.SetActive(true);
         //info.text = interactableObj.GetArtifactInfo();
         
     }
@@ -367,7 +371,7 @@ public class PlayerInteract : MonoBehaviour
         if(canInspect && !inspectionCooldown)
         {
             isReset = false;
-            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && !firstArtefactPlaced)
+            if(GameManager.GetArtifactOneToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 0 && GameManager.GetArtefactPlaced(0))
             {
                 GameManager.SetArtifactOneToBePlaced(false);
                 placeArtefactUI.SetActive(false);
@@ -375,7 +379,31 @@ public class PlayerInteract : MonoBehaviour
                 firstArtefactPlaced = true;
                 isReset = false;
             }
-            else if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && !secondArtefactPlaced)
+            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(1))
+            {
+                GameManager.SetArtifactTwoToBePlaced(false);
+                placeArtefactUI.SetActive(false);
+                inspectionCooldown = true;
+                secondArtefactPlaced = true;
+                isReset = false;
+            }
+            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(4))
+            {
+                GameManager.SetArtifactTwoToBePlaced(false);
+                placeArtefactUI.SetActive(false);
+                inspectionCooldown = true;
+                secondArtefactPlaced = true;
+                isReset = false;
+            }
+            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(5))
+            {
+                GameManager.SetArtifactTwoToBePlaced(false);
+                placeArtefactUI.SetActive(false);
+                inspectionCooldown = true;
+                secondArtefactPlaced = true;
+                isReset = false;
+            }
+            if(GameManager.GetArtifactTwoToBePlaced() && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == 1 && GameManager.GetArtefactPlaced(6))
             {
                 GameManager.SetArtifactTwoToBePlaced(false);
                 placeArtefactUI.SetActive(false);
