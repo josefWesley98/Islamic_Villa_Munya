@@ -18,18 +18,24 @@ public class _PauseMenu : MonoBehaviour
     [SerializeField] GameObject ControlMenu2;*/
 
     [Header("Volume settings")]
+    // Access the audio mixer and audio source where sound is playing
     [SerializeField] private AudioMixer Mixer;
     [SerializeField] private AudioSource AudioSource;
+    // The sliders for volume SFX and Music
     [SerializeField] private Slider slider;
+    [SerializeField] private Slider slider2;
+    // The float values of the different volumes
     float volume;
+    float volumeSFX;
 
     [Header("Cursor settings")]
+    // the fields for the cursor
     [SerializeField] private PlayerControls controls;
     InputAction pause;
     private bool CursorUni = false;
-    [SerializeField] private Slider slider2;
+    
 
-    float volumeSFX;
+    
     private void Awake()
     {
         //Assign the new input controller
@@ -37,8 +43,8 @@ public class _PauseMenu : MonoBehaviour
         Cursor.visible = false;
         controls = new PlayerControls();
         
-    }
-    //deacitvates cursor and centers it so it doesn't move
+    }                                                           //deacitvates cursor and centers it so it doesn't move
+    
 
     private void OnEnable()
     {
@@ -48,29 +54,26 @@ public class _PauseMenu : MonoBehaviour
         pause = controls.Player.Pause;
 
         pause.performed += _ => SetCursor(_);
-    }
-    //changes controls to enabled when in pause menu
+    }                                                           //changes controls to enabled when in pause menu
 
     private void OnDisable()
     {
         pause.Disable();
-    }
-    //changes controls to disabled when in pause menu
+    }                                                           //changes controls to disabled when in pause menu
 
     private void Start()
     {
-        //StartCoroutine(ControlsOff());
-        //GameManager.SetPauseCursor(true);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        AudioSource = AudioSource.GetComponent<AudioSource>();
-        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
-        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
+        Cursor.lockState = CursorLockMode.Locked;                                       //cursor is locked so it won't move
+        Cursor.visible = false;                                                         //sets cursor visibality to false                                 
+
+        AudioSource = AudioSource.GetComponent<AudioSource>();                          //Getting access to the audio scource where the audio is playing
+
+        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);          //Sets value of slider to the saved value on disk thanks to player preference (MusicParam)
+        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);    //Sets value of audio source to the saved value on disk thanks to player preference (MusicParam)
         //print("Got volume from player prefs " + volume);
-        slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
-        volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
+        slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                    //Sets value of slider to the saved value on disk thanks to player preference (SFXParam)
+        volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                        //Sets value of VolumwSFX to the saved value on disk thanks to player preference (SFXParam)
     }
-    //cursor is in a locked state and not visible, gets audioSource and the slider value, sets it to medium volume
 
     public void Pause()
     {
@@ -78,8 +81,8 @@ public class _PauseMenu : MonoBehaviour
         notifications.SetActive(false);
         Time.timeScale = 0f;
         Cursor.visible = true;
-    }
-    //pause menu is activated. time jumps to zero (it freezes), deactivates notifications so no controls are shown and activates the cursor
+    }                                                           //pause menu is activated. time jumps to zero (it freezes), deactivates notifications so no controls are shown and activates the cursor
+    
 
     public void Resume()
     {
@@ -90,19 +93,15 @@ public class _PauseMenu : MonoBehaviour
         Debug.Log(CursorUni);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
-        //Cursor.visible = false;//GameManager.SetPauseCursor(true);
-    }
-    //pause menu is deactivated. time jumps to 1 (normal speed), activates notifications in case some where hidden while the pause menu was activated and sets the cursor to false
+    }                                                           //pause menu is deactivated. time jumps to 1 (normal speed), activates notifications in case some where hidden while the pause menu was activated and sets the cursor to false
 
     public void Home()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
-    }
-    //loads the Menu scene from the scene manager and sets time to 1 (normal speed) so it actually changes without problem
+    }                                                           //loads the Menu scene from the scene manager and sets time to 1 (normal speed) so it actually changes without problem
 
-    public void SetLevel (float sliderValue)
+    public void SetLevel (float sliderValue)                    // slider for volume Music
     {
         Mixer.SetFloat("MusicParam", Mathf.Log10(sliderValue) * 20);
         //change volume to new value set by slider
@@ -111,7 +110,7 @@ public class _PauseMenu : MonoBehaviour
         print("Set volume player prefs to " + volume);
     }
     //sets game volume to slider value
-    public void SetLevelSFX(float slider2Value)
+    public void SetLevelSFX(float slider2Value)                 // slider for volume SFX
     {
         //mixer volume change
         Mixer.SetFloat("SFXParam", Mathf.Log10(slider2Value) * 20);
@@ -122,10 +121,10 @@ public class _PauseMenu : MonoBehaviour
         //print("Set volume player prefs to " +  volumeSFX);
     }
     
-    private void Update()
+    private void Update()                                       // if statement for cursor mode and visibality, 
     {
         if(CursorUni)
-        {
+        {                                                       //when not in pause menu it locks the cursor and makes it invisible 
             if(pause.triggered)
             {
                 CursorUni = false;
@@ -138,8 +137,8 @@ public class _PauseMenu : MonoBehaviour
             }
         }
         else
-        {
-            if(pause.triggered)
+        {                                                       //when in pause menu it frees the cursor and makes it visible
+            if (pause.triggered)
             {
                 CursorUni = true;
                 //GameManager.SetPauseCursor(CursorUni);
@@ -158,12 +157,5 @@ public class _PauseMenu : MonoBehaviour
         //Placeholder
         Debug.Log("Boo!");
     }
-    //a debug log to make sure it works correctly
-
-    /*public IEnumerator ControlsOff()
-    {
-        yield return new WaitForSeconds(10f);
-        ControlMenu.SetActive(false);
-        ControlMenu2.SetActive(false);
-    }*/
+                                                                //a debug log to make sure it works correctly
 }

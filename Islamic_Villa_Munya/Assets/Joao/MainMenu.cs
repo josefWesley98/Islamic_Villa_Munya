@@ -9,62 +9,42 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     //[SerializeField] SpawnAudioPrefabs SpawnAudio;
-    // Get AudioManager for audio spawning
+
+    [Header("Volume settings")]
+    // Access the audio mixer and audio source where sound is playing
     [SerializeField] private AudioMixer Mixer;
     [SerializeField] private AudioSource AudioSource;
-    [SerializeField] private GameObject DifficultyMenu;
+    // The sliders for volume SFX and Music
     [SerializeField] private Slider slider;
     [SerializeField] private Slider slider2;
-
+    // Beginning values for the sliders when first starting the game
     float volumeMusic = 0.5f;
-
     float volumeSFX = 1.0f;
-    //
-    public bool BOY = false;
-    public bool GIRL = false;
-    //
+
+    [Header("Difficulty Settings")]
+    //Different bools used to configure lore complexity when loading game
     public bool Easy = false;
     public bool Medium = false;
     public bool Hard = false;
 
     void Start()
     {
-        AudioSource = AudioSource.GetComponent<AudioSource>();
-        //AudioSource.volume = PlayerPrefs.GetFloat("SliderVolumeLevel", volume);
-        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
-        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
-        //print("Got volume from player prefs " + volume);
-        slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
-        volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
+        AudioSource = AudioSource.GetComponent<AudioSource>();                          //Getting access to the audio scource where the audio is playing
+
+        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);          //Sets value of slider to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
+        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);    //Sets value of audio source to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
+
+        slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                    //Sets value of slider to the saved value on disk thanks to player preference (SFXParam) or default when starting (volumeSFX)
+        volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                        //Sets value of VolumwSFX to the saved value on disk thanks to player preference (SFXParam) or default when starting (volumeSFX)
     }
 
-    public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
+    public void PlayGame()                          // when playgame is called, it switches scene to the museum hub (beginning of the game and the Hub)
     {
         SceneManager.LoadScene("IraklisScene");  
     }
 
-    public void PlayGame2()                         // when playgame2 is called, it switches scene to "SampleScene" which is the ai testing
-    {
-        SceneManager.LoadScene("SampleScene");
-    }
     //----//
-
-    public void DifficultyBoY()                          // when boy is selected, a bool for boy is saved"
-    {
-        BOY = true;
-        GIRL = false;
-        DifficultyMenu.SetActive(true);
-    }
-
-    public void DifficultyGirl()                          // when girl is selected, a bool for girl is saved"
-    {
-        BOY = false;
-        GIRL = true;
-        DifficultyMenu.SetActive(true);
-    }
-
-    //----//
-    public void EASY()                          // when easy is pressed, save bool of easy"
+    public void EASY()                  // when easy is pressed, save bool of easy to game manager, setting lore difficulty to Primary level and switches scene to the museum hub (beginning of the game and the Hub)
     {
         Easy = true;
         Medium = false;
@@ -75,7 +55,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("IraklisScene");
     }
 
-    public void MEDIUM()                          // when medium is pressed, save bool of medium"
+    public void MEDIUM()                // when easy is pressed, save bool of medium to game manager, setting lore difficulty to Secondary level and switches scene to the museum hub (beginning of the game and the Hub)
     {
         Easy = false;
         Medium = true;
@@ -86,7 +66,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("IraklisScene");
     }
 
-    public void HARD()                          // when hard is pressed, save bool of hard"
+    public void HARD()                  // when easy is pressed, save bool of hard to game manager, setting lore difficulty to Univeristy level and switches scene to the museum hub (beginning of the game and the Hub)
     {
         Easy = false;
         Medium = false;
