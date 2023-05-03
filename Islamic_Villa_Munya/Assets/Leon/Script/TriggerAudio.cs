@@ -5,9 +5,11 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.Audio;
 
 public class TriggerAudio : MonoBehaviour
 {
+    AudioMixer mixer;
     public AudioClip[] sounds;
     List<AudioSource> sources = new List<AudioSource>();
     public float volume = 0.25f;
@@ -16,6 +18,7 @@ public class TriggerAudio : MonoBehaviour
 
     void Start()
     {
+        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
 
         for (int i = 0; i < sounds.Count(); i++)
         {
@@ -23,6 +26,7 @@ public class TriggerAudio : MonoBehaviour
             a.clip = sounds[i];
             a.spatialBlend = 1f;
             a.volume = volume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             sources.Add(a);
         }
 

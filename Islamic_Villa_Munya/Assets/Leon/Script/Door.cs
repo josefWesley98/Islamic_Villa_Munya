@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 [ExecuteInEditMode]
 public class Door : MonoBehaviour
@@ -54,7 +55,7 @@ public class Door : MonoBehaviour
     public Rigidbody lockRB;
     public AudioClip unlockAudio;
     AudioSource unlockAudioSource;
-
+    public AudioMixer mixer;
     public bool permanentlyUnlocked = false;
 
     public NamedDoors doorName = NamedDoors.Unnamed;
@@ -265,6 +266,9 @@ public class Door : MonoBehaviour
         unlockAudioSource = transform.AddComponent<AudioSource>();
         unlockAudioSource.clip = unlockAudio;
         unlockAudioSource.spatialBlend = 1f;
+
+        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
+        unlockAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
 
         actualPlayerBoy = playerBoy.GetChild(0);
         actualPlayerGirl = playerGirl.GetChild(0);

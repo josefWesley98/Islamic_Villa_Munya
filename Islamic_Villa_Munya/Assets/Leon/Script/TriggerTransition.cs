@@ -33,8 +33,8 @@ public class TriggerTransition : MonoBehaviour
 
     void Update()
     {
-        if (rb != null)
-            rb.AddForce(Vector3.forward * 1000);
+        //if (rb != null)
+            //rb.AddForce(Vector3.forward * 1000);
     }
 
     void Activate()
