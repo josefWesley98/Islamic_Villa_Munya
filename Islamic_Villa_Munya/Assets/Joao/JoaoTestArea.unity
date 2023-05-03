@@ -583,6 +583,7 @@ MonoBehaviour:
   lockRB: {fileID: 0}
   unlockAudio: {fileID: 0}
   permanentlyUnlocked: 0
+  doorName: 0
 --- !u!95 &51524870
 Animator:
   serializedVersion: 4
@@ -1593,6 +1594,7 @@ MonoBehaviour:
   lockRB: {fileID: 0}
   unlockAudio: {fileID: 0}
   permanentlyUnlocked: 0
+  doorName: 0
 --- !u!1 &126848169
 GameObject:
   m_ObjectHideFlags: 0
@@ -17625,6 +17627,7 @@ MonoBehaviour:
   lockRB: {fileID: 0}
   unlockAudio: {fileID: 0}
   permanentlyUnlocked: 0
+  doorName: 0
 --- !u!95 &793532978
 Animator:
   serializedVersion: 4
@@ -23537,6 +23540,7 @@ MonoBehaviour:
   lockRB: {fileID: 0}
   unlockAudio: {fileID: 0}
   permanentlyUnlocked: 0
+  doorName: 0
 --- !u!1 &1110091837
 GameObject:
   m_ObjectHideFlags: 0
@@ -45812,6 +45816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: _PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511275459017933644, guid: 380466530f66ff2438320e8815605e49,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
