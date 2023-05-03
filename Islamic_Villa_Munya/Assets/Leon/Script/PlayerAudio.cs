@@ -4,10 +4,9 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using UnityEngine.Audio;
+
 public class PlayerAudio : MonoBehaviour
 {
-    AudioMixer mixer;
     public AudioClip[] stepTileClips;
     List<AudioSource> stepTileSources = new List<AudioSource>();
     public float stepTileVolume = 0.25f;
@@ -56,8 +55,8 @@ public class PlayerAudio : MonoBehaviour
     void Start()
     {
         //player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
-        Invoke(nameof(FindPlayer), 2f);
-        Invoke(nameof(SetUp), 2f);
+        Invoke(nameof(FindPlayer), 3f);
+        Invoke(nameof(SetUp), 3f);
     }
 
     private void FixedUpdate()
@@ -112,8 +111,6 @@ public class PlayerAudio : MonoBehaviour
 
     void SetUp()
     {
-        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
-
         footstepMaster[0] = stepCarpetSources;
         footstepMaster[1] = stepTileSources;
 
@@ -123,7 +120,6 @@ public class PlayerAudio : MonoBehaviour
             a.clip = stepTileClips[i];
             a.spatialBlend = 1f;
             a.volume = stepTileVolume;
-            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             stepTileSources.Add(a);
         }
 
@@ -133,7 +129,6 @@ public class PlayerAudio : MonoBehaviour
             a.clip = stepCarpetClips[i];
             a.spatialBlend = 1f;
             a.volume = stepCarpetVolume;
-            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             stepCarpetSources.Add(a);
         }
 

@@ -1,6 +1,5 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class Key : MonoBehaviour
 {
@@ -9,7 +8,6 @@ public class Key : MonoBehaviour
     bool triggered = false;
     public AudioClip pickupAudio;
     AudioSource pickupAudioSource;
-    AudioMixer mixer;
     private void Start()
     {
         if(GameManager.GetHaveKey())
@@ -22,9 +20,6 @@ public class Key : MonoBehaviour
         pickupAudioSource = transform.AddComponent<AudioSource>();
         pickupAudioSource.clip = pickupAudio;
         pickupAudioSource.spatialBlend = 1f;
-
-        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
-        pickupAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
     }
 
     private void OnTriggerEnter(Collider other)

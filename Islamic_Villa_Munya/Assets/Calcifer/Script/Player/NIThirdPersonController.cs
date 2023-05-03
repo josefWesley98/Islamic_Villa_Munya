@@ -919,11 +919,6 @@ public class NIThirdPersonController : MonoBehaviour
     {
         pushing = val;
     }
-/*Cal's script ends here*/
-
-//Leon fps counter
- void OnGUI()
- {
-     GUI.Label(new Rect(0, 0, 100, 100), (1.0f / Time.smoothDeltaTime).ToString());        
- }
 }
+
+/*Cal's script ends here*/
