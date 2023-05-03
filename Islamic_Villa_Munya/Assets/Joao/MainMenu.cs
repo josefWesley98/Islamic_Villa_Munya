@@ -14,7 +14,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private AudioSource AudioSource;
     [SerializeField] private GameObject DifficultyMenu;
     [SerializeField] private Slider slider;
-    float volume = 0.5f;
+    [SerializeField] private Slider slider2;
+
+    float volumeMusic = 0.5f;
+
+    float volumeSFX = 1.0f;
     //
     public bool BOY = false;
     public bool GIRL = false;
@@ -27,8 +31,11 @@ public class MainMenu : MonoBehaviour
     {
         AudioSource = AudioSource.GetComponent<AudioSource>();
         //AudioSource.volume = PlayerPrefs.GetFloat("SliderVolumeLevel", volume);
-        slider.value = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
-        AudioSource.volume = PlayerPrefs.GetFloat("Volume", AudioSource.volume);
+        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
+        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
+        //print("Got volume from player prefs " + volume);
+        slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
+        volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);
     }
 
     public void PlayGame()                          // when playgame is called, it switches scene to "PlayerTesting"
@@ -101,7 +108,23 @@ public class MainMenu : MonoBehaviour
 
     public void SetLevel(float sliderValue)
     {
-        Mixer.SetFloat("Volume", Mathf.Log10(sliderValue) * 20);
-        PlayerPrefs.SetFloat("Volume", volume);
+        //mixer volume change
+        Mixer.SetFloat("MusicParam", Mathf.Log10(sliderValue) * 20);
+        //change volume to new value set by slider
+        volumeMusic = sliderValue;
+        //saved to disk
+        PlayerPrefs.SetFloat("MusicParam", volumeMusic);
+        //print("Set volume player prefs to " +  volumeMusic);
+    }
+
+    public void SetLevelSFX(float slider2Value)
+    {
+        //mixer volume change
+        Mixer.SetFloat("SFXParam", Mathf.Log10(slider2Value) * 20);
+        //change volume to new value set by slider
+        volumeSFX = slider2Value;
+        //saved to disk
+        PlayerPrefs.SetFloat("SFXParam", volumeSFX);
+        //print("Set volume player prefs to " +  volumeSFX);
     }
 }
