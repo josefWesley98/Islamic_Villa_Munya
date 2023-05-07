@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 [ExecuteInEditMode]
 public class Door : MonoBehaviour
@@ -53,8 +54,9 @@ public class Door : MonoBehaviour
     float interactMinDistance = 3f;
     public Rigidbody lockRB;
     public AudioClip unlockAudio;
-    AudioSource unlockAudioSource;
-
+    public AudioClip openAudio;
+    AudioSource unlockAudioSource, openAudioSource;
+    public AudioMixer mixer;
     public bool permanentlyUnlocked = false;
 
     public NamedDoors doorName = NamedDoors.Unnamed;
@@ -266,6 +268,14 @@ public class Door : MonoBehaviour
         unlockAudioSource.clip = unlockAudio;
         unlockAudioSource.spatialBlend = 1f;
 
+        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
+        unlockAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+
+        openAudioSource = transform.AddComponent<AudioSource>();
+        openAudioSource.clip = openAudio;
+        openAudioSource.spatialBlend = 1f;
+        openAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+
         actualPlayerBoy = playerBoy.GetChild(0);
         actualPlayerGirl = playerGirl.GetChild(0);
 
@@ -323,6 +333,7 @@ public class Door : MonoBehaviour
     {
         if(doorState == DoorState.Closed)
             doorState = DoorState.Opening;
+            openAudioSource.Play();
         if (doorState == DoorState.Open && canCloseDoor)
             doorState = DoorState.Closing;
         //open = !open;
