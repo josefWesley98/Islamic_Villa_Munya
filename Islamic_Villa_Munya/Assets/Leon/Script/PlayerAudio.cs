@@ -4,9 +4,11 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using UnityEngine.Audio;
 public class PlayerAudio : MonoBehaviour
 {
+    AudioMixer mixer;
+
     public AudioClip[] stepTileClips;
     List<AudioSource> stepTileSources = new List<AudioSource>();
     public float stepTileVolume = 0.25f;
@@ -111,6 +113,8 @@ public class PlayerAudio : MonoBehaviour
 
     void SetUp()
     {
+        mixer = Resources.Load("NewAudioMixer") as AudioMixer;
+
         footstepMaster[0] = stepCarpetSources;
         footstepMaster[1] = stepTileSources;
 
@@ -120,6 +124,7 @@ public class PlayerAudio : MonoBehaviour
             a.clip = stepTileClips[i];
             a.spatialBlend = 1f;
             a.volume = stepTileVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             stepTileSources.Add(a);
         }
 
@@ -129,6 +134,7 @@ public class PlayerAudio : MonoBehaviour
             a.clip = stepCarpetClips[i];
             a.spatialBlend = 1f;
             a.volume = stepCarpetVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             stepCarpetSources.Add(a);
         }
 
