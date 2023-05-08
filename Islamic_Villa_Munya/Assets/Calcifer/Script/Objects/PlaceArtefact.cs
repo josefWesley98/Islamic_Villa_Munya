@@ -14,6 +14,8 @@ public class PlaceArtefact : MonoBehaviour
     [SerializeField] private InteractableObject IO;
     [SerializeField] private Material transparentMat;
     [SerializeField] private Material normalMat;
+    [SerializeField] private BoxCollider collider;
+    [SerializeField] private MeshRenderer paintingRenderer;
     private bool replace_artefact;
     private bool can_place = false;
     private bool do_until = true;
@@ -25,6 +27,14 @@ public class PlaceArtefact : MonoBehaviour
         if(IO != null)
         {
             IO.enabled = false;
+        }
+        if(collider != null)
+        {
+            collider.enabled = false;
+        }
+        if(paintingRenderer != null)
+        {
+            paintingRenderer.enabled = false;
         }
         renderer.material = transparentMat;
     }
@@ -42,12 +52,19 @@ public class PlaceArtefact : MonoBehaviour
                 {
                     IO.enabled = true;
                 }
+                if(collider != null)
+                {
+                    collider.enabled = true;
+                }
+                if(paintingRenderer != null)
+                {
+                    paintingRenderer.enabled = true;
+                }
                 do_until = false;
             }
             else if(replace_artefact && can_place)
             {
                 GameManager.SetArtefactPlaced(artefact_id, true);
-                Debug.Log("is being called1");
             }
            
         }
@@ -64,7 +81,6 @@ public class PlaceArtefact : MonoBehaviour
         if(other.gameObject.tag == "Player" && GameManager.GetArtefactCollected(artefact_id))
         {
             can_place = true;
-            Debug.Log("boop");
         }
     }
 

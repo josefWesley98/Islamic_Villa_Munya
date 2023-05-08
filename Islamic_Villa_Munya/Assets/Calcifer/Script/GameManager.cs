@@ -86,17 +86,12 @@ public class GameManager : MonoBehaviour
         player_artefact[artefact_idx] = val;
         artefact_counter += 1;
 
-        for(int i = 0; i < artefactToBePlaced.Length; i++)
+        if(!artefactToBePlaced[artefact_idx] && doOnce[artefact_idx])
         {
-            if(i == artefact_idx)
-            {
-                if(player_artefact[i] && doOnce[i])
-                {
-                    artefactToBePlaced[i] = true;
-                    doOnce[i] = false;
-                }
-            }
+            artefactToBePlaced[artefact_idx] = true;
+            doOnce[artefact_idx] = false;   
         }
+      
     }
     public static void SetArtefactToBePlaced(bool val, int idx)
     {

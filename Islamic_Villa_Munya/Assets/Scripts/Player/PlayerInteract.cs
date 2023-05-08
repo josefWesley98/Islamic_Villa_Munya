@@ -60,6 +60,7 @@ public class PlayerInteract : MonoBehaviour
 
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
+    private int artifactToBePlaced = -1;
 
     private void Awake() => playercontrols = new PlayerControls();
 
@@ -98,31 +99,32 @@ public class PlayerInteract : MonoBehaviour
            
             objRenderer = other.GetComponent<MeshRenderer>();
             
-            // if(other.GetComponent<SkinnedMeshRenderer>() != null)
-            // {
-            //     objRenderer2 = other.GetComponent<SkinnedMeshRenderer>();
-            // }
-            
             // sets up all the variables that are declared within each interactable object.
             scale = other.GetComponent<InteractableObject>().GetScale();
             rotationForSpawn =  other.GetComponent<InteractableObject>().GetRotation();
             positionOffset = other.GetComponent<InteractableObject>().GetPositionOffset();
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
-         
-            inspect.gameObject.SetActive(true);
-            placeArtefactUI.SetActive(false);
 
-            for(int i = 0; i < GameManager.GetTotalArtefacts(); i++)
+
+            int pedID = other.GetComponent<InteractableObject>().GetPedestalID();
+            
+            if(GameManager.GetArtefactToBePlaced(pedID))
             {
-                if(GameManager.GetArtefactToBePlaced(i) && interactableObj.GetComponent<InteractableObject>().GetPedestalID() == i && !GameManager.GetArtefactPlaced(i))
-                {
-                    inspect.gameObject.SetActive(false);
-                    placeArtefactUI.SetActive(true);
-                    break;
-                }
+                inspect.gameObject.SetActive(false);
+                placeArtefactUI.SetActive(true);
+                artifactToBePlaced = pedID;
+                Debug.Log("UI enabled for placing object");
             }
-           
+            else if(!GameManager.GetArtefactToBePlaced(pedID))
+            {
+                artifactToBePlaced = -1;
+                inspect.gameObject.SetActive(true);
+                placeArtefactUI.SetActive(false);
+                Debug.Log("UI disabled for placing object");
+            }
+
+          
             isTouching = true;
             canInspect = true;
 
@@ -197,12 +199,7 @@ public class PlayerInteract : MonoBehaviour
         if(objRenderer != null && objRenderer.enabled != false)
         {
             objRenderer.enabled = false;
-            Debug.Log("being disabled");
         }
-        // if(objRenderer2 != null && objRenderer2.enabled != false)
-        // {
-        //     objRenderer2.enabled = false;
-        // }
     }
     private void TurnOnPrimaryArtefact()
     {
@@ -213,7 +210,6 @@ public class PlayerInteract : MonoBehaviour
                 if(!interactableObj.GetComponent<MeshRenderer>().enabled)
                 {
                     interactableObj.GetComponent<MeshRenderer>().enabled = true;
-                    Debug.Log("Re enabled main artefact via interact.");
                 }
             }
         }
@@ -222,21 +218,8 @@ public class PlayerInteract : MonoBehaviour
             if(!objRenderer.enabled)
             {
                 objRenderer.enabled = true;
-                Debug.Log("Re enabled main artefact from obj renderer.");
             }
         }
-        // if(objRenderer2 != null)
-        // {
-        //     objRenderer2.enabled = true;
-        // }
-        // if(interactableObj)
-        // {
-        //     if(interactableObj.GetComponent<SkinnedMeshRenderer>())
-        //     {
-        //         interactableObj.GetComponent<SkinnedMeshRenderer>().enabled = true;
-        //     }
-        // }
-        
     }
     private void PositionCamera()
     {
@@ -370,30 +353,33 @@ public class PlayerInteract : MonoBehaviour
         
             inspectionCooldown = true;
         }
-        
         //GameManager.SetArtefactCollected(0, true);
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
+            inspectionCooldown = true;
             isReset = false;
-            for(int i = 0; i < GameManager.GetTotalArtefacts(); i++)
+            if(artifactToBePlaced != -1)
             {
-                if(GameManager.GetArtefactToBePlaced(i) && !GameManager.GetArtefactPlaced(0))
+                if(GameManager.GetArtefactToBePlaced(artifactToBePlaced))
                 {
-                    GameManager.SetArtefactToBePlaced(false, i);
+                    GameManager.SetArtefactToBePlaced(false, artifactToBePlaced);
+                    GameManager.SetArtefactPlaced(artifactToBePlaced, false);
                     placeArtefactUI.SetActive(false);
                     inspectionCooldown = true;
+                    isInspecting = false;
                     isReset = false;
-                    break;
-                }
-                else
-                {
-                    isReset = false;
-                    isInspecting = true;
-                    inspectionCooldown = true;
-                    doSetup = true;
+                    artifactToBePlaced = -1; 
+                    Debug.Log("artefact has been placed.");
                 }
             }
+            else
+            {
+                isReset = false;
+                isInspecting = true;
+                inspectionCooldown = true;
+                doSetup = true;
+            }        
             
         }
     }
