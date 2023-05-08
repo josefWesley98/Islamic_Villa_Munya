@@ -94,7 +94,7 @@ public class MainMenu : MonoBehaviour
         volumeMusic = sliderValue;
         //saved to disk
         PlayerPrefs.SetFloat("MusicParam", volumeMusic);
-        //print("Set volume player prefs to " +  volumeMusic);
+        print("Set SFXParam player prefs to " +  volumeMusic);
     }
 
     public void SetLevelSFX(float slider2Value)
@@ -105,6 +105,6 @@ public class MainMenu : MonoBehaviour
         volumeSFX = slider2Value;
         //saved to disk
         PlayerPrefs.SetFloat("SFXParam", volumeSFX);
-        //print("Set volume player prefs to " +  volumeSFX);
+        print("Set SFXParam player prefs to " +  volumeSFX);
     }
 }

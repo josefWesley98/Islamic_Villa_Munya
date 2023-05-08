@@ -61,9 +61,9 @@ AudioMixerController:
   m_UpdateMode: 0
   m_ExposedParameters:
   - guid: c99e4aa3289b8d84992aa0ed884e0d84
-    name: MyExposedParam
-  - guid: d9e5a3ebaea03b14f93907b354679179
-    name: Volume
+    name: MusicParam
+  - guid: c11729e3b826e0746aff9078b1860dea
+    name: SFXParam
   m_AudioMixerGroupViews:
   - guids:
     - bd0025a1356108b4eb5579a50b6c44d5
@@ -71,7 +71,7 @@ AudioMixerController:
     - ec9dce4fd6d4a89488f892e4cad811ea
     name: View
   m_CurrentViewIndex: 0
-  m_TargetSnapshot: {fileID: 24500006}
+  m_TargetSnapshot: {fileID: -721126526976767006}
 --- !u!243 &24300002
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -9131229814866925068}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 6
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
@@ -155,7 +155,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -2288920191449572804}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 3
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0

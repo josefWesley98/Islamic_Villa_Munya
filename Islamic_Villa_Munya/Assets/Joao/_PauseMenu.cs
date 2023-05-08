@@ -101,13 +101,15 @@ public class _PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }                                                           //loads the Menu scene from the scene manager and sets time to 1 (normal speed) so it actually changes without problem
 
-    public void SetLevel (float sliderValue)                    // slider for volume Music
+    public void SetLevelMusic (float sliderValue)                    // slider for volume Music
     {
         Mixer.SetFloat("MusicParam", Mathf.Log10(sliderValue) * 20);
         //change volume to new value set by slider
         volume = sliderValue;
         PlayerPrefs.SetFloat("MusicParam", volume);
-        print("Set volume player prefs to " + volume);
+        print("Set MusicParam player prefs to " + volume);
+
+        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);
     }
     //sets game volume to slider value
     public void SetLevelSFX(float slider2Value)                 // slider for volume SFX
@@ -118,7 +120,7 @@ public class _PauseMenu : MonoBehaviour
         volumeSFX = slider2Value;
         //saved to disk
         PlayerPrefs.SetFloat("SFXParam", volumeSFX);
-        //print("Set volume player prefs to " +  volumeSFX);
+        print("Set SFXParam player prefs to " +  volumeSFX);
     }
     
     private void Update()                                       // if statement for cursor mode and visibality, 
