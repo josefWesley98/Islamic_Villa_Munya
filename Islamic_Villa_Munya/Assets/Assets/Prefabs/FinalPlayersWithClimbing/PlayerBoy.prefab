@@ -5803,7 +5803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8405509287026908885
 Transform:
   m_ObjectHideFlags: 0
@@ -5818,7 +5818,7 @@ Transform:
   m_Children:
   - {fileID: 8299262563743362582}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8405509287218328964
 GameObject:
@@ -5844,7 +5844,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8405509287218328964}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6235,7 +6235,7 @@ MonoBehaviour:
   push_pos: {fileID: 8405509287627094480}
   is_ground:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   is_ceiling:
     serializedVersion: 2
     m_Bits: 256
@@ -6249,15 +6249,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483647
   ground_drag: 7
-  walk_speed: 60
-  run_speed: 120
-  stand_jump_force: 300
-  moving_jump_force: 190
+  walk_speed: 80
+  run_speed: 140
+  stand_jump_force: 240
+  moving_jump_force: 270
   air_multiplier: 0.4
   capsule_radius: 0.18
   capsule_height: 1.38
   capsule_centre: 0.65
   isClimbing: 0
+  ray_radius: 0.2
+  ray_length: 0.3
+  physic_mat: {fileID: 13400000, guid: 6f6e705702c1f224c802f291d756bb74, type: 2}
 --- !u!114 &2723775625618994281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6274,6 +6277,9 @@ MonoBehaviour:
   upwardClimbing: {fileID: 6571598036124693571}
   downwardClimbing: {fileID: 6571598036003345934}
   rb: {fileID: 8405509288732363257}
+  lm:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2723775625618994282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6350,6 +6356,7 @@ MonoBehaviour:
   infoObject: {fileID: 0}
   leaveInspectUI: {fileID: 0}
   placeArtefactUI: {fileID: 0}
+  textBackdrop: {fileID: 0}
   distFromCam: 1.5
 --- !u!1 &8847375139044302984
 GameObject:

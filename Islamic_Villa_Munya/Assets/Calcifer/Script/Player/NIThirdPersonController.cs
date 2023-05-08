@@ -73,12 +73,18 @@ public class NIThirdPersonController : MonoBehaviour
     [SerializeField] private float capsule_height;
     [SerializeField] private float capsule_centre;
     [SerializeField] private bool isClimbing = false;
+    [Header("Collision")]
+    [SerializeField] private float ray_radius = 0.2f;
+    [SerializeField] private float ray_length = 0.2f;
+    [SerializeField] private PhysicMaterial physic_mat;
 
     private float stand_jump_delay = 0.5f;  //Change depending on the animation used
     private float run_jump_delay;
     private float disabled_input_delay;
     private int score = 0;
-    float prev_capsule_height;
+    private float prev_capsule_height;
+    private bool grounded_this_frame = false;
+    private float temp_ray_length;
 
     void Awake() 
     {
@@ -90,6 +96,7 @@ public class NIThirdPersonController : MonoBehaviour
     private void Start()
     {
         //Initialise necessary variables here for player startup
+        temp_ray_length = ray_length;
 
         //Set the capsule collider to variables that will change when crouching
         capsule.height = capsule_height;
@@ -268,6 +275,7 @@ public class NIThirdPersonController : MonoBehaviour
             //Handle drag
             if (grounded && !hard_landing)
             {
+                ray_length = temp_ray_length;
                 //If the player speed is above the maximum velocity then call this function
                 ControlPlayerVel();
                 //Prevent moving in the air by preventing player input updates during a jump
@@ -317,7 +325,7 @@ public class NIThirdPersonController : MonoBehaviour
             else
             {
                 rb.drag = 0f;
-                
+                ray_length = 0.1f;
                 //Want to shrink the capsule collider when the player is in the air
                 //float new_height = 0.9f;
                 //capsule.height = new_height;
@@ -334,8 +342,9 @@ public class NIThirdPersonController : MonoBehaviour
 
                 //capsule.height = prev_capsule_height;
                 //HardLandCapsuleCollider();
-
+                
                 StartCoroutine(NoRotation(disable_input));
+
             }
             else
             {
@@ -372,16 +381,16 @@ public class NIThirdPersonController : MonoBehaviour
             PlayerMovement();
         }
 
-        if(rb.velocity.y <= 0)
-        {
-            //Check for obstacles as the player falls so they don't get stuck
-            CheckForObstacles();
-        }
-        if(rb.velocity.y == 0)
-        {
-            grounded = true;
-            CheckForObstacles();
-        }
+        // if(rb.velocity.y <= 0)
+        // {
+        //     //Check for obstacles as the player falls so they don't get stuck
+        //     CheckForObstacles();
+        // }
+        // if(rb.velocity.y == 0)
+        // {
+        //     grounded = true;
+        //     CheckForObstacles();
+        // }
     }
 
     private bool CheckForObstacles()
@@ -424,38 +433,68 @@ public class NIThirdPersonController : MonoBehaviour
 
     private void CheckFloor()
     {   
-        RaycastHit ground_hit;
-        Vector3 ray_origin = feet_pos.transform.position;
-        Vector3 ray_dir = Vector3.down;
-        //float ray_length = 0.2f;
-        float ray_down = 0.2f;
+        // RaycastHit ground_hit;
+        // //Vector3 ray_origin = feet_pos.transform.position;
+        // Vector3 ray_dir = Vector3.down;
+        // //float ray_length = 0.2f;
+        // float ray_down = 0.2f;
 
-        if(Physics.Raycast(feet_pos.position, transform.TransformDirection(Vector3.down), out ground_hit, ray_down))                                                                                                                                                                                                                                                                                                                                                            
+        int num_rays = 8;
+        float angle_interval = 360 / num_rays;
+        Vector3[] ray_origins = new Vector3[num_rays];
+        Vector3 centre_ray_pos = feet_pos.transform.position;
+        //float radius = 0.2f;
+
+        bool any_hit = false;
+
+        for(int i = 0; i < num_rays; i++)
         {
-            grounded = true;
-            Debug.DrawRay(ray_origin, ray_dir, Color.green);
+            //Get angle for this ray
+            float angle = i * angle_interval;
+
+            if(angle == 0)
+            {
+                //Calculate the direction for this ray based on the angle
+                Vector3 dir = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
+
+                //Calculate the origin of new ray based on centre ray
+                Vector3 origin = centre_ray_pos + 0 * dir;
+
+                ray_origins[i] = origin;
+            }
+            else
+            {
+                //Calculate the direction for this ray based on the angle
+                Vector3 dir = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
+
+                //Calculate the origin of new ray based on centre ray
+                Vector3 origin = centre_ray_pos + ray_radius * dir;
+
+                ray_origins[i] = origin;
+                // Debug.DrawRay(origin, Vector3.down * ray_length, Color.green);
+
+            }
         }
-        else
+
+        foreach (Vector3 origin in ray_origins)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(origin, Vector3.down, out hit, ray_length))
+            {
+                // if any ray hits the ground, the player is considered grounded
+                grounded = true;
+                any_hit = true;
+                Debug.DrawRay(origin, Vector3.down * ray_length, Color.green);
+            }
+            else
+            {
+                Debug.DrawRay(origin, Vector3.down * ray_length, Color.red);
+            }
+        }
+
+        if(!any_hit)
         {
             grounded = false;
-
-            //CheckForObstacles();
-
-            //  // Check if there are any obstacles in front of or behind the player
-            // Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-            // foreach(Vector3 direction in directions)
-            // {
-            //     if(Physics.Raycast(ray_origin, direction, out RaycastHit hit, ray_length, is_everything))
-            //     {
-            //         Debug.DrawRay(ray_origin, direction * hit.distance, Color.red);
-
-            //         rb.AddForce(-direction * 0.5f, ForceMode.Impulse);
-            //     }
-            //     else
-            //     {
-            //         Debug.DrawRay(ray_origin, direction * ray_length, Color.green);
-            //     }
-            // }
         }
     }
 
@@ -480,6 +519,11 @@ public class NIThirdPersonController : MonoBehaviour
                 pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
                 Debug.Log("No longer joined");
         }
+
+        if(other.gameObject.tag == "Slope")
+        {
+            physic_mat.dynamicFriction = 0f;
+        }
     }
 
     private void OnCollisionStay(Collision other)
@@ -497,6 +541,13 @@ public class NIThirdPersonController : MonoBehaviour
             pop_obj = other.gameObject;
             pop_obj.GetComponent<ObjectController>().ToggleJoint(pushing, rb);
         }
+
+        //Stop the player sliding on the slopes
+        if(other.gameObject.tag == "Slope")
+        {
+            physic_mat.dynamicFriction = 1f;
+        }
+
 
         // if(other.gameObject.tag == "PushOrPull")
         // {

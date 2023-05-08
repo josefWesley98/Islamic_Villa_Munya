@@ -53,7 +53,6 @@ public class Key : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(GameManager.GetHaveKey());
         transform.Rotate(Vector3.up, 60 * Time.deltaTime, Space.World);
         transform.position = new Vector3(transform.position.x, startY + Mathf.Sin(Time.time * 1.5f) * 0.15f, transform.position.z);
     }

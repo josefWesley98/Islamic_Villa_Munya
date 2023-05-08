@@ -34,12 +34,10 @@ public class ObjectController : MonoBehaviour
         {
             Debug.DrawRay(transform.position, Vector3.down, Color.cyan);
             grounded = true;
-            Debug.Log("Object on ground");
         }
         else
         {
             grounded = false;
-            Debug.Log("Object not on ground");
         }
     }
 
@@ -52,7 +50,6 @@ public class ObjectController : MonoBehaviour
             {
                 //The joint will be destroyed.
                 other.gameObject.GetComponent<NIThirdPersonController>().setPushing(false);
-                Debug.Log("Object destroyed");
             }   
         }
     }
@@ -80,7 +77,7 @@ public class ObjectController : MonoBehaviour
 
             if(!grounded)
             {
-                Debug.Log("Object joint destroyed");
+                
             }
             //rb.constraints &= ~RigidbodyConstraints.FreezeRotation;
         }
