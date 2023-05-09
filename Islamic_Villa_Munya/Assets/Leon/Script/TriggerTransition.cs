@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 public class TriggerTransition : MonoBehaviour
 {
-    public bool transitionActivated = false;
+    //public bool transitionActivated = false;
     Animator anim;
 
     ParticleSystem p, p2;
@@ -15,6 +15,9 @@ public class TriggerTransition : MonoBehaviour
     AudioSource doorSource, portalSource;
 
     AudioMixer mixer;
+
+    bool open = false;
+
     void Start()
     {
         mixer = Resources.Load("NewAudioMixer") as AudioMixer;
@@ -27,6 +30,7 @@ public class TriggerTransition : MonoBehaviour
         portalSource = gameObject.AddComponent<AudioSource>();
         portalSource.clip = portalSound;
         portalSource.spatialBlend = 1f;
+        portalSource.loop = true;
         portalSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
 
         anim = GetComponent<Animator>();
@@ -41,32 +45,44 @@ public class TriggerTransition : MonoBehaviour
         if (c.tag == "Player")
         {
             Activate();
-            transitionActivated = true;
-
-            rb = c.GetComponentInChildren<Rigidbody>();
         }
     }
 
-    void Update()
+    void OnTriggerExit(Collider c)
     {
-        //if (rb != null)
-            //rb.AddForce(Vector3.forward * 1000);
+        if (c.tag == "Player")
+        {
+            Deactivate();
+        }
     }
 
     void Activate()
     {
-        if(transitionActivated)
-            return;
-
+        open = true;
         p.Play();
         p2.Play();
+        p.gameObject.SetActive(open);
         Invoke("Anim", 0.2f);
 
         doorSource.Play();
+        portalSource.Play();
+    }
+
+    void Deactivate()
+    {
+        open = false;
+        p.Stop();
+        p2.Stop();
+        p.gameObject.SetActive(open);
+        Invoke("Anim", 0.2f);
+
+        doorSource.Stop();
+        portalSource.Stop();
+        Anim();
     }
 
     void Anim()
     {
-        anim.SetTrigger("StartAnim");
+        anim.SetBool("Open", open);
     }
 }
