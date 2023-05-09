@@ -158,6 +158,13 @@ public class PlayerAudio : MonoBehaviour
             footstepTimer = 0f;
             //print(rng);
         }
+
+
+        if (upClimbingScript.GetDoAudio())
+        {
+            Climb();
+            upClimbingScript.SetDoAudio(false);
+        }
     }
 
     void SetUp()
@@ -217,8 +224,6 @@ public class PlayerAudio : MonoBehaviour
             climbSources.Add(a);
         }
 
-        upClimbingScript.eventClimbSound.AddListener(Climb);
-
         setupComplete = true;
     }
 
@@ -242,7 +247,7 @@ public class PlayerAudio : MonoBehaviour
     void Climb()
     {
         int rng = Random.Range(0, climbClips.Count());
-        climbSources[rng].pitch = (Random.Range(0.8f, 1.2f));
+        climbSources[rng].pitch = (Random.Range(0.5f, 1.5f));
         climbSources[rng].Play();
 
         print("PLAYED CLIMBING SOUND");

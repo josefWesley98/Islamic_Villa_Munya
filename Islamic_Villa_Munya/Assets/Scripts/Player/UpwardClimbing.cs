@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Events;
 
 public class UpwardClimbing : MonoBehaviour
 {
@@ -94,15 +93,11 @@ public class UpwardClimbing : MonoBehaviour
     private float movingY = 0.0f;
 
 //Leon audio code
-    public UnityEvent eventClimbSound;
+    bool doAudio;
 
     void Start()
     {
-        if (eventClimbSound == null)
-            eventClimbSound = new UnityEvent();
-
         m_Started = true;
-//Leon end
 
         // initaise grabable spots.
         for(int i = 0; i < 150; i++)
@@ -123,6 +118,7 @@ public class UpwardClimbing : MonoBehaviour
 
     void Update()
     {
+        //eventClimbSound.Invoke();
         // movement.
         movementDirection.x = climbingScript.GetMovementDirectionX();
         movementDirection.y = climbingScript.GetMovementDirectionY();
@@ -496,7 +492,7 @@ public class UpwardClimbing : MonoBehaviour
             if(interpolateAmountRightArm >= 1.0f)
             {
                 //Leon audio code
-                //eventClimbSound.Invoke();
+                doAudio = true;
                 //Leon end
 
                 movingLeftHand = true;
@@ -563,7 +559,7 @@ public class UpwardClimbing : MonoBehaviour
             if(interpolateAmountLeftArm >= 1.0f)
             {
                 //Leon audio code
-                //eventClimbSound.Invoke();
+                doAudio = true;
                 //Leon end
 
                 interpolateAmountLeftArm = 0.0f;
@@ -671,4 +667,13 @@ public class UpwardClimbing : MonoBehaviour
         currentHandSpotLeft = null;
     }
 
+    public bool GetDoAudio()
+    {
+        return doAudio;
+    }
+
+    public void SetDoAudio(bool set)
+    {
+        doAudio = set;
+    }
 }
