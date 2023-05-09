@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3028005538756620395}
   - component: {fileID: 3028005538756620388}
+  - component: {fileID: 620096592578727192}
   m_Layer: 0
   m_Name: PlayerAudio
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3028005538756620388
 MonoBehaviour:
@@ -55,6 +56,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 41089b8e4ebfd04448f4e3bb10d1f9b9, type: 3}
   - {fileID: 8300000, guid: ad2bf0d0e7195264cbd069dcee4b079f, type: 3}
   stepCarpetVolume: 0.25
+  playerBoy: {fileID: 0}
+  playerGirl: {fileID: 0}
   footstepTimeWalk: 0.48
   footstepTimeRun: 0.35
   groundLayers:
@@ -62,3 +65,11 @@ MonoBehaviour:
     m_Bits: 64
   carpetMaterials:
   - carpetNew_graph_0_material (Instance)
+--- !u!81 &620096592578727192
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028005538756620389}
+  m_Enabled: 1
