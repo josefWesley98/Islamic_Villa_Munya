@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Events;
+
 public class UpwardClimbing : MonoBehaviour
 {
     [Header("Scrips")]
@@ -91,9 +93,16 @@ public class UpwardClimbing : MonoBehaviour
     private float movingX = 0.0f;
     private float movingY = 0.0f;
 
+//Leon audio code
+    public UnityEvent eventClimbSound;
+
     void Start()
     {
+        if (eventClimbSound == null)
+            eventClimbSound = new UnityEvent();
+
         m_Started = true;
+//Leon end
 
         // initaise grabable spots.
         for(int i = 0; i < 150; i++)
@@ -486,6 +495,10 @@ public class UpwardClimbing : MonoBehaviour
 
             if(interpolateAmountRightArm >= 1.0f)
             {
+                //Leon audio code
+                //eventClimbSound.Invoke();
+                //Leon end
+
                 movingLeftHand = true;
                 movingRightHand = false;
                 idleHandRInterpolate = 0.0f;
@@ -549,6 +562,10 @@ public class UpwardClimbing : MonoBehaviour
             // when the slerp is complete reset values and set the right hand to move now and tell the find hand hold function it needs a new hand hold for this hand.
             if(interpolateAmountLeftArm >= 1.0f)
             {
+                //Leon audio code
+                //eventClimbSound.Invoke();
+                //Leon end
+
                 interpolateAmountLeftArm = 0.0f;
 
                 movingLeftHand = false;
