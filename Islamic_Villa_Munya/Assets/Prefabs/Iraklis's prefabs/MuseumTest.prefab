@@ -592,7 +592,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1740
+  m_VersionIndex: 1767
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -733,10 +733,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  artifactInfo: 
-  artifactInfoEasy: Easy
-  artifactInfoMedium: Medium
-  artifactInfoHard: Hard
+  artifactInfo: lost artifact go find me
+  artifactInfoEasy: Oh no, this artefact is missing and needs to be found!
+  artifactInfoMedium: Oh no, The this artefact has gone missing! We need to find
+    it!
+  artifactInfoHard: Oh no, The this artefact has gone missing! We need to find it!
   scale: {x: 0.35, y: 0.35, z: 0.35}
   rotation: {x: 0, y: 0, z: 0}
   positinOffset: {x: 0, y: 0, z: 0}
@@ -1379,7 +1380,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1734
+  m_VersionIndex: 1761
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1579,9 +1580,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactInfo: Oh no, this artifact is missing! Someone needs to find it and return
     it to its rightful place.
-  artifactInfoEasy: Easy
-  artifactInfoMedium: Medium
-  artifactInfoHard: Hard
+  artifactInfoEasy: Oh no, this artifact is missing! Someone needs to find it and
+    return it to its rightful place.
+  artifactInfoMedium: Oh no, this artifact is missing! Someone needs to find it and
+    return it to its rightful place.
+  artifactInfoHard: Oh no, this artifact is missing! Someone needs to find it and
+    return it to its rightful place.
   scale: {x: 0.35, y: 0.35, z: 0.35}
   rotation: {x: 0, y: 0, z: 0}
   positinOffset: {x: 0, y: 4.82, z: 0}
@@ -2680,7 +2684,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1734
+  m_VersionIndex: 1761
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3148,7 +3152,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2241
+  m_VersionIndex: 2268
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4059,7 +4063,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1737
+  m_VersionIndex: 1764
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4612,7 +4616,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1731
+  m_VersionIndex: 1758
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4845,6 +4849,7 @@ GameObject:
   - component: {fileID: 521892596}
   - component: {fileID: 521892598}
   - component: {fileID: 521892597}
+  - component: {fileID: 1599840257}
   m_Layer: 0
   m_Name: ArtefactBasin
   m_TagString: Untagged
@@ -4884,10 +4889,12 @@ MonoBehaviour:
   artefact: {fileID: 8592429395007427457}
   empty_pedestal: {fileID: 41206349}
   artefact_id: 1
-  renderer: {fileID: 0}
-  IO: {fileID: 0}
-  transparentMat: {fileID: 0}
-  normalMat: {fileID: 0}
+  renderer: {fileID: 2935393946574951011}
+  IO: {fileID: 761681579}
+  transparentMat: {fileID: 2100000, guid: 43f4a83b670a5394887e5d4d13bff405, type: 2}
+  normalMat: {fileID: 2100000, guid: d25408046ecda1449a1ee10c2e064020, type: 2}
+  collider: {fileID: 761681578}
+  paintingRenderer: {fileID: 0}
 --- !u!65 &521892597
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4901,6 +4908,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.6490718, y: 1, z: 1.5235031}
   m_Center: {x: -0.42855927, y: 3.8941947e-10, z: 0.04541051}
+--- !u!114 &1599840257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521892595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2935393946574951011}
 --- !u!1 &527174005
 GameObject:
   m_ObjectHideFlags: 0
@@ -10560,7 +10580,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1719
+  m_VersionIndex: 1746
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -12367,7 +12387,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1734
+  m_VersionIndex: 1761
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -14007,7 +14027,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1734
+  m_VersionIndex: 1761
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15591,7 +15611,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1737
+  m_VersionIndex: 1764
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18227,7 +18247,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2005
+  m_VersionIndex: 2032
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18987,7 +19007,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1984
+  m_VersionIndex: 2011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -21980,8 +22000,9 @@ Transform:
   - {fileID: 2875106855291225524}
   - {fileID: 1168247233912726391}
   - {fileID: 4531208881220708623}
+  - {fileID: 5188926676110712448}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0.197, y: -90.358, z: 0.481}
 --- !u!1 &676913635502505763
 GameObject:
@@ -22810,6 +22831,7 @@ GameObject:
   - component: {fileID: 85030332068156361}
   - component: {fileID: 4148382650808935672}
   - component: {fileID: 8934887482391002961}
+  - component: {fileID: 8934887482391002962}
   m_Layer: 0
   m_Name: ArtefactVolute
   m_TagString: Untagged
@@ -22849,10 +22871,12 @@ MonoBehaviour:
   artefact: {fileID: 6989363502961027793}
   empty_pedestal: {fileID: 86488775}
   artefact_id: 0
-  renderer: {fileID: 0}
-  IO: {fileID: 0}
-  transparentMat: {fileID: 0}
-  normalMat: {fileID: 0}
+  renderer: {fileID: 5406834125908284352}
+  IO: {fileID: 1913533030}
+  transparentMat: {fileID: 2100000, guid: b0c255f27aeefb6478e24e52c7187cb9, type: 2}
+  normalMat: {fileID: 2100000, guid: d627a245d4251604d99e8fd9a97d7e47, type: 2}
+  collider: {fileID: 1913533029}
+  paintingRenderer: {fileID: 0}
 --- !u!65 &8934887482391002961
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22866,6 +22890,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8934887482391002962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749222678216182131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 5406834125908284352}
 --- !u!1 &755895363341989179
 GameObject:
   m_ObjectHideFlags: 0
@@ -24664,7 +24701,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1695
+  m_VersionIndex: 1722
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -29557,6 +29594,7 @@ GameObject:
   - component: {fileID: 216814434934241680}
   - component: {fileID: 1206232383}
   - component: {fileID: 1206232384}
+  - component: {fileID: 44447549}
   m_Layer: 0
   m_Name: ceramic_vase_01_2k
   m_TagString: InteractObject
@@ -29665,6 +29703,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 1730151795977689157}
   pedestalID: 1
+--- !u!114 &44447549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730151795977689157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 216814434934241680}
 --- !u!1 &1760935399121853072
 GameObject:
   m_ObjectHideFlags: 0
@@ -29914,7 +29965,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1701
+  m_VersionIndex: 1728
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31904,7 +31955,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32816,7 +32867,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1707
+  m_VersionIndex: 1734
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34519,7 +34570,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2244
+  m_VersionIndex: 2271
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -35439,6 +35490,7 @@ GameObject:
   - component: {fileID: 4287486394652442845}
   - component: {fileID: 1354285397}
   - component: {fileID: 1354285398}
+  - component: {fileID: 1650409840}
   m_Layer: 0
   m_Name: ceramic_vase_02_2k
   m_TagString: InteractObject
@@ -35546,6 +35598,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 2342094289199948040}
   pedestalID: 5
+--- !u!114 &1650409840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2342094289199948040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 4287486394652442845}
 --- !u!1 &2348558732242651714
 GameObject:
   m_ObjectHideFlags: 0
@@ -35833,6 +35898,7 @@ GameObject:
   - component: {fileID: 4186536892581372329}
   - component: {fileID: 1720781017}
   - component: {fileID: 1720781018}
+  - component: {fileID: 308643302}
   m_Layer: 0
   m_Name: brass_vase_01_2k
   m_TagString: InteractObject
@@ -35939,6 +36005,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 2385057802651353212}
   pedestalID: 2
+--- !u!114 &308643302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2385057802651353212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 4186536892581372329}
 --- !u!1 &2387414736103185762
 GameObject:
   m_ObjectHideFlags: 0
@@ -37868,7 +37947,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1701
+  m_VersionIndex: 1728
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -40705,7 +40784,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -41157,6 +41236,7 @@ GameObject:
   - component: {fileID: 3651772112263607799}
   - component: {fileID: 1543080954}
   - component: {fileID: 1543080955}
+  - component: {fileID: 837117091}
   m_Layer: 0
   m_Name: antique_ceramic_vase_01_2k
   m_TagString: InteractObject
@@ -41263,6 +41343,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 3003143471000835106}
   pedestalID: 7
+--- !u!114 &837117091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3003143471000835106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 3651772112263607799}
 --- !u!1 &3021592432101532121
 GameObject:
   m_ObjectHideFlags: 0
@@ -41620,6 +41713,7 @@ GameObject:
   - component: {fileID: 3533815353663492115}
   - component: {fileID: 1580717591}
   - component: {fileID: 1580717592}
+  - component: {fileID: 1377269088}
   m_Layer: 0
   m_Name: carved_wooden_elephant_2k
   m_TagString: InteractObject
@@ -41726,6 +41820,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 3029337222806548934}
   pedestalID: 4
+--- !u!114 &1377269088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029337222806548934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 3533815353663492115}
 --- !u!1 &3030756403601597538
 GameObject:
   m_ObjectHideFlags: 0
@@ -44112,7 +44219,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1710
+  m_VersionIndex: 1737
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -44874,7 +44981,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1689
+  m_VersionIndex: 1716
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -46112,7 +46219,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1996
+  m_VersionIndex: 2023
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -47248,7 +47355,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1950
+  m_VersionIndex: 1977
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -48666,7 +48773,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1984
+  m_VersionIndex: 2011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -49992,7 +50099,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1981
+  m_VersionIndex: 2008
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -50807,7 +50914,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2005
+  m_VersionIndex: 2032
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -51565,6 +51672,7 @@ GameObject:
   - component: {fileID: 536191932407918043}
   - component: {fileID: 2347528730551408913}
   - component: {fileID: 1252165743}
+  - component: {fileID: 2017003568}
   m_Layer: 0
   m_Name: spinning_wheel_01_2k
   m_TagString: Untagged
@@ -51650,6 +51758,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.004894, y: 0.01024857, z: 0.00966221}
   m_Center: {x: -0.0002458519, y: -0.00037824688, z: 0.0048321947}
+--- !u!114 &2017003568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4293307589139495108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2347528730551408913}
 --- !u!1 &4308969900896216948
 GameObject:
   m_ObjectHideFlags: 0
@@ -52773,7 +52894,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1795
+  m_VersionIndex: 1822
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -53180,7 +53301,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1707
+  m_VersionIndex: 1734
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -54305,7 +54426,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1990
+  m_VersionIndex: 2017
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -58073,6 +58194,7 @@ GameObject:
   - component: {fileID: 4055739924337942702}
   - component: {fileID: 1720018382643721864}
   - component: {fileID: 6856339331070237201}
+  - component: {fileID: 2272685976873785313}
   m_Layer: 0
   m_Name: pCube746 (1)
   m_TagString: Untagged
@@ -58088,7 +58210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5136482158603774016}
   m_LocalRotation: {x: 0.000000005271886, y: 0.70710576, z: 0.000000007450581, w: 0.7071079}
-  m_LocalPosition: {x: -12.221, y: 0, z: 0.703}
+  m_LocalPosition: {x: -12.221, y: -0.036, z: 0.703}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -58145,6 +58267,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2272685976873785313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5136482158603774016}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.30000016, y: 1.18737, z: 1.7289064}
+  m_Center: {x: 0.0000019073486, y: 0.0000009536743, z: 0}
 --- !u!1 &5157369784231891973
 GameObject:
   m_ObjectHideFlags: 0
@@ -60902,7 +61037,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2011
+  m_VersionIndex: 2038
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -61896,7 +62031,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1999
+  m_VersionIndex: 2026
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -62530,7 +62665,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -63532,7 +63667,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -64651,7 +64786,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1707
+  m_VersionIndex: 1734
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -67265,7 +67400,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -70655,7 +70790,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1938
+  m_VersionIndex: 1965
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -71275,7 +71410,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1716
+  m_VersionIndex: 1743
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -72916,7 +73051,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1981
+  m_VersionIndex: 2008
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -74193,7 +74328,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1710
+  m_VersionIndex: 1737
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -74841,7 +74976,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1701
+  m_VersionIndex: 1728
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -77104,7 +77239,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1695
+  m_VersionIndex: 1722
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -77870,9 +78005,26 @@ MonoBehaviour:
     decorated with birds and a\r\nlion head. The exterior surface of the volute's
     roll is ornamented with a scrolling vine and flower motif and incised rope border.
     The flowers are star-shaped and have\r\nsix petals decorated in a chevron pattern."
-  artifactInfoEasy: Easy
-  artifactInfoMedium: Medium
-  artifactInfoHard: Hard
+  artifactInfoEasy: "\u2018In the year 1911, a group of archaeologists discovered
+    some fascinating objects while digging at the villa al-Rummaniyya. \n\nThis object
+    is something called the volute.\r\nThey also found part of a large column, called
+    a capital. Volutes were commonly found at the top of capitals on the corners.
+    All of the artefacts the archaeologists found were made out of white or grey
+    marble. This means that the decorations in the villa al-Rummaniyya was rich.
+    \u2019\r\n"
+  artifactInfoMedium: "\u2018In 1911, the remains of the luxurious villa known as
+    al-Rummaniyya were excavated by a group of archaeologists. They found six fragments,
+    one of the most interesting being the volute. It is a spiral-shaped decorative
+    piece.\r\n\nThe other fragments include a piece of a large column called a capital.
+    The volute was featured on the corners at the top of the capital. All of the
+    fragments were sculpted from white or grey marble, indicating the wealth of the
+    decoration at al-Rummaniyya.\u2019\r\n"
+  artifactInfoHard: "\u2018The volute was first discovered in 1911 when excavating
+    the villa al-Rummaniyya. It was 1 of six fragments uncovered. The other fragments
+    included a part of a column capital, an epigraphic fragment which has since been
+    lost, and three rectangular segments originally from larger friezes or borders.\n\r\nAll
+    fragments are carved from white or grey marble, indicating the adornments of
+    al-Rummaniyya was rich.\u2019\r\n"
   scale: {x: 0.35, y: 0.35, z: 0.35}
   rotation: {x: 45, y: -90, z: 0}
   positinOffset: {x: 0, y: 0.1, z: 0}
@@ -78667,7 +78819,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1987
+  m_VersionIndex: 2014
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -79415,6 +79567,7 @@ GameObject:
   - component: {fileID: 1923365748606645640}
   - component: {fileID: 4070314987118695968}
   - component: {fileID: 4674164884785656788}
+  - component: {fileID: 1647261320}
   m_Layer: 0
   m_Name: pCube746 (4)
   m_TagString: Untagged
@@ -79487,6 +79640,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1647261320
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123585230706907074}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.38085502, y: 1.18737, z: 2.7756908}
+  m_Center: {x: 0.040425498, y: 0.0000009537487, z: 0.045070287}
 --- !u!1 &7131022402625421229
 GameObject:
   m_ObjectHideFlags: 0
@@ -80504,7 +80670,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -84678,6 +84844,7 @@ GameObject:
   - component: {fileID: 8181239396620151635}
   - component: {fileID: 849133454}
   - component: {fileID: 849133455}
+  - component: {fileID: 673788533}
   m_Layer: 0
   m_Name: brass_vase_03_2k
   m_TagString: InteractObject
@@ -84784,6 +84951,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 7676778720511003270}
   pedestalID: 3
+--- !u!114 &673788533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7676778720511003270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 8181239396620151635}
 --- !u!1 &7684828244917709290
 GameObject:
   m_ObjectHideFlags: 0
@@ -87064,6 +87244,7 @@ GameObject:
   - component: {fileID: 5857472655324958706}
   - component: {fileID: 3515146339409154377}
   - component: {fileID: 2542916966460215494}
+  - component: {fileID: 994023648529046911}
   m_Layer: 0
   m_Name: pCube746 (2)
   m_TagString: Untagged
@@ -87080,7 +87261,7 @@ Transform:
   m_GameObject: {fileID: 7898023015225944987}
   m_LocalRotation: {x: 0.000000016647391, y: -0.00000035762787, z: -0.0000000041909516,
     w: 1}
-  m_LocalPosition: {x: -14.845, y: 0, z: -2.059}
+  m_LocalPosition: {x: -14.845, y: -0.076, z: -2.059}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87137,6 +87318,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &994023648529046911
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7898023015225944987}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.30000016, y: 1.18737, z: 1.728906}
+  m_Center: {x: -0.0000076293945, y: 0.0000009536743, z: -0.0000019073486}
 --- !u!1 &7901573416439580564
 GameObject:
   m_ObjectHideFlags: 0
@@ -87578,7 +87772,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1698
+  m_VersionIndex: 1725
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -90608,7 +90802,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1987
+  m_VersionIndex: 2014
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -91378,7 +91572,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1713
+  m_VersionIndex: 1740
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -95153,6 +95347,7 @@ GameObject:
   - component: {fileID: 7834961389886910573}
   - component: {fileID: 1495934903}
   - component: {fileID: 1495934904}
+  - component: {fileID: 2144392288}
   m_Layer: 0
   m_Name: wooden_bowl_01_2k
   m_TagString: InteractObject
@@ -95259,6 +95454,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 8627669484778525112}
   pedestalID: 6
+--- !u!114 &2144392288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627669484778525112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 7834961389886910573}
 --- !u!1 &8630493917758529023
 GameObject:
   m_ObjectHideFlags: 0
@@ -95636,7 +95844,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1704
+  m_VersionIndex: 1731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -98310,7 +98518,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1698
+  m_VersionIndex: 1725
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -98749,7 +98957,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1716
+  m_VersionIndex: 1743
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -99022,6 +99230,7 @@ GameObject:
   - component: {fileID: 5432628887612276858}
   - component: {fileID: 5780087768279343175}
   - component: {fileID: 1858861566635845612}
+  - component: {fileID: 1647261321}
   m_Layer: 0
   m_Name: pCube746 (3)
   m_TagString: Untagged
@@ -99095,6 +99304,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1647261321
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9034748986284807081}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4792747, y: 1.18737, z: 2.7573195}
+  m_Center: {x: -0.13777815, y: 0.0000009537041, z: -0.029648999}
 --- !u!1 &9037608003228389372
 GameObject:
   m_ObjectHideFlags: 0
@@ -101476,8 +101698,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.12739529, y: 1.1897106, z: 1.8534938}
-  m_Center: {x: -0.018839829, y: -0.017447472, z: 0.07703942}
+  m_Size: {x: 0.34127042, y: 1.1897106, z: 1.8534938}
+  m_Center: {x: -0.5334985, y: -0.017447472, z: 0.077039436}
 --- !u!1001 &2398267064608980400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101486,6 +101708,21 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 6800891878915029872}
     m_Modifications:
+    - target: {fileID: 446925433224873439, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 164
+      objectReference: {fileID: 0}
+    - target: {fileID: 446925433224873439, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 446925433224873439, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 597814155441643487, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
         type: 3}
       propertyPath: m_RootOrder
@@ -101541,20 +101778,196 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 970557591891779429, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
     - target: {fileID: 2840443140187192160, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
         type: 3}
       propertyPath: m_Name
       value: PoolFrame
       objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 163
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393584419986314749, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167024417614188359, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb, type: 3}
+--- !u!1 &442228854552266448 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2840443140187192160, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2398267064608980400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &968750848
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442228854552266448}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2029344, y: 3.2637968, z: 3.021484}
+  m_Center: {x: -14.956132, y: 10.268785, z: 55.877228}
+--- !u!114 &968750849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442228854552266448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10fa798c3cbdd5141ad413985f6cbbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artefact: {fileID: 6809314078644810487}
+  empty_pedestal: {fileID: 3184123880672191189}
+  artefact_id: 6
+  renderer: {fileID: 5007852581823648546}
+  IO: {fileID: 1299901002}
+  transparentMat: {fileID: 2100000, guid: 7b57e644412d52d468be6598836cde3f, type: 2}
+  normalMat: {fileID: 2100000, guid: 7b57e644412d52d468be6598836cde3f, type: 2}
+  collider: {fileID: 1299901003}
+  paintingRenderer: {fileID: 5007852581823648546}
 --- !u!4 &2955355309071524463 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 597814155441643487, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
     type: 3}
   m_PrefabInstance: {fileID: 2398267064608980400}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3184123880672191189 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 970557591891779429, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2398267064608980400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1465310427
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3184123880672191189}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.015802668, y: 0.029585855, z: 0.19091393}
+  m_Center: {x: -0.0018205966, y: -0.0044106357, z: 0.08779306}
+--- !u!114 &1465310421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3184123880672191189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: A missing painting of an medieval  villa.
+  artifactInfoEasy: A missing painting of an medieval villa.
+  artifactInfoMedium: A missing painting of an medieval villa.
+  artifactInfoHard: A missing painting of an medieval villa.
+  scale: {x: 54.33333, y: 40.66667, z: 2.333333}
+  rotation: {x: 0, y: 90, z: 0}
+  positinOffset: {x: 0, y: 0.75, z: 0}
+  LookAt: {fileID: 3184123880672191189}
+  pedestalID: 6
+--- !u!23 &5007852581823648546 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7221289265686539922, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2398267064608980400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6809314078644810487 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9167024417614188359, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2398267064608980400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1299901003
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809314078644810487}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.015802668, y: 0.025935723, z: 0.16857457}
+  m_Center: {x: -0.0018205967, y: -0.0025855794, z: 0.07662235}
+--- !u!114 &1299901002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809314078644810487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: A depiction of an medieval villa.
+  artifactInfoEasy: A depiction of an medieval villa.
+  artifactInfoMedium: A depiction of an medieval villa.
+  artifactInfoHard: A depiction of an medieval villa.
+  scale: {x: 54.333332, y: 40.666668, z: 2.3333333}
+  rotation: {x: 0, y: 90, z: 0}
+  positinOffset: {x: 0, y: 0.75, z: 0}
+  LookAt: {fileID: 6809314078644810487}
+  pedestalID: 6
 --- !u!1001 &2832927563027035066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102008,6 +102421,12 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: c92b4fe8d77763045a49769bfb768049, type: 3}
+--- !u!23 &2313011166178984985 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: c92b4fe8d77763045a49769bfb768049,
+    type: 3}
+  m_PrefabInstance: {fileID: 4024215612644317341}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3481946317230686070 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c92b4fe8d77763045a49769bfb768049,
@@ -102054,6 +102473,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 4258587852200469964}
   pedestalID: 9
+--- !u!114 &520297900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4258587852200469964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2313011166178984985}
 --- !u!1001 &4136748694403550948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102387,6 +102819,26 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 6800891878915029872}
     m_Modifications:
+    - target: {fileID: 5049186022638582801, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573661124203456171, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 163
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573661124203456171, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573661124203456171, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6551177755509129116, guid: e7d8afff38d7bbe428da45357784bc4c,
         type: 3}
       propertyPath: m_RootOrder
@@ -102447,14 +102899,276 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtefactFrame
       objectReference: {fileID: 0}
+    - target: {fileID: 8400925431887925166, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 9213737596323747092, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 163
+      objectReference: {fileID: 0}
+    - target: {fileID: 9213737596323747092, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 9213737596323747092, guid: e7d8afff38d7bbe428da45357784bc4c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e7d8afff38d7bbe428da45357784bc4c, type: 3}
+--- !u!1 &1127113739741436645 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5049186022638582801, guid: e7d8afff38d7bbe428da45357784bc4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1465310423
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127113739741436645}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.015802668, y: 0.026956422, z: 0.2022448}
+  m_Center: {x: -0.0018206642, y: -0.0030959267, z: 0.09345905}
+--- !u!114 &1465310422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127113739741436645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: A depiction of an medieval villa.
+  artifactInfoEasy: A depiction of an medieval villa.
+  artifactInfoMedium: A depiction of an medieval villa.
+  artifactInfoHard: A depiction of an medieval villa.
+  scale: {x: 54.333332, y: 40.666668, z: 2.3333333}
+  rotation: {x: 0, y: 0, z: 0}
+  positinOffset: {x: 0, y: -0.65, z: 0}
+  LookAt: {fileID: 1127113739741436645}
+  pedestalID: 4
 --- !u!4 &1395119054442895720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6551177755509129116, guid: e7d8afff38d7bbe428da45357784bc4c,
     type: 3}
   m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1487511179146279728 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6706620293316795844, guid: e7d8afff38d7bbe428da45357784bc4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1666125697630417466 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6821058326186710222, guid: e7d8afff38d7bbe428da45357784bc4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1320132790
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666125697630417466}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2029344, y: 3.2637968, z: 3.021484}
+  m_Center: {x: -14.956132, y: 10.268785, z: 55.877228}
+--- !u!114 &1320132791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666125697630417466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10fa798c3cbdd5141ad413985f6cbbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artefact: {fileID: 1127113739741436645}
+  empty_pedestal: {fileID: 4404543789231040858}
+  artefact_id: 4
+  renderer: {fileID: 1487511179146279728}
+  IO: {fileID: 1465310422}
+  transparentMat: {fileID: 2100000, guid: 7033617e1e2034b419ba400a7986539c, type: 2}
+  normalMat: {fileID: 2100000, guid: 7033617e1e2034b419ba400a7986539c, type: 2}
+  collider: {fileID: 1465310423}
+  paintingRenderer: {fileID: 1487511179146279728}
+--- !u!1 &4404543789231040858 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8400925431887925166, guid: e7d8afff38d7bbe428da45357784bc4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1465310425
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4404543789231040858}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.015802668, y: 0.026255846, z: 0.19473058}
+  m_Center: {x: -0.0018206341, y: -0.0027456402, z: 0.08970193}
+--- !u!114 &1465310424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4404543789231040858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: A missing painting of an medieval  villa.
+  artifactInfoEasy: A missing painting of an medieval  villa.
+  artifactInfoMedium: A missing painting of an medieval  villa.
+  artifactInfoHard: A missing painting of an medieval  villa.
+  scale: {x: 54.33333, y: 40.66667, z: 2.333333}
+  rotation: {x: 0, y: 0, z: 0}
+  positinOffset: {x: 0, y: -0.65, z: 0}
+  LookAt: {fileID: 1127113739741436645}
+  pedestalID: 4
+--- !u!1001 &5730967056960846187
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 2
+    m_TransformParent: {fileID: 6800891878915029872}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4154
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4154
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4154001
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.898663
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.105258
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 39.35353
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.70930684
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.004182249
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70488524
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0017641033
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1147056716517581933, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ae4196cf1690b848855b4c7acdd59ec, type: 2}
+    - target: {fileID: 919132149155446097, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      propertyPath: m_Name
+      value: InfoStand
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_AddedGameObjects: []
+  m_SourcePrefab: {fileID: 100100000, guid: a89bde3e4c8ae2b4cac98fe4f671a024, type: 3}
+--- !u!1 &4848430651379074106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+    type: 3}
+  m_PrefabInstance: {fileID: 5730967056960846187}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &3040975226953875875
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4848430651379074106}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.658371, y: 0.71072406, z: 0.71545917}
+  m_Center: {x: 0.001438277, y: -0.00033074387, z: 0.011070191}
+--- !u!4 &5188926676110712448 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+    type: 3}
+  m_PrefabInstance: {fileID: 5730967056960846187}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6013898374585986046
 PrefabInstance:
@@ -102532,6 +103246,12 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 7159bf49c432fc74b9ebdca2b7010f05, type: 3}
+--- !u!23 &4950649049697859450 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7159bf49c432fc74b9ebdca2b7010f05,
+    type: 3}
+  m_PrefabInstance: {fileID: 6013898374585986046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6124633569253018645 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7159bf49c432fc74b9ebdca2b7010f05,
@@ -102578,6 +103298,19 @@ MonoBehaviour:
   positinOffset: {x: 0, y: 0.1, z: 0}
   LookAt: {fileID: 6896349566941140655}
   pedestalID: 8
+--- !u!114 &2021665273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896349566941140655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 4950649049697859450}
 --- !u!1001 &6355995673093413938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102921,6 +103654,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: HallWayPic
       objectReference: {fileID: 0}
+    - target: {fileID: 3855815042747338057, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855815042747338057, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855815042747338057, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4524230823492212723, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
     - target: {fileID: 7281855569194494086, guid: 1d83ccffc2fe72848ae7816f31d50476,
         type: 3}
       propertyPath: m_RootOrder
@@ -102976,6 +103729,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7315637334234396267, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984193612551302353, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984193612551302353, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984193612551302353, guid: 1d83ccffc2fe72848ae7816f31d50476,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 8.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d83ccffc2fe72848ae7816f31d50476, type: 3}
@@ -102985,6 +103758,132 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7012941343173035273}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &348085158816691042 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7315637334234396267, guid: 1d83ccffc2fe72848ae7816f31d50476,
+    type: 3}
+  m_PrefabInstance: {fileID: 7012941343173035273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1667142583
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348085158816691042}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.014630646, y: 0.016905922, z: 0.1396511}
+  m_Center: {x: -0.00044899996, y: -0.0034530184, z: 0.064971425}
+--- !u!114 &1667142584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348085158816691042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: A missing painting of an medieval  villa.
+  artifactInfoEasy: A missing painting of an medieval  villa.
+  artifactInfoMedium: A missing painting of an medieval  villa.
+  artifactInfoHard: A missing painting of an medieval  villa.
+  scale: {x: 40, y: 56.66667, z: 2.833333}
+  rotation: {x: 0, y: 180, z: 0}
+  positinOffset: {x: 0, y: -0.75, z: 0}
+  LookAt: {fileID: 348085158816691042}
+  pedestalID: 5
+--- !u!23 &4943632394075058991 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2722909238468802086, guid: 1d83ccffc2fe72848ae7816f31d50476,
+    type: 3}
+  m_PrefabInstance: {fileID: 7012941343173035273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5232691384918862930 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3011986665061165403, guid: 1d83ccffc2fe72848ae7816f31d50476,
+    type: 3}
+  m_PrefabInstance: {fileID: 7012941343173035273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1459559485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232691384918862930}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2340566, y: 3.2637959, z: 1.5584295}
+  m_Center: {x: 14.000808, y: 10.269179, z: 55.968834}
+--- !u!114 &1459559484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232691384918862930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10fa798c3cbdd5141ad413985f6cbbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artefact: {fileID: 6889296903987172090}
+  empty_pedestal: {fileID: 348085158816691042}
+  artefact_id: 5
+  renderer: {fileID: 4943632394075058991}
+  IO: {fileID: 2016796106}
+  transparentMat: {fileID: 2100000, guid: 8c0219ed0b7548e4ea60a31805f7827c, type: 2}
+  normalMat: {fileID: 2100000, guid: 8c0219ed0b7548e4ea60a31805f7827c, type: 2}
+  collider: {fileID: 2016796107}
+  paintingRenderer: {fileID: 4943632394075058991}
+--- !u!1 &6889296903987172090 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4524230823492212723, guid: 1d83ccffc2fe72848ae7816f31d50476,
+    type: 3}
+  m_PrefabInstance: {fileID: 7012941343173035273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2016796107
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6889296903987172090}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.01122027, y: 0.017899483, z: 0.17330736}
+  m_Center: {x: -0.0006100969, y: -0.0039497344, z: 0.08179923}
+--- !u!114 &2016796106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6889296903987172090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: 
+  artifactInfoEasy: A depiction of an medieval villa.
+  artifactInfoMedium: A depiction of an medieval villa.
+  artifactInfoHard: A depiction of an medieval villa.
+  scale: {x: 40, y: 56.666668, z: 2.8333333}
+  rotation: {x: 0, y: 180, z: 0}
+  positinOffset: {x: 0, y: -0.75, z: 0}
+  LookAt: {fileID: 6889296903987172090}
+  pedestalID: 5
 --- !u!1001 &7074692821245775922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103001,17 +103900,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 272.87558
+      value: 272
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 388.88724
+      value: 390
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 19.667828
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
@@ -103031,22 +103930,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.709311
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0041822386
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7048811
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0017641279
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
@@ -103056,7 +103955,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a75b5a5239e97424a8cd3186b8f2d64a,
         type: 3}
@@ -103073,6 +103972,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: frame
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a75b5a5239e97424a8cd3186b8f2d64a,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: a75b5a5239e97424a8cd3186b8f2d64a, type: 3}
@@ -103082,6 +103986,46 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7074692821245775922}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7993663332526681443 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a75b5a5239e97424a8cd3186b8f2d64a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7074692821245775922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &8934887482391002968
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7993663332526681443}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0100000035, y: 0.012843872, z: 0.067025125}
+  m_Center: {x: 2.9529368e-10, y: -0.0014219369, z: 0.02865785}
+--- !u!114 &2801057948563883143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7993663332526681443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: '"Hey lady get off of that duck!"'
+  artifactInfoEasy: '"Hey lady get off of that duck!"'
+  artifactInfoMedium: '"Hey lady get off of that duck!"'
+  artifactInfoHard: '"Hey lady get off of that duck!"'
+  scale: {x: 56.666664, y: 81.25, z: 4.166666}
+  rotation: {x: -10, y: -180, z: 0}
+  positinOffset: {x: 0, y: -1.85, z: 0}
+  LookAt: {fileID: 7993663332526681443}
+  pedestalID: 100
 --- !u!1001 &8934887480351967453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105157,6 +106101,93 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: f92a7fe6a382e8443ac65f4cc8bd0bb3, type: 3}
+--- !u!1 &1021004145039243949 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8490495925129843837, guid: f92a7fe6a382e8443ac65f4cc8bd0bb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 8934887482173419216}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &761681578
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021004145039243949}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9500003, y: 0.4, z: 0.95000005}
+  m_Center: {x: -0.0000038146973, y: 0, z: -0.0000014007092}
+--- !u!114 &761681579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021004145039243949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: " \u2018Archaeologists found some old marble water basins from a
+    long time ago. They found them between 1920 and 1950, but they didn't keep track
+    of where each one was found. This means that they don't know exactly where each
+    basin was meant to go. \r\n\nOne of the basins had a piece with pictures of two
+    animal heads on it. The heads looked like dragons! \r\nThey also found another
+    whole basin in a bath area in 1926. They think that it was used as a decoration
+    in the entrance courtyard. This basin was 95cm long, 68cm wide, and 26cm tall.
+    The way it was decorated looked similar to some other things found at a place
+    called Madinat al-Zahra. 20 years after the first basin was found, they discovered
+    another smaller basin.\u2019\r\n"
+  artifactInfoEasy: " \u2018Archaeologists found some old marble water basins from
+    a long time ago. They found them between 1920 and 1950, but they didn't keep
+    track of where each one was found. This means that they don't know exactly where
+    each basin was meant to go. \r\n\nOne of the basins had a piece with pictures
+    of two animal heads on it. The heads looked like dragons! \r\n\nThey also found
+    another whole basin in a bath area in 1926. They think that it was used as a
+    decoration in the entrance courtyard. This basin was 95cm long, 68cm wide, and
+    26cm tall. The way it was decorated looked similar to some other things found
+    at a place called Madinat al-Zahra. 20 years after the first basin was found,
+    they discovered another smaller basin.\u2019\r\n"
+  artifactInfoMedium: "\u2018Between 1920 and 1950, archaeologists found several
+    marble water basins, but they did not keep records of their exact locations,
+    making it impossible to determine the function of each basin within the architectural
+    or garden space. \r\n\nOne of these basins featured a marble fragment with inscriptions
+    and animal imagery that likely belonged to a rectangular fountain basin. The
+    fragment had the heads of two animals with almond-shaped eyes, block snouts,
+    and sharp teeth, which the Spanish archaeologist Velazquez Bosco describes as
+    dragons.\r\n\nOne of the basins was found intact in 1926 by workers and may have
+    been displayed in the entrance courtyard of a bath complex. Measuring 95 x 68
+    x 26cm, the basin design shares some resemblance to motifs found on capitals
+    discovered at the congregational mosque of Madinat al-Zahra. A second basin,
+    albeit smaller, was found 20 years after the first.\u2019"
+  artifactInfoHard: "\u2018Marble water basins were unearthed between 1920 and 1950.
+    Since archaeologists did not mark where these were found, it is impossible to
+    determine what the relationship of each basin to its architectural or garden
+    space may have been.\r\nVelazquez Bosco found a marble fragment bearing animal
+    imagery as well as inscriptions, which likely formed part of a rectangular fountain
+    basin.\r\nAll that survives are the heads of two confronted animals with almond-shaped
+    eyes, block snouts and sharp teeth. Velazquez describes these animals as dragons.\r\nAn
+    entire basin was found by workers in 1926 in what could be a bath complex. It
+    is thought this basin may have been displayed in the bath\u2019s entrance courtyard.\r\nThe
+    basin is measured as 95 x 68 x 26cm. The design holds some resemblance to motifs
+    on capitals excavated from the congregational mosque at Madinat al-Zahra. A second
+    basin was discovered 20 years after the first, although this one was considerably
+    smaller.\u2019\r\n"
+  scale: {x: 0.35, y: 0.35, z: 0.35}
+  rotation: {x: 0, y: 0, z: 0}
+  positinOffset: {x: 0, y: 0, z: 0}
+  LookAt: {fileID: 8592429395007427457}
+  pedestalID: 1
+--- !u!23 &2935393946574951011 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3223585648763372365, guid: f92a7fe6a382e8443ac65f4cc8bd0bb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 8934887482173419216}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8592429395007427457 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f92a7fe6a382e8443ac65f4cc8bd0bb3,
@@ -105176,27 +106207,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.8638154, y: 1, z: 1.5235031}
   m_Center: {x: -0.02, y: 3.9907266e-10, z: 0.04541051}
---- !u!114 &217584034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8592429395007427457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  artifactInfo: 
-  artifactInfoEasy: Easy
-  artifactInfoMedium: Medium
-  artifactInfoHard: Hard
-  scale: {x: 0.35, y: 0.35, z: 0.35}
-  rotation: {x: 0, y: 0, z: 0}
-  positinOffset: {x: 0, y: 0, z: 0}
-  LookAt: {fileID: 8592429395007427457}
-  pedestalID: 1
 --- !u!4 &8968252001904920891 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f92a7fe6a382e8443ac65f4cc8bd0bb3,
