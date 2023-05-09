@@ -18,9 +18,28 @@ public class PlayerAudio : MonoBehaviour
     List<AudioSource> stepCarpetSources = new List<AudioSource>();
     public float stepCarpetVolume = 0.25f;
 
+    public AudioClip[] jumpClips;
+    List<AudioSource> jumpSources = new List<AudioSource>();
+    public float jumpVolume = 0.25f;
+
+    bool jumping = false;
+
+    public AudioClip[] landClips;
+    List<AudioSource> landSources = new List<AudioSource>();
+    public float landVolume = 0.25f;
+
+    bool landed = false;
+
+    public AudioClip[]  climbClips;
+    List<AudioSource> climbSources = new List<AudioSource>();
+    public float climbVolume = 0.25f;
+
     public Transform playerBoy, playerGirl;
     Transform actualPlayer;
+    Transform actualPlayerPosition;
     NIThirdPersonController pController;
+
+    UpwardClimbing upClimbingScript;
 
     public float footstepTimeWalk = 0.3f;
     public float footstepTimeRun = 0.35f;
@@ -48,33 +67,62 @@ public class PlayerAudio : MonoBehaviour
         else
             Debug.LogError("No player assigned for player audio!");
 
-        transform.parent = actualPlayer.GetChild(0);
-        transform.position = actualPlayer.GetChild(0).position;
+       actualPlayerPosition = actualPlayer.GetChild(0);
+        // = actualPlayer.GetChild(0).position;
 
         pController = actualPlayer.GetChild(0).GetComponentInChildren<NIThirdPersonController>();
+
+        upClimbingScript = actualPlayer.GetComponentInChildren<UpwardClimbing>();
     }
 
     void Start()
     {
         //player = GameObject.FindGameObjectWithTag("Player").transform.GetChild(1).gameObject;
-        Invoke(nameof(FindPlayer), 3f);
-        Invoke(nameof(SetUp), 3f);
+        Invoke(nameof(FindPlayer), 1f);
+        Invoke(nameof(SetUp), 1f);
     }
 
     private void FixedUpdate()
     {
         if (!setupComplete)
-         return;
+            return;
+
+        transform.position = actualPlayerPosition.position;
+
+        //print(pController.GetJumping());
+
+        if (pController.GetJumping())
+        {
+            landed = false;
+
+            if(!jumping)
+            {
+                Jump();
+
+                jumping = true;
+            }
+        }
+        else
+        {
+            jumping = false;
+
+            if (!landed)
+            {
+                Land();
+                landed = true;
+            }
+
+        }
+        
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayers))
+        if (Physics.Raycast(transform.position, Vector3.down * 0.5f, out hit, Mathf.Infinity, groundLayers))
         {
             //if (gameObject == previousFloor)
             //    return;
 
             Debug.DrawRay(transform.position, Vector3.down * hit.distance, Color.yellow);
             //Debug.Log("Did Hit");
-
 
             //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
 
@@ -84,10 +132,11 @@ public class PlayerAudio : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(transform.position, Vector3.down * 1000, Color.white);
             //Debug.Log("Did not Hit");
+            Debug.DrawRay(transform.position, Vector3.down * 1000, Color.white);
         }
     }
+    
     // Update is called once per frame
     void Update()
     {
@@ -101,7 +150,7 @@ public class PlayerAudio : MonoBehaviour
 
         footstepTimer += Time.deltaTime;
 
-        if (footstepTimer > footStepTime && playerStepping)
+        if (footstepTimer > footStepTime && playerStepping && !jumping && !pController.GetIsClimbing())
         {
             int rng = Random.Range(0, stepCarpetClips.Count());
             footstepMaster[Convert.ToInt32(onTile)][rng].pitch = (Random.Range(0.8f, 1.2f));
@@ -138,8 +187,67 @@ public class PlayerAudio : MonoBehaviour
             stepCarpetSources.Add(a);
         }
 
+        for (int i = 0; i < jumpClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = jumpClips[i];
+            a.spatialBlend = 1f;
+            a.volume = jumpVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+            jumpSources.Add(a);
+        }        
+        
+        for (int i = 0; i < landClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = landClips[i];
+            a.spatialBlend = 1f;
+            a.volume = landVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+            landSources.Add(a);
+        }
+
+        for (int i = 0; i < climbClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = climbClips[i];
+            a.spatialBlend = 1f;
+            a.volume = climbVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+            climbSources.Add(a);
+        }
+
+        upClimbingScript.eventClimbSound.AddListener(Climb);
+
         setupComplete = true;
     }
+
+    void Jump()
+    {
+        int rng = Random.Range(0, jumpClips.Count());
+        jumpSources[rng].pitch = (Random.Range(0.8f, 1.2f));
+        jumpSources[rng].Play();
+    }
+
+    void Land()
+    {
+        if (pController.GetIsClimbing())
+            return;
+
+        int rng = Random.Range(0, landClips.Count());
+        landSources[rng].pitch = (Random.Range(0.8f, 1.2f));
+        landSources[rng].Play();
+    }
+
+    void Climb()
+    {
+        int rng = Random.Range(0, climbClips.Count());
+        climbSources[rng].pitch = (Random.Range(0.8f, 1.2f));
+        climbSources[rng].Play();
+
+        print("PLAYED CLIMBING SOUND");
+    }
+
     //Leon fps counter
     void OnGUI()
     {
