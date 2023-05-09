@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
 {   
@@ -58,7 +59,7 @@ public class PlayerInteract : MonoBehaviour
     private bool firstArtefactPlaced = false;
     private bool secondArtefactPlaced = false;
     private bool doSetup = false;
-
+    private bool cursorState = false;
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
     private int artifactToBePlaced = -1;
@@ -158,10 +159,13 @@ public class PlayerInteract : MonoBehaviour
             TurnOnPrimaryArtefact();
             ResetVariables();
             isReset = true;
+            cursorState = false;
             if(isInspecting)
             {
+                
                 if(destroyAfterView)
                 {
+                    displayObject.GetComponent<InteractableObject>().SetVisibilityCheck(true);
                     displayObject.SetActive(false);
                 }
             }
@@ -300,6 +304,16 @@ public class PlayerInteract : MonoBehaviour
     }
     private void Checks()
     {
+        if(cursorState)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         // if out of range of any artifacts the n dont let the player inspect.
         if(!canInspect)
         {
@@ -330,7 +344,6 @@ public class PlayerInteract : MonoBehaviour
     }
     void Update()
     {
-        
         DoInspectionCooldown();
 
         Checks();
@@ -343,14 +356,15 @@ public class PlayerInteract : MonoBehaviour
         // this ends the inspection mechanic and resets the original artifact to its visible state.
         if(isInspecting && !inspectionCooldown)
         {
+            if(destroyAfterView)
+            {
+                displayObject.GetComponent<InteractableObject>().SetVisibilityCheck(true);
+                displayObject.SetActive(false);
+            }
             isInspecting = false;
-
+            cursorState = false;
             if(!isReset)
             {
-                if(destroyAfterView)
-                {
-                    displayObject.SetActive(false);
-                }
                 TurnOnPrimaryArtefact();
                 ResetUI();
                 DestroyClonedArtifact();
@@ -364,6 +378,7 @@ public class PlayerInteract : MonoBehaviour
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
+            
             inspectionCooldown = true;
             isReset = false;
             if(artifactToBePlaced != -1)
@@ -381,6 +396,7 @@ public class PlayerInteract : MonoBehaviour
             }
             else
             {
+                cursorState = true;
                 isReset = false;
                 isInspecting = true;
                 inspectionCooldown = true;

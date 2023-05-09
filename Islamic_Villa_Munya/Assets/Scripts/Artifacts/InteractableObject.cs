@@ -23,7 +23,19 @@ public class InteractableObject : MonoBehaviour
     [SerializeField] private GameObject LookAt;
     [SerializeField] private int pedestalID;
     [SerializeField] private bool destroyAfterView = false;
+    private bool visibilityCheck = false;
 
+    private void Update()
+    {
+        if(visibilityCheck)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    public void SetVisibilityCheck(bool val)
+    {
+        visibilityCheck = val;
+    }
     public bool GetDestroyAfterView()
     {
         return destroyAfterView;
