@@ -85,6 +85,7 @@ public class NIThirdPersonController : MonoBehaviour
     private float prev_capsule_height;
     private bool grounded_this_frame = false;
     private float temp_ray_length;
+    private float temp_ray_radius;
 
     void Awake() 
     {
@@ -97,6 +98,7 @@ public class NIThirdPersonController : MonoBehaviour
     {
         //Initialise necessary variables here for player startup
         temp_ray_length = ray_length;
+        temp_ray_radius = ray_radius;
 
         //Set the capsule collider to variables that will change when crouching
         capsule.height = capsule_height;
@@ -523,6 +525,7 @@ public class NIThirdPersonController : MonoBehaviour
         if(other.gameObject.tag == "Slope")
         {
             physic_mat.dynamicFriction = 0f;
+            ray_radius = temp_ray_radius;
         }
     }
 
@@ -546,6 +549,9 @@ public class NIThirdPersonController : MonoBehaviour
         if(other.gameObject.tag == "Slope")
         {
             physic_mat.dynamicFriction = 1f;
+
+            //Change radius of rays
+            ray_length = 0.1f;
         }
 
 
