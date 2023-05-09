@@ -52,6 +52,7 @@ public class PlayerInteract : MonoBehaviour
     private bool isTouching = false;
     private bool isInspecting = false;
     private bool canInspect = false;
+    private bool destroyAfterView = false;
     private bool inspectionCooldown = false;
     private bool isReset = false;
     private bool firstArtefactPlaced = false;
@@ -100,31 +101,28 @@ public class PlayerInteract : MonoBehaviour
             objRenderer = other.GetComponent<MeshRenderer>();
             
             // sets up all the variables that are declared within each interactable object.
-            scale = other.GetComponent<InteractableObject>().GetScale();
-            rotationForSpawn =  other.GetComponent<InteractableObject>().GetRotation();
-            positionOffset = other.GetComponent<InteractableObject>().GetPositionOffset();
+            scale = interactableObj.GetScale();
+            rotationForSpawn =  interactableObj.GetRotation();
+            positionOffset = interactableObj.GetPositionOffset();
+            destroyAfterView = interactableObj.GetDestroyAfterView();
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
 
-
-            int pedID = other.GetComponent<InteractableObject>().GetPedestalID();
+            int pedID = interactableObj.GetPedestalID();
             
             if(GameManager.GetArtefactToBePlaced(pedID))
             {
                 inspect.gameObject.SetActive(false);
                 placeArtefactUI.SetActive(true);
                 artifactToBePlaced = pedID;
-                Debug.Log("UI enabled for placing object");
             }
             else if(!GameManager.GetArtefactToBePlaced(pedID))
             {
                 artifactToBePlaced = -1;
                 inspect.gameObject.SetActive(true);
                 placeArtefactUI.SetActive(false);
-                Debug.Log("UI disabled for placing object");
             }
 
-          
             isTouching = true;
             canInspect = true;
 
@@ -160,6 +158,13 @@ public class PlayerInteract : MonoBehaviour
             TurnOnPrimaryArtefact();
             ResetVariables();
             isReset = true;
+            if(isInspecting)
+            {
+                if(destroyAfterView)
+                {
+                    displayObject.SetActive(false);
+                }
+            }
         }
         else
         {
@@ -191,8 +196,6 @@ public class PlayerInteract : MonoBehaviour
         infoObject.SetActive(true);
         leaveInspectUI.gameObject.SetActive(true);
         textBackdrop.SetActive(true);
-        //info.text = interactableObj.GetArtifactInfo();
-        
     }
     private void TurnOffPrimaryArtefact()
     {
@@ -220,6 +223,7 @@ public class PlayerInteract : MonoBehaviour
                 objRenderer.enabled = true;
             }
         }
+        
     }
     private void PositionCamera()
     {
@@ -343,6 +347,10 @@ public class PlayerInteract : MonoBehaviour
 
             if(!isReset)
             {
+                if(destroyAfterView)
+                {
+                    displayObject.SetActive(false);
+                }
                 TurnOnPrimaryArtefact();
                 ResetUI();
                 DestroyClonedArtifact();
@@ -353,7 +361,6 @@ public class PlayerInteract : MonoBehaviour
         
             inspectionCooldown = true;
         }
-        //GameManager.SetArtefactCollected(0, true);
         // when inspecting is pressed this activates the inspection mechanic.
         if(canInspect && !inspectionCooldown)
         {
@@ -370,7 +377,6 @@ public class PlayerInteract : MonoBehaviour
                     isInspecting = false;
                     isReset = false;
                     artifactToBePlaced = -1; 
-                    Debug.Log("artefact has been placed.");
                 }
             }
             else

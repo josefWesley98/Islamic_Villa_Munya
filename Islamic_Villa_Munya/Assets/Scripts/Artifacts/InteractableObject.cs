@@ -22,6 +22,12 @@ public class InteractableObject : MonoBehaviour
     [Header("Set the look at object the camera will focus on (generally this object.)")]
     [SerializeField] private GameObject LookAt;
     [SerializeField] private int pedestalID;
+    [SerializeField] private bool destroyAfterView = false;
+
+    public bool GetDestroyAfterView()
+    {
+        return destroyAfterView;
+    }
     public string GetArtifactInfo()
     {
         return artifactInfo;

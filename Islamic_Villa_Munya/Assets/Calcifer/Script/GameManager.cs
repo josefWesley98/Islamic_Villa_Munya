@@ -13,12 +13,12 @@ public enum NamedDoors//names for doors that represent indexes in the door unloc
 /*Cal's script starts here*/
 public class GameManager : MonoBehaviour
 {
-    private const int total_main_artefacts = 7;
+    private const int total_main_artefacts = 11;
     static protected int artefact_counter = 0;
     static protected bool current_artefact_collected = false;
 
-    static protected bool[] artefactToBePlaced = new bool[7] {false, false, false, false, false, false, false};
-    static protected bool[] doOnce = new bool[7] {true, true ,true, true, true, true, true};
+    static protected bool[] artefactToBePlaced = new bool[total_main_artefacts] {false, false, false, false, false, false, false,false,false,false,false};
+    static protected bool[] doOnce = new bool[total_main_artefacts] {true, true ,true, true, true, true, true, true, true, true, true};
 
     //variables
     static protected bool[] player_artefact = new bool[total_main_artefacts];
