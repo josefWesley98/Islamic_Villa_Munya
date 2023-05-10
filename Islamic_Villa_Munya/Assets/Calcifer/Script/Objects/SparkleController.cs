@@ -16,11 +16,10 @@ public class SparkleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 1; i < sparkle_arr.Length; i++)
+        for(int i = 0; i < sparkle_arr.Length; i++)
         {
             if(GameManager.GetArtefactCollected(i))
             {
-                Debug.Log("Collected");
                 sparkle_arr[i].gameObject.SetActive(true);
             }
         }
