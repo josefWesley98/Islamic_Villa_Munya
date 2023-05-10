@@ -706,42 +706,34 @@ public class NPCManager : MonoBehaviour
     }
     private void ResetLastJob(int lastJobIterator, string currentLocation, string lastActivity)
     {
-        Debug.Log("bonk");
         if(currentLocation == A1)
         {
-            Debug.Log("got this far");
             if(lastJobIterator != -1)
             {
-                Debug.Log("got this far 2");
                 if(lastActivity == "Walking")
                 {
                     AI_ID_A1_WP[lastJobIterator] = -1;
                     walkingPointsA1Occupied[lastJobIterator] = false;
-                    Debug.Log("walking reset");
                 }
                 if(lastActivity == "Sitting")
                 {
                     AI_ID_A1_Seating[lastJobIterator] = -1;
                     seatingAreasA1Occupied[lastJobIterator] = false;
-                    Debug.Log("sitting reset");
                 }
                 if(lastActivity == "Idling")
                 {
                     AI_ID_A1_Idle[lastJobIterator] = -1;
                     idleAreasA1Occupied[lastJobIterator] = false;
-                    Debug.Log("idling reset");
                 }
                 if(lastActivity == "Inspecting")
                 {
                     AI_ID_A1_Inspection[lastJobIterator] = -1;
                     inspectionAreasA1Occupied[lastJobIterator] = false;
-                    Debug.Log("inspecting reset");
                 }
                 if(lastActivity == "Socialising")
                 {
                     AI_ID_A1_Social[lastJobIterator] = -1;
                     socialAreasA1Occupied[lastJobIterator] = false;
-                    Debug.Log("social reset");
                 }
             } 
         }
@@ -963,7 +955,34 @@ public class NPCManager : MonoBehaviour
                     newDestination = walkingWaypointsA1[rand].position;
                     AI_ID_A1_WP[rand] = id;
                     wayPointNowInUse = rand;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    if(lastJobIterator != -1)
+                    {
+                        if(lastActivity == "Walking")
+                        {
+                            AI_ID_A1_WP[lastJobIterator] = -1;
+                            walkingPointsA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Sitting")
+                        {
+                            AI_ID_A1_Seating[lastJobIterator] = -1;
+                            seatingAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Idling")
+                        {
+                            AI_ID_A1_Idle[lastJobIterator] = -1;
+                            idleAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Inspecting")
+                        {
+                            AI_ID_A1_Inspection[lastJobIterator] = -1;
+                            inspectionAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Socialising")
+                        {
+                            AI_ID_A1_Social[lastJobIterator] = -1;
+                            socialAreasA1Occupied[lastJobIterator] = false;
+                        }
+                    } 
                     break;
                 }
                 if(iterator >= 100)
@@ -985,7 +1004,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA2Occupied[rand] = true;
                     newDestination = walkingWaypointsA2[rand].position;
                     AI_ID_A2_WP[rand] = id;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1007,7 +1026,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA3Occupied[rand] = true;
                     newDestination = walkingWaypointsA3[rand].position;
                     AI_ID_A3_WP[rand] = id;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1029,7 +1048,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA4Occupied[rand] = true;
                     newDestination = walkingWaypointsA4[rand].position;
                     AI_ID_A4_WP[rand] = id;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1051,7 +1070,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA5Occupied[rand] = true;
                     newDestination = walkingWaypointsA5[rand].position;
                     AI_ID_A5_WP[rand] = id;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1073,7 +1092,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA6Occupied[rand] = true;
                     newDestination = walkingWaypointsA6[rand].position;
                     AI_ID_A6_WP[rand] = id;
-                   ResetLastJob(lastJobIterator, lastActivity, area);
+                   ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1095,7 +1114,7 @@ public class NPCManager : MonoBehaviour
                     walkingPointsA7Occupied[rand] = true;
                     newDestination = walkingWaypointsA1[rand].position;
                     AI_ID_A7_WP[rand] = id;
-                    ResetLastJob(lastJobIterator, lastActivity, area);
+                    ResetLastJob(lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1134,7 +1153,34 @@ public class NPCManager : MonoBehaviour
                     newDestination = socialAreasA1[rand].position;
                     AI_ID_A1_Social[rand] = id;
                     wayPointNowInUse = rand;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    if(lastJobIterator != -1)
+                    {
+                        if(lastActivity == "Walking")
+                        {
+                            AI_ID_A1_WP[lastJobIterator] = -1;
+                            walkingPointsA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Sitting")
+                        {
+                            AI_ID_A1_Seating[lastJobIterator] = -1;
+                            seatingAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Idling")
+                        {
+                            AI_ID_A1_Idle[lastJobIterator] = -1;
+                            idleAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Inspecting")
+                        {
+                            AI_ID_A1_Inspection[lastJobIterator] = -1;
+                            inspectionAreasA1Occupied[lastJobIterator] = false;
+                        }
+                        if(lastActivity == "Socialising")
+                        {
+                            AI_ID_A1_Social[lastJobIterator] = -1;
+                            socialAreasA1Occupied[lastJobIterator] = false;
+                        }
+                    } 
                     break;
                 }
                 if(iterator >= 100)
@@ -1156,7 +1202,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA2Occupied[rand] = true;
                     newDestination = socialAreasA2[rand].position;
                     AI_ID_A2_Social[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1178,7 +1224,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA3Occupied[rand] = true;
                     newDestination = socialAreasA3[rand].position;
                     AI_ID_A3_Social[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1200,7 +1246,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA4Occupied[rand] = true;
                     newDestination = socialAreasA4[rand].position;
                     AI_ID_A4_Social[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1222,7 +1268,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA5Occupied[rand] = true;
                     newDestination = socialAreasA5[rand].position;
                     AI_ID_A5_Social[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1244,7 +1290,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA6Occupied[rand] = true;
                     newDestination = socialAreasA6[rand].position;
                     AI_ID_A6_Social[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1266,7 +1312,7 @@ public class NPCManager : MonoBehaviour
                     socialAreasA7Occupied[rand] = true;
                     newDestination = socialAreasA7[rand].position;
                     AI_ID_A7_Idle[rand] = id;
-                    ResetLastJob(_lastJobIterator, lastActivity, area);
+                    ResetLastJob(_lastJobIterator, lastActivity, currentLocation);
                     break;
                 }
                 if(iterator >= 100)
@@ -1715,7 +1761,34 @@ public class NPCManager : MonoBehaviour
                             AILastPos = AI[rand].GetComponent<AIController2>().GetCurrentWayPointPos();
                             currentJob = AI[rand].GetComponent<AIController2>().GetCurrentJob();
 
-                            ResetLastJob(AILastPos, currentJob, area);
+                            if(AILastPos != -1)
+                            {
+                                if(currentJob == "Walking")
+                                {
+                                    AI_ID_A1_WP[AILastPos] = -1;
+                                    walkingPointsA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Sitting")
+                                {
+                                    AI_ID_A1_Seating[AILastPos] = -1;
+                                    seatingAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Idling")
+                                {
+                                    AI_ID_A1_Idle[AILastPos] = -1;
+                                    idleAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Inspecting")
+                                {
+                                    AI_ID_A1_Inspection[AILastPos] = -1;
+                                    inspectionAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Socialising")
+                                {
+                                    AI_ID_A1_Social[AILastPos] = -1;
+                                    socialAreasA1Occupied[AILastPos] = false;
+                                }
+                            } 
 
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
@@ -1732,7 +1805,34 @@ public class NPCManager : MonoBehaviour
                             AILastPos = AI[rand].GetComponent<AIController2>().GetCurrentWayPointPos();
                             currentJob = AI[rand].GetComponent<AIController2>().GetCurrentJob();
 
-                            ResetLastJob(AILastPos, currentJob, area);
+                            if(AILastPos != -1)
+                            {
+                                if(currentJob == "Walking")
+                                {
+                                    AI_ID_A1_WP[AILastPos] = -1;
+                                    walkingPointsA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Sitting")
+                                {
+                                    AI_ID_A1_Seating[AILastPos] = -1;
+                                    seatingAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Idling")
+                                {
+                                    AI_ID_A1_Idle[AILastPos] = -1;
+                                    idleAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Inspecting")
+                                {
+                                    AI_ID_A1_Inspection[AILastPos] = -1;
+                                    inspectionAreasA1Occupied[AILastPos] = false;
+                                }
+                                if(currentJob == "Socialising")
+                                {
+                                    AI_ID_A1_Social[AILastPos] = -1;
+                                    socialAreasA1Occupied[AILastPos] = false;
+                                }
+                            } 
 
                             AI[rand].GetComponent<AIController2>().SetNewJob("Socialising");
                             AI[rand].GetComponent<AIController2>().SetCurrentWayPointPos(socialPosID);
@@ -2039,7 +2139,6 @@ public class NPCManager : MonoBehaviour
 
                     if(lastJobIterator != -1)
                     {
-                        Debug.Log("worked");
                         if(lastActivity == "Walking")
                         {
                             AI_ID_A1_WP[lastJobIterator] = -1;
@@ -2366,7 +2465,6 @@ public class NPCManager : MonoBehaviour
                     {
                         if(lastActivity == "Walking")
                         {
-                            Debug.Log("worked find inspect");
                             AI_ID_A1_WP[lastJobIterator] = -1;
                             walkingPointsA1Occupied[lastJobIterator] = false;
                         }
