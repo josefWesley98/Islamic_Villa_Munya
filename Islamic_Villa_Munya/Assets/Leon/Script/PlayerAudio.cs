@@ -127,13 +127,13 @@ public class PlayerAudio : MonoBehaviour
             //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
 
             onTile =
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[0] &&
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[1] &&
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[2] &&
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[3] &&
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[4] &&
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[5]
-            ;
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[0] && hit.transform.gameObject.tag != "DoNotCollide";
+            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[1] &&
+            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[2] &&
+            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[3] &&
+            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[4] &&
+            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[5]
+            //;
 
 
             previousFloor = gameObject;
@@ -158,7 +158,7 @@ public class PlayerAudio : MonoBehaviour
 
         footstepTimer += Time.deltaTime;
 
-        if (footstepTimer > footStepTime && playerStepping && !jumping && !pController.GetIsClimbing())
+        if (footstepTimer > footStepTime && playerStepping && !jumping && !pController.GetIsClimbing() && !pController.GetHardLanding())
         {
             int rng = Random.Range(0, stepCarpetClips.Count());
             footstepMaster[Convert.ToInt32(onTile)][rng].pitch = (Random.Range(0.8f, 1.2f));

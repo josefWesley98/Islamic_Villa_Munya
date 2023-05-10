@@ -32,7 +32,10 @@ public class AudioPush : MonoBehaviour
     {
         //print(rb.velocity.magnitude);
 
-        a.pitch = Mathf.Clamp(rb.velocity.magnitude, 0.8f, 1.1f);
+        Vector3 hVel = rb.velocity;
+        hVel.y = 0;
+
+        a.pitch = Mathf.Clamp(hVel.magnitude, 0.8f, 1.1f);
 
         if (rb.velocity.magnitude > speedMinimum)
         {

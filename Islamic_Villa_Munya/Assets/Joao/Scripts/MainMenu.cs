@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Slider slider;
     [SerializeField] private Slider slider2;
     // Beginning values for the sliders when first starting the game
-    float volumeMusic = 0.5f;
+    float volumeMusic = 0.25f;
     float volumeSFX = 1.0f;
 
     [Header("Difficulty Settings")]

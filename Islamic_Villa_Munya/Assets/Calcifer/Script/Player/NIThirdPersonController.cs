@@ -976,6 +976,11 @@ public class NIThirdPersonController : MonoBehaviour
     {
         pushing = val;
     }
+
+    public bool GetHardLanding()
+    {
+        return hard_landing;
+    }
 }
 
 /*Cal's script ends here*/

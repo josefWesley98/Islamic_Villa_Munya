@@ -41,6 +41,14 @@ public class TriggerTransition : MonoBehaviour
         anim = GetComponent<Animator>();
         p = transform.GetChild(0).GetComponent<ParticleSystem>();
         p2 = transform.GetChild(1).GetComponent<ParticleSystem>();
+
+        if(ignoreFirstEnter)
+            Invoke(nameof(IgnoreFix), 3f);
+    }
+
+    void IgnoreFix()
+    {
+        ignoreFirstEnter = false;
     }
 
     void OnTriggerEnter(Collider c)
@@ -84,11 +92,12 @@ public class TriggerTransition : MonoBehaviour
         p.gameObject.SetActive(open);
         p.Play();
         p2.Play();
-        Invoke("Anim", 0.2f);
+        //Invoke("Anim", 0.2f);
 
         doorSource.Play();
         portalSource.Play();
         colliderClosed.SetActive(false);
+        Anim();
     }
 
     void Deactivate()
@@ -97,7 +106,7 @@ public class TriggerTransition : MonoBehaviour
         p.Stop();
         p2.Stop();
         p.gameObject.SetActive(open);
-        Invoke("Anim", 0.2f);
+        //Invoke("Anim", 0.2f);
 
         doorSource.Stop();
         portalSource.Stop();
