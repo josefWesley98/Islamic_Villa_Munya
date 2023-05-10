@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*Cal's script starts here*/
 public class EliminateSparkles : MonoBehaviour
 {
     private bool do_until = true;
@@ -20,9 +21,11 @@ public class EliminateSparkles : MonoBehaviour
         {
             if(GameManager.GetArtefactCollected(artefact_id) && GameManager.GetArtefactPlaced(artefact_id))
             {
-                Destroy(gameObject);
+                Debug.Log("Inactive sparkles");
+                gameObject.SetActive(false);
                 do_until = false;
             }
         }
     }
 }
+/*Cal's script ends here*/
