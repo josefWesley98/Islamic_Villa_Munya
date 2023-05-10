@@ -18,10 +18,12 @@ public class TriggerTransition : MonoBehaviour
 
     bool open = false;
 
-    public bool ignoreFirstEnter = false;
     public bool requireArtefact1 = false;
 
     public GameObject colliderClosed;
+
+    public bool requireSecondTrigger = false;
+    bool secondTriggerSprung = false;
 
     void Start()
     {
@@ -41,14 +43,6 @@ public class TriggerTransition : MonoBehaviour
         anim = GetComponent<Animator>();
         p = transform.GetChild(0).GetComponent<ParticleSystem>();
         p2 = transform.GetChild(1).GetComponent<ParticleSystem>();
-
-        if(ignoreFirstEnter)
-            Invoke(nameof(IgnoreFix), 3f);
-    }
-
-    void IgnoreFix()
-    {
-        ignoreFirstEnter = false;
     }
 
     void OnTriggerEnter(Collider c)
@@ -64,10 +58,10 @@ public class TriggerTransition : MonoBehaviour
                     return;
                 }
             }
-            if (ignoreFirstEnter)
+            if (requireSecondTrigger)
             {
-                ignoreFirstEnter = false;
-                return;
+                if (!secondTriggerSprung)
+                    return;
             }
             Activate();
         }
@@ -118,4 +112,6 @@ public class TriggerTransition : MonoBehaviour
     {
         anim.SetBool("Open", open);
     }
+
+    public void ActivateSecondTrigger() => secondTriggerSprung = true;
 }
