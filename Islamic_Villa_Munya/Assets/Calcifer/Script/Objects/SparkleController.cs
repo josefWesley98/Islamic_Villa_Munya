@@ -5,6 +5,8 @@ using UnityEngine;
 /*Cal's code starts here*/
 public class SparkleController : MonoBehaviour
 {
+    [SerializeField] private GameObject[] sparkle_arr;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,12 +16,12 @@ public class SparkleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i < gameObject.transform.childCount; i++)
+        for(int i = 1; i < sparkle_arr.Length; i++)
         {
             if(GameManager.GetArtefactCollected(i))
             {
                 Debug.Log("Collected");
-                gameObject.transform.GetChild(i).gameObject.SetActive(true);
+                sparkle_arr[i].gameObject.SetActive(true);
             }
         }
     }
