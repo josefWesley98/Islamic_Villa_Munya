@@ -30,6 +30,10 @@ public class AudioPush : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //print(rb.velocity.magnitude);
+
+        a.pitch = Mathf.Clamp(rb.velocity.magnitude, 0.8f, 1.1f);
+
         if (rb.velocity.magnitude > speedMinimum)
         {
             a.volume = Mathf.Lerp(a.volume, volume, Time.deltaTime * fadeSpeed);
