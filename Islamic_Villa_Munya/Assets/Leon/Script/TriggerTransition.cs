@@ -49,11 +49,6 @@ public class TriggerTransition : MonoBehaviour
         {
             //print(c.gameObject.transform.parent.name);
 
-            if (ignoreFirstEnter)
-            {
-                ignoreFirstEnter = false;
-                return;
-            }
             if (requireArtefact1)
             {
                 if (!GameManager.GetArtefactCollected(0))
@@ -61,7 +56,11 @@ public class TriggerTransition : MonoBehaviour
                     return;
                 }
             }
-
+            if (ignoreFirstEnter)
+            {
+                ignoreFirstEnter = false;
+                return;
+            }
             Activate();
         }
     }
