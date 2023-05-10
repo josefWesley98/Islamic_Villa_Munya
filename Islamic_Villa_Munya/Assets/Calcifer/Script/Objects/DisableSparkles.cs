@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*Cal's script starts here*/
 public class DisableSparkles : MonoBehaviour
 {
     [SerializeField] private GameObject sparkles;
@@ -18,7 +19,7 @@ public class DisableSparkles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(do_until)
+        if(do_until && !GameManager.GetArtefactPlaced(id))
         {
             if(GameManager.GetArtefactCollected(id))
             {
@@ -28,7 +29,7 @@ public class DisableSparkles : MonoBehaviour
 
         }
 
-        if(!is_placed)
+        if(!is_placed && !do_until)
         {
             if(GameManager.GetArtefactPlaced(id))
             {
@@ -38,3 +39,5 @@ public class DisableSparkles : MonoBehaviour
         }
     }
 }
+
+/*Cal's script ends here*/

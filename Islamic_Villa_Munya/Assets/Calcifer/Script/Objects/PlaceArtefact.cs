@@ -55,10 +55,13 @@ public class PlaceArtefact : MonoBehaviour
     {
         replace_artefact = kb.fKey.isPressed;
 
+
+
         if(do_until)
         {
             if(GameManager.GetArtefactPlaced(artefact_id))
             {
+                Debug.Log(artefact_id + " I have beeen plaaaaaaaaaced");
                 //play leon audio
                 placeSound.Play();
                 //leon end
