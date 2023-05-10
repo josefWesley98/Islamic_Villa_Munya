@@ -116,7 +116,7 @@ public class PlayerAudio : MonoBehaviour
         
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, Vector3.down * 0.5f, out hit, Mathf.Infinity, groundLayers))
+        if (Physics.Raycast(transform.position, Vector3.down * 0.1f, out hit, Mathf.Infinity, groundLayers))
         {
             //if (gameObject == previousFloor)
             //    return;
@@ -126,7 +126,15 @@ public class PlayerAudio : MonoBehaviour
 
             //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
 
-            onTile = !(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name == carpetMaterials[0]);
+            onTile =
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[0] &&
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[1] &&
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[2] &&
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[3] &&
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[4] &&
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[5]
+            ;
+
 
             previousFloor = gameObject;
         }
