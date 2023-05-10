@@ -7,7 +7,7 @@ public class TriggerTransition : MonoBehaviour
     //public bool transitionActivated = false;
     Animator anim;
 
-    ParticleSystem p, p2;
+    public ParticleSystem p, p2;
 
     Rigidbody rb;
 
@@ -17,6 +17,11 @@ public class TriggerTransition : MonoBehaviour
     AudioMixer mixer;
 
     bool open = false;
+
+    public bool ignoreFirstEnter = false;
+    public bool requireArtefact1 = false;
+
+    public GameObject colliderClosed;
 
     void Start()
     {
@@ -40,18 +45,36 @@ public class TriggerTransition : MonoBehaviour
 
     void OnTriggerEnter(Collider c)
     {
-        //print(c);
-
-        if (c.tag == "Player")
+        if (c.tag == "Player" && !c.isTrigger)
         {
+            //print(c.gameObject.transform.parent.name);
+
+            if (ignoreFirstEnter)
+            {
+                ignoreFirstEnter = false;
+                return;
+            }
+            if (requireArtefact1)
+            {
+                if (!GameManager.GetArtefactCollected(0))
+                {
+                    return;
+                }
+            }
+
             Activate();
         }
     }
 
     void OnTriggerExit(Collider c)
     {
-        if (c.tag == "Player")
+        if (c.tag == "Player" && !c.isTrigger)
         {
+            // if (ignoreFirstEnter)
+            // {
+            //     return;
+            // }
+
             Deactivate();
         }
     }
@@ -59,13 +82,14 @@ public class TriggerTransition : MonoBehaviour
     void Activate()
     {
         open = true;
+        p.gameObject.SetActive(open);
         p.Play();
         p2.Play();
-        p.gameObject.SetActive(open);
         Invoke("Anim", 0.2f);
 
         doorSource.Play();
         portalSource.Play();
+        colliderClosed.SetActive(false);
     }
 
     void Deactivate()
@@ -78,6 +102,7 @@ public class TriggerTransition : MonoBehaviour
 
         doorSource.Stop();
         portalSource.Stop();
+        colliderClosed.SetActive(true);
         Anim();
     }
 
