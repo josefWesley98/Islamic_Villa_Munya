@@ -304,16 +304,7 @@ public class PlayerInteract : MonoBehaviour
     }
     private void Checks()
     {
-        if(cursorState)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+      
         // if out of range of any artifacts the n dont let the player inspect.
         if(!canInspect)
         {
