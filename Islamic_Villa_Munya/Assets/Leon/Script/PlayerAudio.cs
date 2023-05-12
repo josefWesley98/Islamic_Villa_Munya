@@ -5,6 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.Audio;
+
+public enum FloorType
+{
+    Carpet,
+    Mud,
+    Tile
+}
+
 public class PlayerAudio : MonoBehaviour
 {
     AudioMixer mixer;
@@ -17,6 +25,10 @@ public class PlayerAudio : MonoBehaviour
     public AudioClip[] stepCarpetClips;
     List<AudioSource> stepCarpetSources = new List<AudioSource>();
     public float stepCarpetVolume = 0.25f;
+
+    public AudioClip[] stepMudClips;
+    List<AudioSource> stepMudSources = new List<AudioSource>();
+    public float stepMudVolume = 0.25f;
 
     public AudioClip[] jumpClips;
     List<AudioSource> jumpSources = new List<AudioSource>();
@@ -48,14 +60,14 @@ public class PlayerAudio : MonoBehaviour
     float footstepTimer = 0f;
 
     //master array of all footstepsound lists
-    List<AudioSource>[] footstepMaster = new List<AudioSource>[2];
+    List<AudioSource>[] footstepMaster = new List<AudioSource>[3];
 
     public LayerMask groundLayers;
 
     public List<string> carpetMaterials = new List<string>();
     GameObject previousFloor;
 
-    bool onTile = true;
+    FloorType floor = FloorType.Tile;
 
     bool setupComplete = false;
     void FindPlayer()
@@ -124,17 +136,21 @@ public class PlayerAudio : MonoBehaviour
             Debug.DrawRay(transform.position, Vector3.down * hit.distance, Color.yellow);
             //Debug.Log("Did Hit");
 
-            //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
-
-            onTile =
-            hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[0] && hit.transform.gameObject.tag != "DoNotCollide";
-            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[1] &&
-            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[2] &&
-            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[3] &&
-            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[4] &&
-            //hit.transform.gameObject.GetComponent<MeshRenderer>().material.name != carpetMaterials[5]
-            //;
-
+                //print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
+            if (hit.collider is TerrainCollider)
+            {
+                floor = FloorType.Mud;
+            }
+            else if (hit.transform.gameObject.GetComponent<MeshRenderer>().material.name == carpetMaterials[0])
+            {
+                floor = FloorType.Carpet;
+            }
+            else if (hit.transform.gameObject.tag == "DoNotCollide")
+            {
+                floor = FloorType.Carpet;
+            }
+            else
+                floor = FloorType.Tile;
 
             previousFloor = gameObject;
         }
@@ -160,9 +176,9 @@ public class PlayerAudio : MonoBehaviour
 
         if (footstepTimer > footStepTime && playerStepping && !jumping && !pController.GetIsClimbing() && !pController.GetHardLanding())
         {
-            int rng = Random.Range(0, stepCarpetClips.Count());
-            footstepMaster[Convert.ToInt32(onTile)][rng].pitch = (Random.Range(0.8f, 1.2f));
-            footstepMaster[Convert.ToInt32(onTile)][rng].Play();
+            int rng = Random.Range(0, stepTileClips.Count());
+            footstepMaster[Convert.ToInt32(floor)][rng].pitch = (Random.Range(0.8f, 1.2f));
+            footstepMaster[Convert.ToInt32(floor)][rng].Play();
             footstepTimer = 0f;
             //print(rng);
         }
@@ -180,7 +196,8 @@ public class PlayerAudio : MonoBehaviour
         mixer = Resources.Load("NewAudioMixer") as AudioMixer;
 
         footstepMaster[0] = stepCarpetSources;
-        footstepMaster[1] = stepTileSources;
+        footstepMaster[1] = stepMudSources;
+        footstepMaster[2] = stepTileSources;
 
         for (int i = 0; i < stepTileClips.Count(); i++)
         {
@@ -200,6 +217,16 @@ public class PlayerAudio : MonoBehaviour
             a.volume = stepCarpetVolume;
             a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
             stepCarpetSources.Add(a);
+        }
+
+        for (int i = 0; i < stepMudClips.Count(); i++)
+        {
+            AudioSource a = transform.AddComponent<AudioSource>();
+            a.clip = stepMudClips[i];
+            a.spatialBlend = 1f;
+            a.volume = stepMudVolume;
+            a.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+            stepMudSources.Add(a);
         }
 
         for (int i = 0; i < jumpClips.Count(); i++)
