@@ -6,7 +6,7 @@ public class AudioAmbientArea : MonoBehaviour
 {
     public float fadeSpeed = 0.5f;
 
-    AudioClip loopClip;
+    public AudioClip loopClip;
     public float volume = 1.0f;
 
     bool playAudio = false;
@@ -18,7 +18,6 @@ public class AudioAmbientArea : MonoBehaviour
 
     void Start()
     {
-        loopClip = Resources.Load("amb_villa 1") as AudioClip;
         mixer = Resources.Load("NewAudioMixer") as AudioMixer;
         a = gameObject.AddComponent<AudioSource>();
         a.clip = loopClip;
