@@ -31,11 +31,14 @@ public class MainMenu : MonoBehaviour
     {
         AudioSource = AudioSource.GetComponent<AudioSource>();                          //Getting access to the audio scource where the audio is playing
 
-        slider.value = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);          //Sets value of slider to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
-        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", AudioSource.volume);    //Sets value of audio source to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
+        slider.value = PlayerPrefs.GetFloat("MusicParam", volumeMusic);          //Sets value of slider to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
+        AudioSource.volume = PlayerPrefs.GetFloat("MusicParam", volumeMusic);    //Sets value of audio source to the saved value on disk thanks to player preference (MusicParam) or default when starting (volumeMusic)
 
         slider2.value = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                    //Sets value of slider to the saved value on disk thanks to player preference (SFXParam) or default when starting (volumeSFX)
         volumeSFX = PlayerPrefs.GetFloat("SFXParam", volumeSFX);                        //Sets value of VolumwSFX to the saved value on disk thanks to player preference (SFXParam) or default when starting (volumeSFX)
+        
+        SetLevel(volumeMusic);
+        SetLevelSFX(volumeSFX);
     }
 
     public void PlayGame()                          // when playgame is called, it switches scene to the museum hub (beginning of the game and the Hub)
