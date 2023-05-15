@@ -24,7 +24,7 @@ public class TriggerTransition : MonoBehaviour
 
     public bool requireSecondTrigger = false;
     bool secondTriggerSprung = false;
-
+    public float AUTO_OPENTIME = 4f;
     void Start()
     {
         mixer = Resources.Load("NewAudioMixer") as AudioMixer;
@@ -43,42 +43,44 @@ public class TriggerTransition : MonoBehaviour
         anim = GetComponent<Animator>();
         p = transform.GetChild(0).GetComponent<ParticleSystem>();
         p2 = transform.GetChild(1).GetComponent<ParticleSystem>();
+
+        Invoke(nameof(Activate), AUTO_OPENTIME);
     }
 
-    void OnTriggerEnter(Collider c)
-    {
-        if (c.tag == "Player" && !c.isTrigger)
-        {
-            //print(c.gameObject.transform.parent.name);
+    //void OnTriggerEnter(Collider c)
+    //{
+    //    if (c.tag == "Player" && !c.isTrigger)
+    //    {
+    //        //print(c.gameObject.transform.parent.name);
 
-            if (requireArtefact1)
-            {
-                if (!GameManager.GetArtefactCollected(0))
-                {
-                    return;
-                }
-            }
-            if (requireSecondTrigger)
-            {
-                if (!secondTriggerSprung)
-                    return;
-            }
-            Activate();
-        }
-    }
+    //        if (requireArtefact1)
+    //        {
+    //            if (!GameManager.GetArtefactCollected(0))
+    //            {
+    //                return;
+    //            }
+    //        }
+    //        if (requireSecondTrigger)
+    //        {
+    //            if (!secondTriggerSprung)
+    //                return;
+    //        }
+    //        Activate();
+    //    }
+    //}
 
-    void OnTriggerExit(Collider c)
-    {
-        if (c.tag == "Player" && !c.isTrigger)
-        {
-            // if (ignoreFirstEnter)
-            // {
-            //     return;
-            // }
+    //void OnTriggerExit(Collider c)
+    //{
+    //    if (c.tag == "Player" && !c.isTrigger)
+    //    {
+    //        // if (ignoreFirstEnter)
+    //        // {
+    //        //     return;
+    //        // }
 
-            Deactivate();
-        }
-    }
+    //        Deactivate();
+    //    }
+    //}
 
     void Activate()
     {
