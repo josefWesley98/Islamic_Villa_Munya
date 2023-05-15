@@ -111,13 +111,16 @@ public class PlayerInteract : MonoBehaviour
 
             int pedID = interactableObj.GetPedestalID();
             
-            if(GameManager.GetArtefactToBePlaced(pedID))
+            if(pedID <= GameManager.GetTotalArtefacts())
             {
-                inspect.gameObject.SetActive(false);
-                placeArtefactUI.SetActive(true);
-                artifactToBePlaced = pedID;
+                if(GameManager.GetArtefactToBePlaced(pedID))
+                {
+                    inspect.gameObject.SetActive(false);
+                    placeArtefactUI.SetActive(true);
+                    artifactToBePlaced = pedID;
+                }
             }
-            else if(!GameManager.GetArtefactToBePlaced(pedID))
+            else
             {
                 artifactToBePlaced = -1;
                 inspect.gameObject.SetActive(true);
