@@ -117,6 +117,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Removes the artefacts from the museum
+    public static void ResetPlacedArtefacts()
+    {
+        for(int i = 0; i < artefact_counter; i++)
+        {
+            artefactToBePlaced[i] = false;
+            doOnce[i] = true;
+        }
+    }
+
     public static void SetHasKey(bool val)
     {
         has_key = val;

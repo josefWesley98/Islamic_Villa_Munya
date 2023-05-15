@@ -28,7 +28,7 @@ public class HUBTransitionController : MonoBehaviour
         total_artefact_collected = GameManager.GetArtefactCounter();
         Debug.Log(GameManager.GetArtefactCounter());
 
-        if(GameManager.GetArtefactCollected(0))
+        if(GameManager.GetArtefactCollected(0) || total_artefact_collected > 0)
         {
             transform.position = spawn_points[1].position;
         }

@@ -89,7 +89,7 @@ public class PlaceArtefact : MonoBehaviour
         }
         if(GameManager.GetArtefactPlaced(artefact_id) && empty_pedestal != null)
         {
-            Destroy(empty_pedestal);
+            empty_pedestal.SetActive(false);
         }
     }
 
