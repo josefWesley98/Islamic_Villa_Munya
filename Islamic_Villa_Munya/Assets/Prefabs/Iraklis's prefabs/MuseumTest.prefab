@@ -592,7 +592,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1806
+  m_VersionIndex: 1809
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1381,7 +1381,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1800
+  m_VersionIndex: 1803
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2686,7 +2686,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1800
+  m_VersionIndex: 1803
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3154,7 +3154,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2307
+  m_VersionIndex: 2310
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4065,7 +4065,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1803
+  m_VersionIndex: 1806
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4618,7 +4618,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1797
+  m_VersionIndex: 1800
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4897,7 +4897,7 @@ MonoBehaviour:
   IO: {fileID: 7568163750972811620}
   transparentMat: {fileID: 2100000, guid: 43f4a83b670a5394887e5d4d13bff405, type: 2}
   normalMat: {fileID: 2100000, guid: d25408046ecda1449a1ee10c2e064020, type: 2}
-  collider: {fileID: 5520690816056063682}
+  collider: {fileID: 761681578}
   paintingRenderer: {fileID: 0}
 --- !u!65 &521892597
 BoxCollider:
@@ -9290,10 +9290,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  seatingAreasA1Occupied: 00000000000000000000
-  AI_ID_A1_Seating: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  seatingAreasA1Occupied: 0000000000000000
+  AI_ID_A1_Seating: 0000000000000000000000000000000000000000000000000000000000000000
   idleAreasA1:
   - {fileID: 0}
   - {fileID: 0}
@@ -10598,7 +10596,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1785
+  m_VersionIndex: 1788
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -12405,7 +12403,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1800
+  m_VersionIndex: 1803
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13669,6 +13667,74 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &1636380078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1636380079}
+  - component: {fileID: 1636380081}
+  - component: {fileID: 1636380080}
+  m_Layer: 0
+  m_Name: lookat
+  m_TagString: InteractObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1636380079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636380078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.104, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7555870964661611892}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1636380081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636380078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactInfo: 
+  artifactInfoEasy: 
+  artifactInfoMedium: 
+  artifactInfoHard: 
+  scale: {x: 1, y: 1, z: 1}
+  rotation: {x: 0, y: 0, z: 0}
+  positinOffset: {x: 0, y: 0, z: 0}
+  LookAt: {fileID: 1636380078}
+  pedestalID: 66
+  destroyAfterView: 0
+--- !u!65 &1636380080
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636380078}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1639750860
 GameObject:
   m_ObjectHideFlags: 0
@@ -14045,7 +14111,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1800
+  m_VersionIndex: 1803
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -14173,6 +14239,37 @@ Transform:
   m_Father: {fileID: 1802080039}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -160.253, z: 0}
+--- !u!1 &1727357098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1727357099}
+  m_Layer: 0
+  m_Name: lookat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1727357099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727357098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.81, y: 0.472, z: 0.007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6404196661742781813}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1749582632
 GameObject:
   m_ObjectHideFlags: 0
@@ -15629,7 +15726,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1803
+  m_VersionIndex: 1806
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18576,7 +18673,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2071
+  m_VersionIndex: 2074
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -19336,7 +19433,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2050
+  m_VersionIndex: 2053
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -23745,7 +23842,7 @@ BoxCollider:
   m_GameObject: {fileID: 779111909707178539}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.001638038, y: 0.0010779095, z: 0.0044179508}
   m_Center: {x: 0.000040729476, y: 0.0000001846779, z: -0.000009003246}
@@ -23756,7 +23853,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 779111909707178539}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
@@ -25363,7 +25460,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1761
+  m_VersionIndex: 1764
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -29054,7 +29151,7 @@ BoxCollider:
   m_GameObject: {fileID: 1488109826126306448}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.002126089, y: 0.000933728, z: 0.010029442}
   m_Center: {x: 0.0005961827, y: 0.00000002981348, z: 0.0019483449}
@@ -29065,7 +29162,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488109826126306448}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
@@ -29361,7 +29458,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2143
+  m_VersionIndex: 2146
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31096,7 +31193,6 @@ GameObject:
   - component: {fileID: 1206232383}
   - component: {fileID: 1206232384}
   - component: {fileID: 44447549}
-  - component: {fileID: 2201217821420170233}
   m_Layer: 0
   m_Name: ceramic_vase_01_2k
   m_TagString: InteractObject
@@ -31207,19 +31303,6 @@ MonoBehaviour:
   pedestalID: 1
   destroyAfterView: 0
 --- !u!114 &44447549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730151795977689157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderer: {fileID: 216814434934241680}
---- !u!114 &2201217821420170233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31481,7 +31564,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1767
+  m_VersionIndex: 1770
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32746,7 +32829,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1776
+  m_VersionIndex: 1779
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -33930,7 +34013,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34842,7 +34925,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1773
+  m_VersionIndex: 1776
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -36545,7 +36628,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2310
+  m_VersionIndex: 2313
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -38119,7 +38202,6 @@ GameObject:
   - component: {fileID: 1720781017}
   - component: {fileID: 1720781018}
   - component: {fileID: 308643302}
-  - component: {fileID: 1580788643483218705}
   m_Layer: 0
   m_Name: brass_vase_01_2k
   m_TagString: InteractObject
@@ -38228,19 +38310,6 @@ MonoBehaviour:
   pedestalID: 2
   destroyAfterView: 0
 --- !u!114 &308643302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2385057802651353212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderer: {fileID: 4186536892581372329}
---- !u!114 &1580788643483218705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40182,7 +40251,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1767
+  m_VersionIndex: 1770
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -43025,7 +43094,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -44377,7 +44446,7 @@ BoxCollider:
   m_GameObject: {fileID: 3044721248159539584}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.0027174966, y: 0.0029971385, z: 0.010741976}
   m_Center: {x: -0.00013009485, y: -0.000052633382, z: -0.0005041481}
@@ -44388,7 +44457,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3044721248159539584}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
@@ -46704,7 +46773,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1776
+  m_VersionIndex: 1779
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -47466,7 +47535,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1755
+  m_VersionIndex: 1758
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -47822,7 +47891,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2187
+  m_VersionIndex: 2190
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -48709,7 +48778,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1773
+  m_VersionIndex: 1776
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -49392,7 +49461,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2062
+  m_VersionIndex: 2065
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -50528,7 +50597,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2016
+  m_VersionIndex: 2019
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -52176,7 +52245,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2050
+  m_VersionIndex: 2053
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -53526,7 +53595,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2146
+  m_VersionIndex: 2149
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -54060,7 +54129,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -55203,7 +55272,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2071
+  m_VersionIndex: 2074
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -57312,7 +57381,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1861
+  m_VersionIndex: 1864
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -57719,7 +57788,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1773
+  m_VersionIndex: 1776
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -58844,7 +58913,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2056
+  m_VersionIndex: 2059
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -66013,7 +66082,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2077
+  m_VersionIndex: 2080
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -67007,7 +67076,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2065
+  m_VersionIndex: 2068
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -67818,7 +67887,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -68820,7 +68889,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -70054,7 +70123,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1773
+  m_VersionIndex: 1776
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -72766,7 +72835,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -74548,7 +74617,7 @@ GameObject:
   - component: {fileID: 1370328418}
   m_Layer: 0
   m_Name: ArtefactEmpty
-  m_TagString: Untagged
+  m_TagString: InteractObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76535,7 +76604,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2004
+  m_VersionIndex: 2007
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -77253,7 +77322,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1782
+  m_VersionIndex: 1785
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -77629,7 +77698,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2190
+  m_VersionIndex: 2193
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -79353,7 +79422,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -80728,7 +80797,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1776
+  m_VersionIndex: 1779
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -81376,7 +81445,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1767
+  m_VersionIndex: 1770
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -83639,7 +83708,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1761
+  m_VersionIndex: 1764
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -85220,7 +85289,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2053
+  m_VersionIndex: 2056
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -87200,7 +87269,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -91702,7 +91771,6 @@ GameObject:
   - component: {fileID: 8181239396620151635}
   - component: {fileID: 849133454}
   - component: {fileID: 849133455}
-  - component: {fileID: 673788533}
   - component: {fileID: 3127452802839038647}
   m_Layer: 0
   m_Name: brass_vase_03_2k
@@ -91811,19 +91879,6 @@ MonoBehaviour:
   LookAt: {fileID: 7676778720511003270}
   pedestalID: 3
   destroyAfterView: 0
---- !u!114 &673788533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7676778720511003270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderer: {fileID: 8181239396620151635}
 --- !u!114 &3127452802839038647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94645,7 +94700,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1764
+  m_VersionIndex: 1767
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -97675,7 +97730,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2053
+  m_VersionIndex: 2056
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -98445,7 +98500,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1779
+  m_VersionIndex: 1782
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -103077,7 +103132,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1770
+  m_VersionIndex: 1773
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -104739,6 +104794,8 @@ GameObject:
   - component: {fileID: 1308706231}
   - component: {fileID: 1564868725}
   - component: {fileID: 1564868724}
+  - component: {fileID: 8934887482391002977}
+  - component: {fileID: 8934887482391002978}
   m_Layer: 0
   m_Name: ArtefactSquarePyxis
   m_TagString: Untagged
@@ -104823,8 +104880,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c2fee2d08e4b643b04d1963a6b1f9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sparkles: {fileID: 0}
+  sparkles: {fileID: 4883838465329753420}
   id: 11
+--- !u!114 &8934887482391002977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897515333049643117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2751949981720082355}
+--- !u!114 &8934887482391002978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897515333049643117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 1134285306393731286}
 --- !u!1 &8899733209777944657
 GameObject:
   m_ObjectHideFlags: 0
@@ -106064,7 +106147,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1764
+  m_VersionIndex: 1767
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -106503,7 +106586,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1782
+  m_VersionIndex: 1785
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -109872,6 +109955,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sparkles: {fileID: 4883838464737054203}
   id: 4
+--- !u!114 &1887278390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442228854552266448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 5007852581823648546}
+--- !u!114 &1887278391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442228854552266448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 3976884889963348736}
 --- !u!4 &2955355309071524463 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 597814155441643487, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
@@ -109915,10 +110024,16 @@ MonoBehaviour:
   artifactInfoHard: A missing painting of an medieval villa.
   scale: {x: 54.33333, y: 40.66667, z: 2.333333}
   rotation: {x: 0, y: 90, z: 0}
-  positinOffset: {x: 0, y: 0.75, z: 0}
+  positinOffset: {x: 0, y: -0.55, z: 0}
   LookAt: {fileID: 3184123880672191189}
   pedestalID: 4
   destroyAfterView: 0
+--- !u!23 &3976884889963348736 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1619290961771970224, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2398267064608980400}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &5007852581823648546 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7221289265686539922, guid: 9c68f88df90e8bd4bb5c9564dd4ad9eb,
@@ -109962,7 +110077,7 @@ MonoBehaviour:
   artifactInfoHard: A depiction of an medieval villa.
   scale: {x: 54.333332, y: 40.666668, z: 2.3333333}
   rotation: {x: 0, y: 90, z: 0}
-  positinOffset: {x: 0, y: 0.75, z: 0}
+  positinOffset: {x: 0, y: -0.55, z: 0}
   LookAt: {fileID: 6809314078644810487}
   pedestalID: 4
   destroyAfterView: 0
@@ -110225,6 +110340,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 897731145735301486}
   m_SourcePrefab: {fileID: 100100000, guid: 91cce20d5b99626468c2a28d6a3971d6, type: 3}
+--- !u!23 &3406905043415759878 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1999020543204602195, guid: 91cce20d5b99626468c2a28d6a3971d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 3817416968519241045}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3767048221510589907 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 53215160038625414, guid: 91cce20d5b99626468c2a28d6a3971d6,
@@ -110326,6 +110447,32 @@ MonoBehaviour:
   normalMat: {fileID: 2100000, guid: 7033617e1e2034b419ba400a7986539c, type: 2}
   collider: {fileID: 281436276}
   paintingRenderer: {fileID: 6927369336840007472}
+--- !u!114 &1884076067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5142862144604622362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 6927369336840007472}
+--- !u!114 &1884076068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5142862144604622362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 3406905043415759878}
 --- !u!23 &6927369336840007472 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6113853323002733157, guid: 91cce20d5b99626468c2a28d6a3971d6,
@@ -111191,6 +111338,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sparkles: {fileID: 4883838464938915344}
   id: 3
+--- !u!114 &8934887482391002975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666125697630417466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 1487511179146279728}
+--- !u!114 &8934887482391002976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666125697630417466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2747452290765637775}
+--- !u!23 &2747452290765637775 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8040870764696972923, guid: e7d8afff38d7bbe428da45357784bc4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5311432908961834740}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4404543789231040858 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8400925431887925166, guid: e7d8afff38d7bbe428da45357784bc4c,
@@ -111314,14 +111493,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 9ae4196cf1690b848855b4c7acdd59ec, type: 2}
+      objectReference: {fileID: 2100000, guid: ff91e1b02e62ff242a3c2bbdd4c86e21, type: 2}
     - target: {fileID: 919132149155446097, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
         type: 3}
       propertyPath: m_Name
       value: InfoStand
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2833789669333406751, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1636380079}
   m_SourcePrefab: {fileID: 100100000, guid: a89bde3e4c8ae2b4cac98fe4f671a024, type: 3}
 --- !u!1 &4848430651379074106 stripped
 GameObject:
@@ -111345,6 +111528,12 @@ BoxCollider:
 --- !u!4 &5188926676110712448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
+    type: 3}
+  m_PrefabInstance: {fileID: 5730967056960846187}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7555870964661611892 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2833789669333406751, guid: a89bde3e4c8ae2b4cac98fe4f671a024,
     type: 3}
   m_PrefabInstance: {fileID: 5730967056960846187}
   m_PrefabAsset: {fileID: 0}
@@ -111676,7 +111865,7 @@ BoxCollider:
   m_GameObject: {fileID: 6121625211787420003}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.0011224053, y: 0.001122396, z: 0.008078959}
   m_Center: {x: 0.000000064933865, y: 0.00000017298946, z: 0.00010448963}
@@ -111687,7 +111876,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6121625211787420003}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
@@ -112081,12 +112270,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: pyxis_square
       objectReference: {fileID: 0}
+    - target: {fileID: 8680890140464267517, guid: 119fc2ec40f89d242a153568f9079adf,
+        type: 3}
+      propertyPath: m_TagString
+      value: InteractObject
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 119fc2ec40f89d242a153568f9079adf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1727357099}
   m_SourcePrefab: {fileID: 100100000, guid: 119fc2ec40f89d242a153568f9079adf, type: 3}
 --- !u!23 &1134285306393731286 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -3398188113315659192, guid: 119fc2ec40f89d242a153568f9079adf,
+    type: 3}
+  m_PrefabInstance: {fileID: 6875588790784008862}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2751949981720082355 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -479039082261392083, guid: 119fc2ec40f89d242a153568f9079adf,
     type: 3}
   m_PrefabInstance: {fileID: 6875588790784008862}
   m_PrefabAsset: {fileID: 0}
@@ -112121,14 +112325,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  artifactInfo: 
+  artifactInfo: test
   artifactInfoEasy: Easy
   artifactInfoMedium: Medium
   artifactInfoHard: Hard
-  scale: {x: 0.35, y: 0.35, z: 0.35}
-  rotation: {x: 0, y: 0, z: 0}
-  positinOffset: {x: 0, y: 0, z: 0}
-  LookAt: {fileID: 2815391904660120163}
+  scale: {x: 0.2, y: 0.2, z: 0.2}
+  rotation: {x: 0, y: -90, z: 0}
+  positinOffset: {x: 0, y: 0, z: -0.001}
+  LookAt: {fileID: 1727357098}
   pedestalID: 11
   destroyAfterView: 0
 --- !u!1 &6029077737658621903 stripped
@@ -112318,6 +112522,12 @@ MonoBehaviour:
   LookAt: {fileID: 348085158816691042}
   pedestalID: 5
   destroyAfterView: 0
+--- !u!23 &2293556978849747639 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9117151609138173886, guid: 1d83ccffc2fe72848ae7816f31d50476,
+    type: 3}
+  m_PrefabInstance: {fileID: 7012941343173035273}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &4943632394075058991 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2722909238468802086, guid: 1d83ccffc2fe72848ae7816f31d50476,
@@ -112378,6 +112588,32 @@ MonoBehaviour:
   normalMat: {fileID: 2100000, guid: 8c0219ed0b7548e4ea60a31805f7827c, type: 2}
   collider: {fileID: 2016796107}
   paintingRenderer: {fileID: 4943632394075058991}
+--- !u!114 &642343771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232691384918862930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 4943632394075058991}
+--- !u!114 &642343772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232691384918862930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34a18370e651564891460d527f616b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 2293556978849747639}
 --- !u!1 &6889296903987172090 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4524230823492212723, guid: 1d83ccffc2fe72848ae7816f31d50476,
@@ -112538,8 +112774,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0100000035, y: 0.012843872, z: 0.067025125}
-  m_Center: {x: 2.9529368e-10, y: -0.0014219369, z: 0.02865785}
+  m_Size: {x: 0.0100000035, y: 0.012843872, z: 0.08848186}
+  m_Center: {x: 4.0500625e-10, y: -0.0014219369, z: 0.039384887}
 --- !u!65 &5582790287725043515
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112548,11 +112784,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7993663332526681443}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0100000035, y: 0.012843872, z: 0.067025125}
-  m_Center: {x: 2.9529368e-10, y: -0.0014219369, z: 0.02865785}
+  m_Size: {x: 0.0100000035, y: 0.012843872, z: 0.05032768}
+  m_Center: {x: 2.0842035e-10, y: -0.0014219369, z: 0.020308208}
 --- !u!114 &2801057948563883143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112573,29 +112809,7 @@ MonoBehaviour:
   rotation: {x: -10, y: -180, z: 0}
   positinOffset: {x: 0, y: -1.85, z: 0}
   LookAt: {fileID: 7993663332526681443}
-  pedestalID: 100
-  destroyAfterView: 0
---- !u!114 &5093026548449030865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7993663332526681443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fb1606c9d1e3844b5b44f2fe344eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  artifactInfo: '"Hey lady get off of that duck!"'
-  artifactInfoEasy: '"Hey lady get off of that duck!"'
-  artifactInfoMedium: '"Hey lady get off of that duck!"'
-  artifactInfoHard: '"Hey lady get off of that duck!"'
-  scale: {x: 56.666664, y: 81.25, z: 4.166666}
-  rotation: {x: -10, y: -180, z: 0}
-  positinOffset: {x: 0, y: -1.85, z: 0}
-  LookAt: {fileID: 7993663332526681443}
-  pedestalID: 100
+  pedestalID: 150
   destroyAfterView: 0
 --- !u!1001 &8934887480351967453
 PrefabInstance:
@@ -114177,17 +114391,17 @@ PrefabInstance:
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
@@ -114788,17 +115002,17 @@ PrefabInstance:
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8613830737862831549, guid: 450f0ed3badcd5a4d9a52cd7b4499bbb,
         type: 3}
@@ -115621,19 +115835,6 @@ GameObject:
   m_PrefabInstance: {fileID: 8934887482173419216}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &761681578
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1021004145039243949}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.9500003, y: 0.4, z: 0.95000005}
-  m_Center: {x: -0.0000038146973, y: 0, z: -0.0000014007092}
---- !u!65 &5520690816056063682
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
