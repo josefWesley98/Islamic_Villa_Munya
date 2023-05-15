@@ -119,6 +119,12 @@ public class PlayerInteract : MonoBehaviour
                     placeArtefactUI.SetActive(true);
                     artifactToBePlaced = pedID;
                 }
+                if(!GameManager.GetArtefactToBePlaced(pedID))
+                {
+                    artifactToBePlaced = -1;
+                    inspect.gameObject.SetActive(true);
+                    placeArtefactUI.SetActive(false);
+                }
             }
             else
             {
@@ -126,6 +132,8 @@ public class PlayerInteract : MonoBehaviour
                 inspect.gameObject.SetActive(true);
                 placeArtefactUI.SetActive(false);
             }
+
+            
 
             isTouching = true;
             canInspect = true;
