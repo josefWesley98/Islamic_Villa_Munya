@@ -63,7 +63,8 @@ public class PlayerInteract : MonoBehaviour
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
     private int artifactToBePlaced = -1;
-
+    int pedID = 0;
+    [SerializeField] private Compendium_activation comp_active;
     private void Awake() => playercontrols = new PlayerControls();
 
     void Start()
@@ -109,7 +110,7 @@ public class PlayerInteract : MonoBehaviour
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
 
-            int pedID = interactableObj.GetPedestalID();
+            pedID = interactableObj.GetPedestalID();
             
             if(pedID <= GameManager.GetTotalArtefacts())
             {
@@ -133,7 +134,7 @@ public class PlayerInteract : MonoBehaviour
                 placeArtefactUI.SetActive(false);
             }
 
-            
+           
 
             isTouching = true;
             canInspect = true;
@@ -163,7 +164,10 @@ public class PlayerInteract : MonoBehaviour
         // resets the objects back to visible and destroys the smaller copy that is generated for inspecting.
         if(other.GetComponent<InteractableObject>() && !isReset)
         {
-
+            if(pedID == 66)
+            {
+                comp_active.Museum_compendium_Deactivation();
+            }
             TurnOnPrimaryArtefact();
             ResetUI();
             DestroyClonedArtifact();
@@ -367,6 +371,10 @@ public class PlayerInteract : MonoBehaviour
             cursorState = false;
             if(!isReset)
             {
+                if(pedID == 66)
+                {
+                    comp_active.Museum_compendium_Deactivation();
+                }
                 TurnOnPrimaryArtefact();
                 ResetUI();
                 DestroyClonedArtifact();
@@ -403,6 +411,10 @@ public class PlayerInteract : MonoBehaviour
                 isInspecting = true;
                 inspectionCooldown = true;
                 doSetup = true;
+                if(pedID == 66)
+                {
+                    comp_active.Museum_compendium_Activation();
+                }
             }        
             
         }
