@@ -18,7 +18,6 @@ public class Compendium_activation : MonoBehaviour
         Debug.Log(CursorUni);
 
         _Compendium.SetActive(true);
-        Time.timeScale = 0f;
         notifications.SetActive(false);
     }
 
@@ -31,7 +30,6 @@ public class Compendium_activation : MonoBehaviour
 
         GameManager.SetPauseCursor(CursorUni);
         _Compendium.SetActive(false);
-        Time.timeScale = 1f;
         notifications.SetActive(true);
     }
 
