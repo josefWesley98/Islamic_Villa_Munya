@@ -19,6 +19,7 @@ public class PlaceArtefact : MonoBehaviour
     private bool replace_artefact;
     private bool can_place = false;
     private bool do_until = true;
+    private bool check_reset = true;
 
 //Leon audio
     AudioMixer mixer;
@@ -53,9 +54,34 @@ public class PlaceArtefact : MonoBehaviour
 
     private void Update() 
     {
+        //Debug.Log("Can we place?? " + can_place);
         replace_artefact = kb.fKey.isPressed;
 
+        //If the player has not collected the total of the id of the current artefact, reset it in the museum
+        if(empty_pedestal.activeSelf == false && (GameManager.GetArtefactCounter() < artefact_id || GameManager.GetArtefactCounter() == 0))
+        {
+            do_until = true;
+            can_place = false;
 
+            GameManager.SetArtefactPlaced(artefact_id, false);
+
+            empty_pedestal.SetActive(true);
+            renderer.material = transparentMat;
+
+            if (IO != null)
+            {
+                IO.enabled = false;
+            }
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+            if (paintingRenderer != null)
+            {
+                paintingRenderer.enabled = false;
+            }
+
+        }
 
         if(do_until)
         {

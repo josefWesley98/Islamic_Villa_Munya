@@ -172,6 +172,11 @@ public class GameManager : MonoBehaviour
         hard_diff = val;
     }
 
+    public static void ResetCounter()
+    {
+        artefact_counter = 0;
+    }
+
     //Getters
     public static bool GetArtefactPlaced(int idx)
     {

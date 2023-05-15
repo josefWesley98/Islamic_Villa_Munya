@@ -18,6 +18,7 @@ public class QuitGame : MonoBehaviour
         //Variables to reset
         GameManager.ResetArtefacts(false);
         GameManager.ResetPlacedArtefacts();
+        GameManager.ResetCounter();
         GameManager.SetHasKey(false);
         GameManager.SetBoy(false);
         GameManager.SetGirl(false);
