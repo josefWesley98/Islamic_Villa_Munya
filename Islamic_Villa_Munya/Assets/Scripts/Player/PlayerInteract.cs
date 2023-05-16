@@ -63,8 +63,11 @@ public class PlayerInteract : MonoBehaviour
     private float inspectionCooldownTimer = 0.0f;
     private float inspectionCooldownTime = 1.0f;
     private int artifactToBePlaced = -1;
-    int pedID = 0;
+    private int pedID = 0;
+    private bool isBook = false;
     [SerializeField] private Compendium_activation comp_active;
+
+
     private void Awake() => playercontrols = new PlayerControls();
 
     void Start()
@@ -109,7 +112,7 @@ public class PlayerInteract : MonoBehaviour
             destroyAfterView = interactableObj.GetDestroyAfterView();
             destination = other.gameObject.transform.position;
             displayObject = other.gameObject;
-
+            isBook = interactableObj.GetIsBook();
             pedID = interactableObj.GetPedestalID();
             
             if(pedID <= GameManager.GetTotalArtefacts())
@@ -133,7 +136,6 @@ public class PlayerInteract : MonoBehaviour
                 inspect.gameObject.SetActive(true);
                 placeArtefactUI.SetActive(false);
             }
-
            
 
             isTouching = true;
@@ -182,6 +184,10 @@ public class PlayerInteract : MonoBehaviour
                 {
                     displayObject.GetComponent<InteractableObject>().SetVisibilityCheck(true);
                     displayObject.SetActive(false);
+                    if(isBook)
+                    {
+                        GameManager.SetArtefactCollected(pedID, true);
+                    }
                 }
             }
         }
@@ -214,7 +220,11 @@ public class PlayerInteract : MonoBehaviour
         leaveInspectUI.SetActive(true);
         infoObject.SetActive(true);
         leaveInspectUI.gameObject.SetActive(true);
-        textBackdrop.SetActive(true);
+        if(pedID != 66)
+        {
+            textBackdrop.SetActive(true);
+        }
+        
     }
     private void TurnOffPrimaryArtefact()
     {
@@ -375,6 +385,10 @@ public class PlayerInteract : MonoBehaviour
                 {
                     comp_active.Museum_compendium_Deactivation();
                 }
+                if(isBook)
+                {
+                    GameManager.SetArtefactCollected(pedID, true);
+                }
                 TurnOnPrimaryArtefact();
                 ResetUI();
                 DestroyClonedArtifact();
@@ -414,6 +428,8 @@ public class PlayerInteract : MonoBehaviour
                 if(pedID == 66)
                 {
                     comp_active.Museum_compendium_Activation();
+                    leaveInspectUI.SetActive(false);
+                    textBackdrop.SetActive(false);
                 }
             }        
             

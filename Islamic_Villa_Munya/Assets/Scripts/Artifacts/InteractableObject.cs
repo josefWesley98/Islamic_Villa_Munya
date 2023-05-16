@@ -23,13 +23,24 @@ public class InteractableObject : MonoBehaviour
     [SerializeField] private GameObject LookAt;
     [SerializeField] private int pedestalID;
     [SerializeField] private bool destroyAfterView = false;
+    [SerializeField] private bool book = false;
+
     private bool visibilityCheck = false;
 
     private void Update()
     {
-        if(visibilityCheck)
+        // if(visibilityCheck)
+        // {
+        //     gameObject.SetActive(false);
+        //     Debug.Log("visablity has been turned off");
+        // }
+        if(book)
         {
-            gameObject.SetActive(false);
+            if(GameManager.GetArtefactCollected(pedestalID))
+            {
+                Debug.Log("is a book and is being made inactive");
+                gameObject.SetActive(false);
+            }
         }
     }
     public void SetVisibilityCheck(bool val)
@@ -77,5 +88,9 @@ public class InteractableObject : MonoBehaviour
     public int GetPedestalID()
     {
         return pedestalID;
+    }
+    public bool GetIsBook()
+    {
+        return book;
     }
 }
