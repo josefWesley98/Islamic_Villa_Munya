@@ -12,7 +12,7 @@ using System.Collections.Generic;
 /// Just activate / deactivate this component as usual to pause / resume flicker
 /// </summary>
 public class LightFlicker : MonoBehaviour
-{
+
     [Tooltip("External light to flicker; you can leave this null if you attach script to a light")]
     public new Light light;
     [Tooltip("Minimum random light intensity")]

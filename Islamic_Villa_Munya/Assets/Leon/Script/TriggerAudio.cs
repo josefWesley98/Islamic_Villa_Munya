@@ -9,8 +9,11 @@ using UnityEngine.Audio;
 
 public class TriggerAudio : MonoBehaviour
 {
+    //generic script to trigger audio when trigger entered
     AudioMixer mixer;
+    // sound clip array to choose from
     public AudioClip[] sounds;
+    //list to hold all the audio sources which the clips will be added to
     List<AudioSource> sources = new List<AudioSource>();
     public float volume = 0.25f;
     public bool onceOnly = false;
@@ -18,8 +21,10 @@ public class TriggerAudio : MonoBehaviour
 
     void Start()
     {
+        //get the mixer
         mixer = Resources.Load("NewAudioMixer") as AudioMixer;
 
+        // for every clip, set up an audio source on this object and add it to the source list and mixer
         for (int i = 0; i < sounds.Count(); i++)
         {
             AudioSource a = transform.AddComponent<AudioSource>();
@@ -31,52 +36,7 @@ public class TriggerAudio : MonoBehaviour
         }
 
     }
-    //private void FixedUpdate()
-    //{
-
-    //    RaycastHit hit;
-    //    // Does the ray intersect any objects excluding the player layer
-    //    if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayers))
-    //    {
-    //        //if (gameObject == previousFloor)
-    //        //    return;
-
-    //        Debug.DrawRay(transform.position, Vector3.down * hit.distance, Color.yellow);
-    //        //Debug.Log("Did Hit");
-
-
-    //        print(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name);
-
-    //        onTile = !(hit.transform.gameObject.GetComponent<MeshRenderer>().material.name == carpetMaterials[0]);
-
-    //        previousFloor = gameObject;
-    //    }
-    //    else
-    //    {
-    //        Debug.DrawRay(transform.position, Vector3.down * 1000, Color.white);
-    //        //Debug.Log("Did not Hit");
-    //    }
-    //}
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    bool playerStepping = pController.GetPlayerInput() != Vector2.zero;
-    //    //print(pController.GetRunning());
-
-    //    footStepTime = pController.GetRunning() ? footstepTimeRun : footstepTimeWalk;
-
-    //    footstepTimer += Time.deltaTime;
-
-    //    if (footstepTimer > footStepTime && playerStepping)
-    //    {
-    //        int rng = Random.Range(0, stepCarpetClips.Count());
-    //        footstepMaster[Convert.ToInt32(onTile)][rng].pitch = (Random.Range(0.8f, 1.2f));
-    //        footstepMaster[Convert.ToInt32(onTile)][rng].Play();
-    //        footstepTimer = 0f;
-    //        //print(rng);
-    //    }
-    //}
-
+    //if something enters trigger, play a random sound from the collection with pitch variation
     private void OnTriggerEnter(Collider other)
     {
         if (!canPlay)
@@ -87,7 +47,7 @@ public class TriggerAudio : MonoBehaviour
         if (onceOnly)
             canPlay = false;
     }
-
+    //if this is a collider and not a trigger, if collision happens play a random sound from the collection with pitch variation
     private void OnCollisionEnter(Collision collision)
     {
         if (!canPlay)

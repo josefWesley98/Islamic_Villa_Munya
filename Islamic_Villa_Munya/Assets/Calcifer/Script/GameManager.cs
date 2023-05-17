@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //Leon code
-public enum NamedDoors//names for doors that represent indexes in the door unlock array
-{
-    Unnamed = 0,
-    Puzzle1Door = 1,
-    MuseumEntranceL = 2,
-}
-//Leon end
 
+//Leon end
+    public enum NamedDoors//names for doors that represent indexes in the door unlock array
+    {
+        Unnamed = 0,
+        Puzzle1Door = 1,
+        MuseumEntranceL = 2,
+    }
 /*Cal's script starts here*/
 public class GameManager : MonoBehaviour
 {
@@ -45,32 +45,31 @@ public class GameManager : MonoBehaviour
 
 
 //Leon code 
-    //array of door unlock states (true or false for every door)
+    //Game Manager code that keeps track of every door, and whether it is locked or not
+
+    //array of door unlock states (true or false for every door based on if they are unlocked or not)
     static bool[] doorUnlockStates = new bool[3];
-    //give a name to every index in the door unlock array instead of having to remember numbers
 
     private void Start()
     {
+    //give a name to every index in the door unlock array instead of having to remember numbers
         doorUnlockStates[(int)NamedDoors.Unnamed] = true;
         doorUnlockStates[(int)NamedDoors.Puzzle1Door] = true;
         doorUnlockStates[(int)NamedDoors.MuseumEntranceL] = true;
     }
 
+    //function for setting the unlock state of a door. takes in a door name, and a true or false value
     public static void SetDoorUnlocked(NamedDoors doorName, bool value)
     {
-        //print("index = " + doorName);
         if (doorName == NamedDoors.Unnamed)
             return;
 
         doorUnlockStates[(int)doorName] = value;
-
-        //print("Set " + doorName.ToString() + " to " + value);
     }
-
+    //function for checking if a door is unlocked
     public static bool GetDoorUnlocked(NamedDoors doorName)
     {
         bool value = doorUnlockStates[(int)doorName];
-        //print("Door " + doorName.ToString() + " is set to " + value);
         return value;
     }
 //Leon end

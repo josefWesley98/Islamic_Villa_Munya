@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WindEffect : MonoBehaviour
 {
+    //script for controlling wind forces that act on the hanging lights. placed on each hanging light. 
    public float forceTimeMin = 0.1f;
    public float forceTimeMax = 0.5f;
     public float forceAmountMin = 10f;
@@ -18,6 +19,7 @@ public class WindEffect : MonoBehaviour
 
     void Start()
     {
+        //workaround, delays the start a little after the scene has loaded to prevent massive force buildup
         Invoke(nameof(SetUp), 2f);
     }
 
@@ -36,6 +38,7 @@ public class WindEffect : MonoBehaviour
 
         if (timer < 0)
         {
+            //add a random force withing the range to this object in the wind direction. the wind direction is (0, 0, -1)
             rb.AddForce(Vector3.back * Random.Range(forceAmountMin, forceAmountMax) * 0.333f);
 
             ResetRandomTimer();
@@ -44,6 +47,7 @@ public class WindEffect : MonoBehaviour
 
     void ResetRandomTimer()
     {
+        //randomise the next wind time
         timer = Random.Range(forceTimeMin, forceTimeMax);
     }
 }
